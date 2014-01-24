@@ -20,14 +20,15 @@ class SiftRequest {
 
     public function send() {
         // Build properties string
-        $properties_string = ""; $and = "";
-        foreach($this->properties as $key=>$value) {
-            $properties_string .= $and.$key.'='.$value;
-            $and="&";
+        $kvProperties = array();
+        foreach ($this->properties as $key => $value) {
+            $kvProperties[] = "${key}=${value}";
         }
+        $propertiesString = join($kvProperties, '&');
         $curlUrl = $this->url;
-        if ($this->method == self::GET) $curlUrl .= "?".$properties_string;
+        if ($this->method == self::GET) $curlUrl .= "?".$propertiesString;
 
+        // Mock the request if self::$mock exists
         if (self::$mock) {
             if (self::$mock["url"] == $curlUrl && self::$mock["method"] == $this->method) {
                 return self::$mock["response"];
@@ -41,7 +42,7 @@ class SiftRequest {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         } else if ($this->method == self::POST) {
             curl_setopt($ch, CURLOPT_POST, count($this->properties));
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $properties_string);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $propertiesString);
         }
         curl_setopt($ch, CURLOPT_URL, $curlUrl);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
