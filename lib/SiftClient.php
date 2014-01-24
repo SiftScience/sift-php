@@ -53,7 +53,7 @@ class SiftClient {
             throw new InvalidArgumentException("${name} must be a ${type}.");
 
         // Check if empty
-        if ((gettype($arg) == "string" && !strlen($arg)) || (gettype($arg) == "array" && !count($arg)))
+        if (empty($arg))
             throw new InvalidArgumentException("${name} cannot be empty.");
     }
 
