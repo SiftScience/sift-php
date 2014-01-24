@@ -1,8 +1,8 @@
 <?php
 
 class SiftClient {
-    private static $API_ENDPOINT = "https://api.siftscience.com";
-    protected static $API_VERSION = 203;
+    const API_ENDPOINT = "https://api.siftscience.com";
+    const API_VERSION = 203;
 
     private $apiKey;
 
@@ -24,7 +24,7 @@ class SiftClient {
         if (!$path) $path = self::restApiUrl();
         $properties['$api_key'] = $this->apiKey;
         $properties['$type'] = $event;
-        return (new SiftRequest($path, SiftRequest::$POST, $properties, $timeout))->send();
+        return (new SiftRequest($path, SiftRequest::POST, $properties, $timeout))->send();
     }
 
     /**
@@ -34,7 +34,7 @@ class SiftClient {
         $this->validateArgument($userId, "user id", "string");
 
         $properties = array("api_key" => $this->apiKey);
-        return (new SiftRequest(self::userScoreApiUrl($userId), SiftRequest::$GET, $properties, $timeout))->send();
+        return (new SiftRequest(self::userScoreApiUrl($userId), SiftRequest::GET, $properties, $timeout))->send();
     }
 
     /**
@@ -58,15 +58,15 @@ class SiftClient {
     }
 
     private static function restApiUrl() {
-        return self::$API_ENDPOINT."/v".self::$API_VERSION."/events";
+        return self::API_ENDPOINT."/v".self::API_VERSION."/events";
     }
 
     private static function userLabelApiUrl($userId) {
-        return self::$API_ENDPOINT."/v".self::$API_VERSION."/users/".urlencode($userId)."/labels";
+        return self::API_ENDPOINT."/v".self::API_VERSION."/users/".urlencode($userId)."/labels";
     }
 
     private static function userScoreApiUrl($userId) {
-        return self::$API_ENDPOINT."/v".self::$API_VERSION."/score/".urlencode($userId);
+        return self::API_ENDPOINT."/v".self::API_VERSION."/score/".urlencode($userId);
     }
 }
 

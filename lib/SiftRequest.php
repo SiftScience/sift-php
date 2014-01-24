@@ -1,8 +1,9 @@
 <?php
 
 class SiftRequest {
-    public static $GET = 1;
-    public static $POST = 2;
+    const GET = 1;
+    const POST = 2;
+
     private static $mock = null;
 
     private $url;
@@ -25,7 +26,7 @@ class SiftRequest {
             $and="&";
         }
         $curlUrl = $this->url;
-        if ($this->method == self::$GET) $curlUrl .= "?".$properties_string;
+        if ($this->method == self::GET) $curlUrl .= "?".$properties_string;
 
         if (self::$mock) {
             if (self::$mock["url"] == $curlUrl && self::$mock["method"] == $this->method) {
@@ -36,9 +37,9 @@ class SiftRequest {
 
         // Open and configure curl connection
         $ch = curl_init();
-        if ($this->method == self::$GET) {
+        if ($this->method == self::GET) {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        } else if ($this->method == self::$POST) {
+        } else if ($this->method == self::POST) {
             curl_setopt($ch, CURLOPT_POST, count($this->properties));
             curl_setopt($ch, CURLOPT_POSTFIELDS, $properties_string);
         }
