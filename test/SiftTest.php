@@ -1,10 +1,10 @@
 <?php
-require_once dirname(__DIR__)."/vendor/autoload.php";
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 class SiftTest extends PHPUnit_Framework_TestCase {
 
     protected function setUp() {
-        Sift::init("awesomeApiKey");
+        Sift::init('awesomeApiKey');
     }
 
     public function testGetInstance() {

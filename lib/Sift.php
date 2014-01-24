@@ -1,12 +1,10 @@
 <?php
 
-require_once "SiftClient.php";
-
 class Sift {
+    const DEFAULT_TIMEOUT = 2;
 
     private static $instance;
     private static $apiKey;
-    const DEFAULT_TIMEOUT = 2;
 
     /**
      * Initialize Sift with an api key

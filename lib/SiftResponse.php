@@ -11,8 +11,8 @@ class SiftResponse {
         $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
         $this->body = $json->decode($result);
         $this->httpStatusCode = $httpStatusCode;
-        $this->apiStatus = intval($this->body["status"]);
-        $this->apiErrorMessage = $this->body["error_message"];
+        $this->apiStatus = intval($this->body['status']);
+        $this->apiErrorMessage = $this->body['error_message'];
         $this->originalRequest = $this;
     }
 

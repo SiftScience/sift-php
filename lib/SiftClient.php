@@ -1,7 +1,7 @@
 <?php
 
 class SiftClient {
-    const API_ENDPOINT = "https://api.siftscience.com";
+    const API_ENDPOINT = 'https://api.siftscience.com';
     const API_VERSION = 203;
 
     private $apiKey;
@@ -10,7 +10,7 @@ class SiftClient {
      * Client constructor
      */
     function  __construct($apiKey) {
-        $this->validateArgument($apiKey, "api key", "string");
+        $this->validateArgument($apiKey, 'api key', 'string');
         $this->apiKey = $apiKey;
     }
 
@@ -18,8 +18,8 @@ class SiftClient {
      * Tracks an event and associated properties through the Sift Science API.
      */
     public function track($event, $properties, $timeout = Sift::DEFAULT_TIMEOUT, $path = null) {
-        $this->validateArgument($event, "event", "string");
-        $this->validateArgument($properties, "properties", "array");
+        $this->validateArgument($event, 'event', 'string');
+        $this->validateArgument($properties, 'properties', 'array');
 
         if (!$path) $path = self::restApiUrl();
         $properties['$api_key'] = $this->apiKey;
@@ -31,9 +31,9 @@ class SiftClient {
      * Retrieves a user's fraud score from the Sift Science API.
      */
     public function score($userId, $timeout = Sift::DEFAULT_TIMEOUT) {
-        $this->validateArgument($userId, "user id", "string");
+        $this->validateArgument($userId, 'user id', 'string');
 
-        $properties = array("api_key" => $this->apiKey);
+        $properties = array('api_key' => $this->apiKey);
         return (new SiftRequest(self::userScoreApiUrl($userId), SiftRequest::GET, $properties, $timeout))->send();
     }
 
@@ -41,8 +41,8 @@ class SiftClient {
      * Labels a user as either good or bad through the Sift Science API.
      */
     public function label($userId, $properties, $timeout = Sift::DEFAULT_TIMEOUT) {
-        $this->validateArgument($userId, "user id", "string");
-        $this->validateArgument($properties, "properties", "array");
+        $this->validateArgument($userId, 'user id', 'string');
+        $this->validateArgument($properties, 'properties', 'array');
 
         return $this->track('$label', $properties, $timeout, $this->userLabelApiUrl($userId));
     }
@@ -58,19 +58,19 @@ class SiftClient {
     }
 
     private static function restApiUrl() {
-        return self::urlPrefix()."/events";
+        return self::urlPrefix() . '/events';
     }
 
     private static function userLabelApiUrl($userId) {
-        return self::urlPrefix()."/users/".urlencode($userId)."/labels";
+        return self::urlPrefix() . '/users/' . urlencode($userId) . '/labels';
     }
 
     private static function userScoreApiUrl($userId) {
-        return self::urlPrefix()."/score/".urlencode($userId);
+        return self::urlPrefix() . '/score/' . urlencode($userId);
     }
 
     private static function urlPrefix() {
-        return self::API_ENDPOINT."/v".self::API_VERSION;
+        return self::API_ENDPOINT . '/v' . self::API_VERSION;
     }
 }
 

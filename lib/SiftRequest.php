@@ -26,12 +26,12 @@ class SiftRequest {
         }
         $propertiesString = join($kvProperties, '&');
         $curlUrl = $this->url;
-        if ($this->method == self::GET) $curlUrl .= "?".$propertiesString;
+        if ($this->method == self::GET) $curlUrl .= '?' . $propertiesString;
 
         // Mock the request if self::$mock exists
         if (self::$mock) {
-            if (self::$mock["url"] == $curlUrl && self::$mock["method"] == $this->method) {
-                return self::$mock["response"];
+            if (self::$mock['url'] == $curlUrl && self::$mock['method'] == $this->method) {
+                return self::$mock['response'];
             }
             return null;
         }
@@ -59,9 +59,9 @@ class SiftRequest {
 
     public static function setMockResponse($url, $method, $response) {
         self::$mock = array(
-            "url" => $url,
-            "method" => $method,
-            "response" => $response
+            'url' => $url,
+            'method' => $method,
+            'response' => $response
         );
     }
 
