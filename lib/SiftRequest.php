@@ -3,7 +3,7 @@
 class SiftRequest {
     public static $GET = 1;
     public static $POST = 2;
-    protected static $mockResponse = null;
+    private static $mock = null;
 
     private $url;
     private $method;
@@ -18,25 +18,31 @@ class SiftRequest {
     }
 
     public function send() {
-        if (self::$mockResponse) return self::$mockResponse;
-
         // Build properties string
         $properties_string = ""; $and = "";
         foreach($this->properties as $key=>$value) {
             $properties_string .= $and.$key.'='.$value;
             $and="&";
         }
+        $curlUrl = $this->url;
+        if ($this->method == self::$GET) $curlUrl .= "?".$properties_string;
+
+        if (self::$mock) {
+            if (self::$mock["url"] == $curlUrl && self::$mock["method"] == $this->method) {
+                return self::$mock["response"];
+            }
+            return null;
+        }
 
         // Open and configure curl connection
         $ch = curl_init();
         if ($this->method == self::$GET) {
-            curl_setopt($ch, CURLOPT_URL, $this->url."?".$properties_string);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         } else if ($this->method == self::$POST) {
-            curl_setopt($ch, CURLOPT_URL, $this->url);
             curl_setopt($ch, CURLOPT_POST, count($this->properties));
             curl_setopt($ch, CURLOPT_POSTFIELDS, $properties_string);
         }
+        curl_setopt($ch, CURLOPT_URL, $curlUrl);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
 
         // Send the request using curl and parse result
@@ -49,11 +55,15 @@ class SiftRequest {
         return new SiftResponse($result, $httpStatusCode, $this);
     }
 
-    public static function setMockResponse($mock) {
-        self::$mockResponse = $mock;
+    public static function setMockResponse($url, $method, $response) {
+        self::$mock = array(
+            "url" => $url,
+            "method" => $method,
+            "response" => $response
+        );
     }
 
     public static function clearMockResponse() {
-        self::$mockResponse = null;
+        self::$mock = null;
     }
 }
