@@ -1,8 +1,8 @@
 <?php
 
 class SiftRequest {
-    const GET = 1;
-    const POST = 2;
+    const GET = 'GET';
+    const POST = 'POST';
 
     private static $mock = null;
 
