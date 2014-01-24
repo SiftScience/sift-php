@@ -6,6 +6,7 @@ class Sift {
 
     private static $instance;
     private static $apiKey;
+    const DEFAULT_TIMEOUT = 2;
 
     /**
      * Initialize Sift with an api key
@@ -24,15 +25,15 @@ class Sift {
         return self::$instance;
     }
 
-    public static function track($event, $properties, $timeout = 2, $path = null) {
+    public static function track($event, $properties, $timeout = self::DEFAULT_TIMEOUT, $path = null) {
         self::getInstance().track($event, $properties, $timeout, $path);
     }
 
-    public static function score($userId, $timeout = 2) {
+    public static function score($userId, $timeout = self::DEFAULT_TIMEOUT) {
         self::getInstance().score($userId, $timeout);
     }
 
-    public static function label($userId, $properties, $timeout = 2) {
+    public static function label($userId, $properties, $timeout = self::DEFAULT_TIMEOUT) {
         self::getInstance().label($userId, $properties, $timeout);
     }
 }
