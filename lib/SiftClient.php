@@ -44,7 +44,7 @@ class SiftClient {
         $this->validateArgument($userId, "user id", "string");
         $this->validateArgument($properties, "properties", "array");
 
-        $this->track('$label', $properties, $timeout, $this->userLabelApiUrl($userId));
+        return $this->track('$label', $properties, $timeout, $this->userLabelApiUrl($userId));
     }
 
     private function validateArgument($arg, $name, $type) {
@@ -58,15 +58,19 @@ class SiftClient {
     }
 
     private static function restApiUrl() {
-        return self::API_ENDPOINT."/v".self::API_VERSION."/events";
+        return self::urlPrefix()."/events";
     }
 
     private static function userLabelApiUrl($userId) {
-        return self::API_ENDPOINT."/v".self::API_VERSION."/users/".urlencode($userId)."/labels";
+        return self::urlPrefix()."/users/".urlencode($userId)."/labels";
     }
 
     private static function userScoreApiUrl($userId) {
-        return self::API_ENDPOINT."/v".self::API_VERSION."/score/".urlencode($userId);
+        return self::urlPrefix()."/score/".urlencode($userId);
+    }
+
+    private static function urlPrefix() {
+        return self::API_ENDPOINT."/v".self::API_VERSION;
     }
 }
 
