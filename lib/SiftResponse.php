@@ -17,6 +17,6 @@ class SiftResponse {
     }
 
     public function isOk() {
-        return $this->apiStatus == 0;
+        return $this->apiStatus === 0;
     }
 }
