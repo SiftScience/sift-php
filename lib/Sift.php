@@ -7,6 +7,9 @@ class Sift {
     private static $instance;
     private static $apiKey;
 
+    /**
+     * Initialize Sift with an api key
+     */
     public static function init($apiKey) {
         self::$apiKey = $apiKey;
     }
@@ -19,5 +22,17 @@ class Sift {
             self::$instance = new SiftClient(self::$apiKey);
         }
         return self::$instance;
+    }
+
+    public static function track($event, $properties, $timeout = 2, $path = null) {
+        self::getInstance().track($event, $properties, $timeout, $path);
+    }
+
+    public static function score($userId, $timeout=2) {
+        self::getInstance().score($userId, $timeout);
+    }
+
+    public static function label($userId, $properties, $timeout=2) {
+        self::getInstance().label($userId, $properties, $timeout);
     }
 }
