@@ -11,6 +11,14 @@ class SiftRequest {
     private $properties;
     private $timeout;
 
+    /**
+     * SiftRequest constructor
+     *
+     * @param $url Url of the HTTP request
+     * @param $method Method of the HTTP request
+     * @param $properties Parameters to send along with the request
+     * @param $timeout HTTP request timeout
+     */
     function __construct($url, $method, $properties, $timeout) {
         $this->url = $url;
         $this->method = $method;
@@ -18,6 +26,11 @@ class SiftRequest {
         $this->timeout = $timeout;
     }
 
+    /**
+     * Send the HTTP request via cURL
+     *
+     * @return SiftResponse
+     */
     public function send() {
         // Build properties string
         $kvProperties = array();

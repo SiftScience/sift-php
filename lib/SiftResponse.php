@@ -6,6 +6,7 @@ class SiftResponse {
     public $apiStatus;
     public $apiErrorMessage;
     public $originalRequest;
+    public $rawResponse;
 
     public function __construct($result, $httpStatusCode, $request) {
         $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
@@ -14,7 +15,7 @@ class SiftResponse {
         $this->apiStatus = intval($this->body['status']);
         $this->apiErrorMessage = $this->body['error_message'];
         $this->originalRequest = $request;
-        $this->rawResponse($result);
+        $this->rawResponse = $result;
     }
 
     public function isOk() {
