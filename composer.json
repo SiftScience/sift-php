@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-    	"php": ">=5.0.0",
+        "php": ">=5.0.0",
         "pear-pear/Services_JSON": "*"
     },
     "require-dev": {

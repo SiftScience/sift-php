@@ -22,7 +22,7 @@ class SiftClient {
      *
      * @param $event The name of the event to send. This can be either a reserved event name, like $transaction
      * or $label or a custom event name (that does not start with a $). This parameter is required.
-     * @param $properties A hash of name-value pairs that specify the event-specific attributes to track.
+     * @param $properties An array of name-value pairs that specify the event-specific attributes to track.
      * This parameter is required.
      * @param $timeout (optional) The number of seconds to wait before failing the request. By default this is
      * configured to 2 seconds (see above).
@@ -68,7 +68,7 @@ class SiftClient {
      *
      * @param $userId A user's id. This id should be the same as the user_id used in event calls.
      * This parameter is required.
-     * @param $properties A hash of name-value pairs that specify the label attributes. This parameter is required.
+     * @param $properties An array of name-value pairs that specify the label attributes. This parameter is required.
      * @param $timeout (optional) The number of seconds to wait before failing the request. By default this is
      * configured to 2 seconds (see above).
      * @return null|SiftResponse

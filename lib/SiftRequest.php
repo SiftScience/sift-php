@@ -32,12 +32,8 @@ class SiftRequest {
      * @return SiftResponse
      */
     public function send() {
-        // Build properties string
-        $kvProperties = array();
-        foreach ($this->properties as $key => $value) {
-            $kvProperties[] = "${key}=${value}";
-        }
-        $propertiesString = join($kvProperties, '&');
+        $json = new Services_JSON();
+        $propertiesString = http_build_query($this->properties);
         $curlUrl = $this->url;
         if ($this->method == self::GET) $curlUrl .= '?' . $propertiesString;
 
@@ -51,14 +47,18 @@ class SiftRequest {
 
         // Open and configure curl connection
         $ch = curl_init();
-        if ($this->method == self::GET) {
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        } else if ($this->method == self::POST) {
-            curl_setopt($ch, CURLOPT_POST, count($this->properties));
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $propertiesString);
-        }
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_URL, $curlUrl);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
+        if ($this->method == self::POST) {
+            $jsonString = $json->encode($this->properties);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonString);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($jsonString))
+            );
+        }
 
         // Send the request using curl and parse result
         $result = curl_exec($ch);
