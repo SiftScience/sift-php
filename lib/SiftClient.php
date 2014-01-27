@@ -3,6 +3,7 @@
 class SiftClient {
     const API_ENDPOINT = 'https://api.siftscience.com';
     const API_VERSION = 203;
+    const DEFAULT_TIMEOUT = 2;
 
     private $apiKey;
 
@@ -17,7 +18,7 @@ class SiftClient {
     /**
      * Tracks an event and associated properties through the Sift Science API.
      */
-    public function track($event, $properties, $timeout = Sift::DEFAULT_TIMEOUT, $path = null) {
+    public function track($event, $properties, $timeout = self::DEFAULT_TIMEOUT, $path = null) {
         $this->validateArgument($event, 'event', 'string');
         $this->validateArgument($properties, 'properties', 'array');
 
@@ -30,7 +31,7 @@ class SiftClient {
     /**
      * Retrieves a user's fraud score from the Sift Science API.
      */
-    public function score($userId, $timeout = Sift::DEFAULT_TIMEOUT) {
+    public function score($userId, $timeout = self::DEFAULT_TIMEOUT) {
         $this->validateArgument($userId, 'user id', 'string');
 
         $properties = array('api_key' => $this->apiKey);
@@ -40,7 +41,7 @@ class SiftClient {
     /**
      * Labels a user as either good or bad through the Sift Science API.
      */
-    public function label($userId, $properties, $timeout = Sift::DEFAULT_TIMEOUT) {
+    public function label($userId, $properties, $timeout = self::DEFAULT_TIMEOUT) {
         $this->validateArgument($userId, 'user id', 'string');
         $this->validateArgument($properties, 'properties', 'array');
 
