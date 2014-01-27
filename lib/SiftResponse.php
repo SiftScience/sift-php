@@ -13,7 +13,8 @@ class SiftResponse {
         $this->httpStatusCode = $httpStatusCode;
         $this->apiStatus = intval($this->body['status']);
         $this->apiErrorMessage = $this->body['error_message'];
-        $this->originalRequest = $this;
+        $this->originalRequest = $request;
+        $this->rawResponse($result);
     }
 
     public function isOk() {
