@@ -3,6 +3,7 @@
     "description": "Sift Science PHP library",
     "keywords": ["sift", "sift science", "php", "fraud"],
     "version": "1.0.0",
+    "homepage": "https://github.com/SiftScience/sift-php",
     "repositories": [
         {
             "type": "pear",
