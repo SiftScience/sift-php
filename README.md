@@ -68,3 +68,12 @@ $sift = new SiftClient('my_api_key');
 $response = $sift->score('23056');
 $response->body['score']; // => 0.030301357270181357
 ```
+
+
+## Contributing
+Run the tests from the project root with [PHPUnit](http://phpunit.de) like this:
+
+```
+phpunit --bootstrap vendor/autoload.php test/SiftClientTest
+```
+
