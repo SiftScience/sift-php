@@ -37,7 +37,8 @@ class SiftClient {
         $properties['$api_key'] = $this->apiKey;
         $properties['$type'] = $event;
         try {
-            return (new SiftRequest($path, SiftRequest::POST, $properties, $timeout))->send();
+            $request = new SiftRequest($path, SiftRequest::POST, $properties, $timeout);
+            return $request->send();
         } catch (Exception $e) {
             return null;
         }
@@ -57,7 +58,8 @@ class SiftClient {
 
         $properties = array('api_key' => $this->apiKey);
         try {
-            return (new SiftRequest(self::userScoreApiUrl($userId), SiftRequest::GET, $properties, $timeout))->send();
+            $request = new SiftRequest(self::userScoreApiUrl($userId), SiftRequest::GET, $properties, $timeout);
+            return $request->send();
         } catch (Exception $e) {
             return null;
         }
