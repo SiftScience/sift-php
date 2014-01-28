@@ -77,3 +77,6 @@ Run the tests from the project root with [PHPUnit](http://phpunit.de) like this:
 phpunit --bootstrap vendor/autoload.php test/SiftClientTest
 ```
 
+
+## License
+MIT
