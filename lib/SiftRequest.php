@@ -51,7 +51,7 @@ class SiftRequest {
         curl_setopt($ch, CURLOPT_URL, $curlUrl);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
         if ($this->method == self::POST) {
-            $jsonString = $json->encode($this->properties);
+            $jsonString = $json->encodeUnsafe($this->properties);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonString);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
