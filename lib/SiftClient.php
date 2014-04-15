@@ -24,20 +24,22 @@ class SiftClient {
      * or $label or a custom event name (that does not start with a $). This parameter is required.
      * @param $properties An array of name-value pairs that specify the event-specific attributes to track.
      * This parameter is required.
+     * @param $returnScore Whether to return the user's score as part of the API 
+     * response.  The score will include the posted event.
      * @param $timeout (optional) The number of seconds to wait before failing the request. By default this is
      * configured to 2 seconds (see above).
      * @param $path (optional) Overrides the default API path with a different URL.
      * @return null|SiftResponse
      */
-    public function track($event, $properties, $timeout = self::DEFAULT_TIMEOUT, $path = null) {
+    public function track($event, $properties, $timeout = self::DEFAULT_TIMEOUT, $path = null, $returnScore = False) {
         $this->validateArgument($event, 'event', 'string');
         $this->validateArgument($properties, 'properties', 'array');
 
-        if (!$path) $path = self::restApiUrl();
+        if (!$path) $path = self::restApiUrl($returnScore);
         $properties['$api_key'] = $this->apiKey;
         $properties['$type'] = $event;
         try {
-            $request = new SiftRequest($path, SiftRequest::POST, $properties, $timeout);
+            $request = new SiftRequest($path, SiftRequest::POST, $properties, $timeout, $returnScore);
             return $request->send();
         } catch (Exception $e) {
             return null;
@@ -92,8 +94,8 @@ class SiftClient {
             throw new InvalidArgumentException("${name} cannot be empty.");
     }
 
-    private static function restApiUrl() {
-        return self::urlPrefix() . '/events';
+    private static function restApiUrl($returnScore) {
+        return self::urlPrefix() . '/events?return_score=' . ($returnScore ? 'true' : 'false');
     }
 
     private static function userLabelApiUrl($userId) {
