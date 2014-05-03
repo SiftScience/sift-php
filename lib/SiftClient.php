@@ -31,7 +31,7 @@ class SiftClient {
      * @param $path (optional) Overrides the default API path with a different URL.
      * @return null|SiftResponse
      */
-    public function track($event, $properties, $timeout = self::DEFAULT_TIMEOUT, $path = null, $returnScore = False) {
+    public function track($event, $properties, $timeout = self::DEFAULT_TIMEOUT, $path = null, $returnScore = FALSE) {
         $this->validateArgument($event, 'event', 'string');
         $this->validateArgument($properties, 'properties', 'array');
 
