@@ -56,7 +56,8 @@ class SiftRequest {
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonString);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                     'Content-Type: application/json',
-                    'Content-Length: ' . strlen($jsonString))
+                    'Content-Length: ' . strlen($jsonString),
+                    'User-Agent: SiftScience/v' . SiftClient::API_VERSION . ' sift-php/' . SiftClient::VERSION)
             );
         }
 
