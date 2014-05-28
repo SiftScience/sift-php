@@ -95,7 +95,7 @@ class SiftClient {
     }
 
     private static function restApiUrl($returnScore) {
-        return self::urlPrefix() . '/events?return_score=' . ($returnScore ? 'true' : 'false');
+        return self::urlPrefix() . '/events' . ($returnScore ? '?return_score=true' : '');
     }
 
     private static function userLabelApiUrl($userId) {

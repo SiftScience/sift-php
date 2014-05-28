@@ -114,4 +114,16 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($response->apiErrorMessage, 'OK');
         $this->assertEquals($response->body["score"], 0.55);
     }
+
+    public function testSuccessfulSyncScoreFetch() {
+        $mockUrl = 'https://api.siftscience.com/v203/events?return_score=true';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
+                "score_response": {"user_id": "12345", "score": 0.55}}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+        $response = $this->client->track('$transaction', $this->transaction_properties, 2, null, true);
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+        $this->assertEquals($response->body["score_response"]["score"], 0.55);
+    }
 }
