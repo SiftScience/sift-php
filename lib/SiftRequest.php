@@ -1,5 +1,7 @@
 <?php
 
+require_once('Services_JSON-1.0.3/JSON.php');
+
 class SiftRequest {
     const GET = 'GET';
     const POST = 'POST';
