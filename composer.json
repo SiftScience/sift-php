@@ -4,7 +4,7 @@
     "keywords": ["sift", "sift science", "php", "fraud"],
     "homepage": "https://github.com/SiftScience/sift-php",
     "license": "MIT",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "require": {
         "php": ">=5.0.0"
     },
