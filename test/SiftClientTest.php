@@ -25,6 +25,11 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
             '$billing_zip' => '94131',
             '$user_email' => 'mike@example.com'
         );
+        $this->label_properties = array(
+            '$reasons' => '[ "$fake" ]',
+            '$is_bad' => true,
+            '$description' => 'Listed a fake item'
+        );
     }
 
     protected function tearDown() {
@@ -125,5 +130,15 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($response->isOk());
         $this->assertEquals($response->apiErrorMessage, 'OK');
         $this->assertEquals($response->body["score_response"]["score"], 0.55);
+    }
+
+    public function testSuccessfulLabelUser() {
+        $mockUrl = 'https://api.siftscience.com/v203/users/54321/labels';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+        $response = $this->client->label("54321", $this->label_properties);
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
     }
 }
