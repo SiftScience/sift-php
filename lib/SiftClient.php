@@ -11,17 +11,20 @@ class SiftClient {
     /**
      * SiftClient constructor
      *
-     * @param $apiKey The SiftScience API key associated with your account. This cannot be null or blank.
+     * @param   $apiKey The SiftScience API key associated with your account. If Sift::$api_key has been set you can instantiate the client without an $apiKey,
+     *          If Sift::$api_key has not been set, this parameter is required and must not be null or an empty string.
      */
     function  __construct($apiKey = null) {
-        if (!$apiKey)
+        if (!$apiKey) {
             $apiKey = Sift::$api_key;
+        }
         $this->validateArgument($apiKey, 'api key', 'string');
         $this->api_key = $apiKey;
     }
 
     /**
      * Tracks an event and associated properties through the Sift Science API.
+     * Check https://siftscience.com/resources/references/events_api.html for valid $event values and $properties fields.
      *
      * @param $event The name of the event to send. This can be either a reserved event name, like $transaction
      * or $label or a custom event name (that does not start with a $). This parameter is required.
@@ -72,6 +75,7 @@ class SiftClient {
 
     /**
      * Labels a user as either good or bad through the Sift Science API.
+     * Check https://siftscience.com/resources/references/labels_api.html for valid $properties fields.
      *
      * @param $userId A user's id. This id should be the same as the user_id used in event calls.
      * This parameter is required.
