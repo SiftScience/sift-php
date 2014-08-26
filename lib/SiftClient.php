@@ -3,20 +3,21 @@
 class SiftClient {
     const API_ENDPOINT = 'https://api.siftscience.com';
     // Must be kept in sync with composer.json
-    const VERSION = "1.0.4";
     const API_VERSION = "203";
     const DEFAULT_TIMEOUT = 2;
 
-    private $apiKey;
+    private $api_key;
 
     /**
      * SiftClient constructor
      *
      * @param $apiKey The SiftScience API key associated with your account. This cannot be null or blank.
      */
-    function  __construct($apiKey) {
+    function  __construct($apiKey = null) {
+        if (!$apiKey)
+            $apiKey = Sift::$api_key;
         $this->validateArgument($apiKey, 'api key', 'string');
-        $this->apiKey = $apiKey;
+        $this->api_key = $apiKey;
     }
 
     /**
@@ -38,7 +39,7 @@ class SiftClient {
         $this->validateArgument($properties, 'properties', 'array');
 
         if (!$path) $path = self::restApiUrl($returnScore);
-        $properties['$api_key'] = $this->apiKey;
+        $properties['$api_key'] = $this->api_key;
         $properties['$type'] = $event;
         try {
             $request = new SiftRequest($path, SiftRequest::POST, $properties, $timeout, $returnScore);
@@ -60,7 +61,7 @@ class SiftClient {
     public function score($userId, $timeout = self::DEFAULT_TIMEOUT) {
         $this->validateArgument($userId, 'user id', 'string');
 
-        $properties = array('api_key' => $this->apiKey);
+        $properties = array('api_key' => $this->api_key);
         try {
             $request = new SiftRequest(self::userScoreApiUrl($userId), SiftRequest::GET, $properties, $timeout);
             return $request->send();
