@@ -40,6 +40,30 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('SiftClient', $this->client);
     }
 
+    public function testGlobalApiKeySuccess() {
+        $this->setExpectedException(null);
+        Sift::setApiKey('test_global_api_key');
+        new SiftClient();
+    }
+
+    public function testEmptyGlobalApiKeyFail() {
+        $this->setExpectedException('InvalidArgumentException');
+        Sift::setApiKey('');
+        new SiftClient();
+    }
+
+    public function testNullGlobalApiKeyFail() {
+        $this->setExpectedException('InvalidArgumentException');
+        Sift::setApiKey(null);
+        new SiftClient();
+    }
+
+    public function testNonStringGlobalApiKeyFail() {
+        $this->setExpectedException('InvalidArgumentException');
+        Sift::setApiKey(42);
+        new SiftClient();
+    }
+
     public function testEmptyApiKeyFail() {
         $this->setExpectedException('InvalidArgumentException');
         new SiftClient('');
