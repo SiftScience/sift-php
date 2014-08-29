@@ -7,6 +7,8 @@ class SiftClient {
     const DEFAULT_TIMEOUT = 2;
 
     private $api_key;
+    private $path;
+    private $timeout;
 
     /**
      * SiftClient constructor
@@ -14,12 +16,17 @@ class SiftClient {
      * @param   $apiKey The SiftScience API key associated with your account. If Sift::$api_key has been set you can instantiate the client without an $apiKey,
      *          If Sift::$api_key has not been set, this parameter is required and must not be null or an empty string.
      */
-    function  __construct($apiKey = null) {
+    function  __construct($apiKey = null, $path = API_ENDPOINT, $timeout = DEFAULT_TIMEOUT) {
         if (!$apiKey) {
             $apiKey = Sift::$api_key;
         }
         $this->validateArgument($apiKey, 'api key', 'string');
         $this->api_key = $apiKey;
+
+        $this->validateArgument($path, 'api key', 'string');
+        $this->path = $path;
+
+        $this->timeout = $timeout;
     }
 
     /**
