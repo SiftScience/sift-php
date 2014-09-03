@@ -5,6 +5,8 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
     private static $API_KEY = 'agreatsuccess';
     private $client;
     private $transaction_properties;
+    private $errors;
+
 
     protected function setUp() {
         $this->client = new SiftClient(SiftClientTest::$API_KEY);
@@ -30,6 +32,25 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
             '$is_bad' => true,
             '$description' => 'Listed a fake item'
         );
+        $this->errors = array();
+        set_error_handler(array($this, "errorHandler"));
+    }
+ 
+    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
+        $this->errors[] = compact("errno", "errstr", "errfile",
+            "errline", "errcontext");
+    }
+ 
+    public function assertError($errstr, $errno) {
+        foreach ($this->errors as $error) {
+            if ($error["errstr"] === $errstr
+                && $error["errno"] === $errno) {
+                return;
+            }
+        }
+        $this->fail("Error with level " . $errno .
+            " and message '" . $errstr . "' not found in ", 
+            var_export($this->errors, TRUE));
     }
 
     protected function tearDown() {
@@ -62,6 +83,21 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
         $this->setExpectedException('InvalidArgumentException');
         Sift::setApiKey(42);
         new SiftClient();
+    }
+
+    public function testEmptyPathFail() {
+        $this->setExpectedException('InvalidArgumentException');
+        new SiftClient('12345','');
+    }
+
+    public function testNullPathFail() {
+        $this->setExpectedException('InvalidArgumentException');
+        new SiftClient('12345',null);
+    }
+
+    public function testNonStringPathFail() {
+        $this->setExpectedException('InvalidArgumentException');
+        new SiftClient('12345',123);
     }
 
     public function testEmptyApiKeyFail() {
@@ -165,4 +201,5 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($response->isOk());
         $this->assertEquals($response->apiErrorMessage, 'OK');
     }
+
 }
