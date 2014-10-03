@@ -32,6 +32,8 @@
     require 'sift-php/lib/SiftRequest.php';
     require 'sift-php/lib/SiftResponse.php';
     require 'sift-php/lib/SiftClient.php';
+    require 'sift-php/lib/Sift.php';
+
 
     $sift = new SiftClient('my_api_key');
     ```
