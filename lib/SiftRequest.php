@@ -1,7 +1,5 @@
 <?php
 
-require_once('Services_JSON-1.0.3/JSON.php');
-
 class SiftRequest {
     const GET = 'GET';
     const POST = 'POST';
@@ -34,7 +32,6 @@ class SiftRequest {
      * @return SiftResponse
      */
     public function send() {
-        $json = new Services_JSON();
         $propertiesString = http_build_query($this->properties);
         $curlUrl = $this->url;
         if ($this->method == self::GET) $curlUrl .= '?' . $propertiesString;
@@ -53,7 +50,13 @@ class SiftRequest {
         curl_setopt($ch, CURLOPT_URL, $curlUrl);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
         if ($this->method == self::POST) {
-            $jsonString = $json->encodeUnsafe($this->properties);
+            if (function_exists('json_encode')) {
+                $jsonString = json_encode($this->properties);
+            } else {
+                require_once(dirname(__FILE__) . '/Services_JSON-1.0.3/JSON.php');
+                $json = new Services_JSON();
+                $jsonString = $json->encodeUnsafe($this->properties);
+            }
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonString);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(

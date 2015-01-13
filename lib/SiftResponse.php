@@ -1,7 +1,5 @@
 <?php
 
-require_once('Services_JSON-1.0.3/JSON.php');
-
 class SiftResponse {
     public $body;
     public $httpStatusCode;
@@ -11,8 +9,13 @@ class SiftResponse {
     public $rawResponse;
 
     public function __construct($result, $httpStatusCode, $request) {
-        $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
-        $this->body = $json->decode($result);
+        if (function_exists('json_decode')) {
+            $this->body = json_decode($result, true);
+        } else {
+            require_once(dirname(__FILE__) . '/Services_JSON-1.0.3/JSON.php');
+            $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
+            $this->body = $json->decode($result);
+        }
         $this->httpStatusCode = $httpStatusCode;
         $this->apiStatus = intval($this->body['status']);
         $this->apiErrorMessage = $this->body['error_message'];
