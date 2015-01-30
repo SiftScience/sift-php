@@ -11,13 +11,20 @@ class SiftResponse {
     public $rawResponse;
 
     public function __construct($result, $httpStatusCode, $request) {
-        $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
-        $this->body = $json->decode($result);
+        $this->body = null;
+        $this->apiStatus = null;
+        $this->apiErrorMessage = null;
         $this->httpStatusCode = $httpStatusCode;
-        $this->apiStatus = intval($this->body['status']);
-        $this->apiErrorMessage = $this->body['error_message'];
         $this->request = $request;
         $this->rawResponse = $result;
+
+        // Only attempt to get our response body if the http status code expects a body
+        if (!in_array($this->httpStatusCode, array(204,304))) {
+            $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
+            $this->body = $json->decode($result);
+            $this->apiStatus = intval($this->body['status']);
+            $this->apiErrorMessage = $this->body['error_message'];
+        }
     }
 
     public function __get($name)
@@ -38,6 +45,12 @@ class SiftResponse {
     }
 
     public function isOk() {
-        return $this->apiStatus === 0;
+        // If there is no body, check the http status code only (should be 204)
+        if (in_array($this->httpStatusCode, array(204,304))) {
+            return 204 === $this->httpStatusCode;
+        }
+
+        // Otherwise expect http status 200 and api status 0
+        return $this->apiStatus === 0 && 200 === $this->httpStatusCode;
     }
 }

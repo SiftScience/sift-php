@@ -5,6 +5,7 @@ require_once('Services_JSON-1.0.3/JSON.php');
 class SiftRequest {
     const GET = 'GET';
     const POST = 'POST';
+    const DELETE = 'DELETE';
 
     private static $mock = null;
 
@@ -37,7 +38,7 @@ class SiftRequest {
         $json = new Services_JSON();
         $propertiesString = http_build_query($this->properties);
         $curlUrl = $this->url;
-        if ($this->method == self::GET) $curlUrl .= '?' . $propertiesString;
+        if ($this->method == self::GET || $this->method == self::DELETE) $curlUrl .= '?' . $propertiesString;
 
         // Mock the request if self::$mock exists
         if (self::$mock) {
@@ -62,6 +63,8 @@ class SiftRequest {
                     'User-Agent: SiftScience/v' . SiftClient::API_VERSION . ' sift-php/' . Sift::VERSION)
             );
         }
+        else if ($this->method == self::DELETE) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+
 
         // Send the request using curl and parse result
         $result = curl_exec($ch);

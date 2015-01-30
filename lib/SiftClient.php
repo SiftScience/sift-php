@@ -98,6 +98,28 @@ class SiftClient {
         return $this->track('$label', $properties, $timeout, $this->userLabelApiUrl($userId));
     }
 
+    /**
+     * Removes a label from a user
+     *
+     * @param $userId A user's id. This id should be the same as the user_id used in event calls.
+     * This parameter is required.
+     * @param $timeout (optional) The number of seconds to wait before failing the request. By default this is
+     * configured to 2 seconds (see above).
+     * @return null|SiftResponse
+     */
+    public function unlabel($userId, $timeout = self::DEFAULT_TIMEOUT) {
+        $this->validateArgument($userId, 'user id', 'string');
+
+
+        $properties = array('api_key' => $this->api_key);
+        try {
+            $request = new SiftRequest(self::userLabelApiUrl($userId), SiftRequest::DELETE, $properties, $timeout);
+            return $request->send();
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
     private function validateArgument($arg, $name, $type) {
         // Validate type
         if (gettype($arg) != $type)

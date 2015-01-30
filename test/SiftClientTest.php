@@ -202,4 +202,49 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($response->apiErrorMessage, 'OK');
     }
 
+    public function testSuccessfulUnlabelUser() {
+        $mockUrl = 'https://api.siftscience.com/v203/users/54321/labels?api_key=agreatsuccess';
+        $mockResponse = new SiftResponse('', 204, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::DELETE, $mockResponse);
+        $response = $this->client->unlabel("54321");
+        $this->assertTrue($response->isOk());
+    }
+
+    // Test all special characters for score API
+
+    public function testSuccessfulScoreFetchWithAllUserIdCharacters() {
+        $mockUrl = 'https://api.siftscience.com/v203/score/12345' . urlencode('=.-_+@:&^%!$') . '?api_key=agreatsuccess';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
+                "user_id": "12345=.-_+@:&^%!$", "score": 0.55}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
+        $response = $this->client->score('12345=.-_+@:&^%!$');
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+        $this->assertEquals($response->body["score"], 0.55);
+    }
+
+    // Test all special characters for Label API
+
+    public function testSuccessfulLabelWithAllUserIdCharacters() {
+        $mockUrl = 'https://api.siftscience.com/v203/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+        $response = $this->client->label("54321=.-_+@:&^%!$", $this->label_properties);
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+    }
+
+    // Test all special characters for Unlabel API
+    
+    public function testSuccessfulUnlabelWithAllUserIdCharacters() {
+        $mockUrl = 'https://api.siftscience.com/v203/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels?api_key=agreatsuccess';
+        $mockResponse = new SiftResponse('', 204, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::DELETE, $mockResponse);
+        $response = $this->client->unlabel("54321=.-_+@:&^%!$");
+        $this->assertTrue($response->isOk());
+    }
+
 }
