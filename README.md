@@ -66,6 +66,12 @@ $response = $sift->label('23056', array(
     '$reasons' => array('$chargeback')
 ));
 ```
+### Unlabel a user
+
+```
+$sift = new SiftClient('my_api_key');
+$response = $sift->unlabel('23056');
+```
 ### Get a user's score
 
 ```
