@@ -1,4 +1,4 @@
-# Sift Science PHP Bindings
+# Sift Science PHP Bindings <img src="https://travis-ci.org/SiftScience/sift-php.svg"><a href="https://travis-ci.org/SiftScience/sift-php"></a></img>
 
 ## Installation
 ### With Composer
