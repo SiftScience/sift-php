@@ -1,10 +1,8 @@
-language: python
-python:
-  - "2.7"
-  - "3.4"
-# command to install dependencies
-install:
-  - "python setup.py install"
-# command to run tests
+language: php
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
 script:
-  - "PYTHONPATH=. python tests/client_test.py"
+  - phpunit --bootstrap vendor/autoload.php test/SiftClientTest
