@@ -38,7 +38,9 @@ class SiftClient {
      * @param $properties An array of name-value pairs that specify the event-specific attributes to track.
      * This parameter is required.
      * @param $returnScore Whether to return the user's score as part of the API 
-     * response.  The score will include the posted event.
+     * response.  The score will include the posted event. This feature must be
+     * enabled for your account in order to use it.  Please contact
+     * support@siftscience.com if you are interested in using this feature.
      * @param $timeout (optional) The number of seconds to wait before failing the request. By default this is
      * configured to 2 seconds (see above).
      * @param $path (optional) Overrides the default API path with a different URL.
