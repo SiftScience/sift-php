@@ -88,6 +88,8 @@ Run the tests from the project root with [PHPUnit](http://phpunit.de) like this:
 phpunit --bootstrap vendor/autoload.php test/SiftClientTest
 ```
 
+## Updating Packagist
+Update the composer.json file to reflect the new version number, as well as any new requirements and push to the remote repository.  Create a new release with this version number, Packagist will automatically crawl the changes.
 
 ## License
 MIT
