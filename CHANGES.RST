@@ -1,3 +1,8 @@
+1.2.1 (2016-02-29)
+==================
+* Add TravisCI
+* Code cleanups
+
 1.2.0 (2015-02-04)
 ==================
 * Added Unlabel functionality
