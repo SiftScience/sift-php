@@ -89,7 +89,11 @@ phpunit --bootstrap vendor/autoload.php test/SiftClientTest
 ```
 
 ## Updating Packagist
-Update the composer.json file to reflect the new version number, as well as any new requirements and push to the remote repository.  Create a new release with this version number, Packagist will automatically crawl the changes.
+
+1. Update `composer.json` to reflect the new version, as well as any new requirements then merge changes into master.
+
+2. Create a [new release](https://github.com/SiftScience/sift-php/releases) with the version number and use it as the description.
+[Packagist](https://packagist.org/packages/siftscience/sift-php) will automatically deploy a new package via the configured webhook.
 
 ## License
 MIT
