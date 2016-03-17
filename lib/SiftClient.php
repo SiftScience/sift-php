@@ -37,7 +37,11 @@ class SiftClient {
      * or $label or a custom event name (that does not start with a $). This parameter is required.
      * @param $properties An array of name-value pairs that specify the event-specific attributes to track.
      * This parameter is required.
-     * @param $returnScore Whether to return the user's score as part of the API 
+     * @param $returnScore (Deprecated -- please use $returnAction instead.) Whether to return the user's score as part of the API 
+     * response.  The score will include the posted event. This feature must be
+     * enabled for your account in order to use it.  Please contact
+     * support@siftscience.com if you are interested in using this feature.
+     * @param $returnAction Whether to return an action triggered by this event as part of the API 
      * response.  The score will include the posted event. This feature must be
      * enabled for your account in order to use it.  Please contact
      * support@siftscience.com if you are interested in using this feature.
@@ -46,15 +50,15 @@ class SiftClient {
      * @param $path (optional) Overrides the default API path with a different URL.
      * @return null|SiftResponse
      */
-    public function track($event, $properties, $timeout = self::DEFAULT_TIMEOUT, $path = null, $returnScore = FALSE) {
+    public function track($event, $properties, $timeout = self::DEFAULT_TIMEOUT, $path = null, $returnScore = FALSE, $returnAction = FALSE) {
         $this->validateArgument($event, 'event', 'string');
         $this->validateArgument($properties, 'properties', 'array');
 
-        if (!$path) $path = self::restApiUrl($returnScore);
+        if (!$path) $path = self::restApiUrl($returnScore, $returnAction);
         $properties['$api_key'] = $this->api_key;
         $properties['$type'] = $event;
         try {
-            $request = new SiftRequest($path, SiftRequest::POST, $properties, $timeout, $returnScore);
+            $request = new SiftRequest($path, SiftRequest::POST, $properties, $timeout);
             return $request->send();
         } catch (Exception $e) {
             return null;
@@ -132,8 +136,13 @@ class SiftClient {
             throw new InvalidArgumentException("${name} cannot be empty.");
     }
 
-    private static function restApiUrl($returnScore) {
-        return self::urlPrefix() . '/events' . ($returnScore ? '?return_score=true' : '');
+    private static function restApiUrl($returnScore, $returnAction) {
+        $queryParams = array();
+        if ($returnScore) array_push($queryParams, 'return_score=true');
+        if ($returnAction) array_push($queryParams, 'return_action=true');
+        $queryString = empty($queryParams) ? '' : '?' . join('&', $queryParams);
+
+        return self::urlPrefix() . '/events' . $queryString;
     }
 
     private static function userLabelApiUrl($userId) {
