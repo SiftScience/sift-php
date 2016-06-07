@@ -862,7 +862,7 @@ class Services_JSON
      */
     function isError($data, $code = null)
     {
-        if (class_exists('pear')) {
+        if (class_exists('pear', false)) {
             return PEAR::isError($data, $code);
         } elseif (is_object($data) && (get_class($data) == 'services_json_error' ||
                                  is_subclass_of($data, 'services_json_error'))) {
@@ -905,7 +905,7 @@ class Services_JSON
 
 }
 
-if (class_exists('PEAR_Error')) {
+if (class_exists('PEAR_Error', false)) {
 
     class Services_JSON_Error extends PEAR_Error
     {
