@@ -9,22 +9,38 @@ class SiftRequest {
 
     private $url;
     private $method;
-    private $properties;
     private $timeout;
+    private $version;
+    private $body;
+    private $params;
+    private $auth;
 
     /**
      * SiftRequest constructor
      *
-     * @param $url Url of the HTTP request
-     * @param $method Method of the HTTP request
-     * @param $properties Parameters to send along with the request
-     * @param $timeout HTTP request timeout
+     * @param string $url  Url for the HTTP request
+     * @param string $method  Method for the HTTP request
+     * @param int $timeout  Request timeout
+     * @param string $version  Version of the Sift Science API that is being called.
+     * @param array $opts  Array of optional parameters for this request --
+     *     - array 'params': URL query parameters for the request.
+     *     - array 'body': HTTP body for the request.
+     *     - string 'auth': Basic authorization for the request (i.e., "username:password").
      */
-    function __construct($url, $method, $properties, $timeout) {
+    function __construct($url, $method, $timeout, $version, $opts = array()) {
+        $opts += array(
+            'params' => array(),
+            'body' => array(),
+            'auth' => null
+        );
+
         $this->url = $url;
         $this->method = $method;
-        $this->properties = $properties;
         $this->timeout = $timeout;
+        $this->version = $version;
+        $this->body = $opts['body'];
+        $this->params = $opts['params'];
+        $this->auth = $opts['auth'];
     }
 
     /**
@@ -33,9 +49,12 @@ class SiftRequest {
      * @return SiftResponse
      */
     public function send() {
-        $propertiesString = http_build_query($this->properties);
         $curlUrl = $this->url;
-        if ($this->method == self::GET || $this->method == self::DELETE) $curlUrl .= '?' . $propertiesString;
+        if ($this->params) {
+            $queryString = http_build_query($this->params);
+            $separator = parse_url($curlUrl, PHP_URL_QUERY) ? '&' : '?';
+            $curlUrl .= $separator . $queryString;
+        }
 
         // Mock the request if self::$mock exists
         if (self::$mock) {
@@ -50,26 +69,35 @@ class SiftRequest {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_URL, $curlUrl);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
+        $headers = array(
+            'User-Agent: SiftScience/v' . $this->version . ' sift-php/' . Sift::VERSION
+        );
+        if ($this->auth) {
+            curl_setopt($ch, CURLOPT_USERPWD, $this->auth);
+        }
+
+        // HTTP-method-specific configuration.
         if ($this->method == self::POST) {
             if (function_exists('json_encode')) {
-                $jsonString = json_encode($this->properties);
+                $jsonString = json_encode($this->body);
             } else {
                 require_once(dirname(__FILE__) . '/Services_JSON-1.0.3/JSON.php');
                 $json = new Services_JSON();
-                $jsonString = $json->encodeUnsafe($this->properties);
+                $jsonString = $json->encodeUnsafe($this->body);
             }
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonString);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    'Content-Type: application/json',
-                    'Content-Length: ' . strlen($jsonString),
-                    'User-Agent: SiftScience/v' . SiftClient::API_VERSION . ' sift-php/' . Sift::VERSION)
+            $headers += array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($jsonString)
             );
-        }
-        else if ($this->method == self::DELETE) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 
+        } else if ($this->method == self::DELETE) {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        }
 
         // Send the request using curl and parse result
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         $result = curl_exec($ch);
         $httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 

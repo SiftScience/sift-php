@@ -2,129 +2,340 @@
 
 class SiftClient {
     const API_ENDPOINT = 'https://api.siftscience.com';
+    const API3_ENDPOINT = 'https://api3.siftscience.com';
+
     // Must be kept in sync with composer.json
-    const API_VERSION = "203";
+    const API_VERSION = '204';
+
+    const API3_VERSION = '3';
+
     const DEFAULT_TIMEOUT = 2;
 
     private $api_key;
-    private $path;
+    private $account_id;
     private $timeout;
+    private $version;
+
 
     /**
-     * SiftClient constructor
+     * SiftClient constructor.
      *
-     * @param   $apiKey The SiftScience API key associated with your account. If Sift::$api_key has been set you can instantiate the client without an $apiKey,
-     *          If Sift::$api_key has not been set, this parameter is required and must not be null or an empty string.
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'api_key': The API key associated with your Sift Science account.  By default,
+     *           Sift::$api_key.
+     *     - string 'account_id': The ID associated with your Sift Science account.  By default,
+     *           Sift::$account_id.
+     *     - int 'timeout': The number of seconds to wait before failing a request.  By default, 2.
+     *     - string 'version': The version of Sift Science's API to call.  By default, '204'.
      */
-    function  __construct($apiKey = null, $path = self::API_ENDPOINT, $timeout = self::DEFAULT_TIMEOUT) {
-        if (!$apiKey) {
-            $apiKey = Sift::$api_key;
-        }
-        $this->validateArgument($apiKey, 'api key', 'string');
-        $this->api_key = $apiKey;
+    function  __construct($opts = array()) {
+        $this->mergeArguments($opts, array(
+            'api_key' => Sift::$api_key,
+            'account_id' => Sift::$account_id,
+            'timeout' => self::DEFAULT_TIMEOUT,
+            'version' => self::API_VERSION
+        ));
 
-        $this->validateArgument($path, 'path', 'string');
-        $this->path = $path;
+        $this->validateArgument($opts['api_key'], 'api key', 'string');
 
-        $this->timeout = $timeout;
+        $this->api_key = $opts['api_key'];
+        $this->account_id = $opts['account_id'];
+        $this->timeout = $opts['timeout'];
+        $this->version = $opts['version'];
     }
+
 
     /**
      * Tracks an event and associated properties through the Sift Science API.
-     * Check https://siftscience.com/resources/references/events_api.html for valid $event values and $properties fields.
      *
-     * @param $event The name of the event to send. This can be either a reserved event name, like $transaction
-     * or $label or a custom event name (that does not start with a $). This parameter is required.
-     * @param $properties An array of name-value pairs that specify the event-specific attributes to track.
-     * This parameter is required.
-     * @param $returnScore (Deprecated -- please use $returnAction instead.) Whether to return the user's score as part of the API 
-     * response.  The score will include the posted event. This feature must be
-     * enabled for your account in order to use it.  Please contact
-     * support@siftscience.com if you are interested in using this feature.
-     * @param $returnAction Whether to return an action triggered by this event as part of the API 
-     * response.  The score will include the posted event. This feature must be
-     * enabled for your account in order to use it.  Please contact
-     * support@siftscience.com if you are interested in using this feature.
-     * @param $timeout (optional) The number of seconds to wait before failing the request. By default this is
-     * configured to 2 seconds (see above).
-     * @param $path (optional) Overrides the default API path with a different URL.
+     * See https://siftscience.com/resources/references/events_api.html for valid $event values
+     * and $properties fields.
+     *
+     * @param string $event  The type of the event to send. This can be either a reserved event name,
+     *     like $transaction or $label or a custom event name (that does not start with a $). This
+     *     parameter is required.
+     *
+     * @param array $properties An array of name-value pairs that specify the event-specific
+     *     attributes to track.  This parameter is required.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - bool 'return_score': Whether to return the user's score as part of the API response.  The
+     *           score will include the posted event.
+     *     - bool 'return_action': Whether to return any actions triggered by this event as part of the
+     *           API response.
+     *     - bool 'return_workflow_status': Whether to return the status of any workflow run as a
+     *           result of the posted event in the API response.
+     *     - array 'abuse_types': List of abuse types, specifying for which abuse types a score
+     *          should be returned (if scores were requested).  If not specified, a score will
+     *          be returned for every abuse_type to which you are subscribed.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'version': By default, this client's version is used.
+     *     - string 'path': The URL path to use for this call.  By default, the path for the requested
+     *           version of the Events API is used.
+     *
      * @return null|SiftResponse
      */
-    public function track($event, $properties, $timeout = self::DEFAULT_TIMEOUT, $path = null, $returnScore = FALSE, $returnAction = FALSE) {
+    public function track($event, $properties, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'return_score' => false,
+            'return_action' => false,
+            'return_workflow_status' => false,
+            'abuse_types' => array(),
+            'path' => NULL,
+            'timeout' => $this->timeout,
+            'version' => $this->version
+        ));
         $this->validateArgument($event, 'event', 'string');
         $this->validateArgument($properties, 'properties', 'array');
 
-        if (!$path) $path = self::restApiUrl($returnScore, $returnAction);
+        $path = $opts['path'];
+        if (!$path) {
+            $path = self::restApiUrl($opts['version']);
+        }
+
         $properties['$api_key'] = $this->api_key;
         $properties['$type'] = $event;
+
+        $params = array();
+        if ($opts['return_score']) $params['return_score'] = 'true';
+        if ($opts['return_action']) $params['return_action'] = 'true';
+        if ($opts['return_workflow_status']) $params['return_workflow_status'] = 'true';
+        if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+
         try {
-            $request = new SiftRequest($path, SiftRequest::POST, $properties, $timeout);
+            $request = new SiftRequest(
+                $path, SiftRequest::POST, $opts['timeout'], $opts['version'], array(
+                    'body' => $properties,
+                    'params' => $params
+                ));
             return $request->send();
         } catch (Exception $e) {
             return null;
         }
     }
+
 
     /**
-     * Retrieves a user's fraud score from the Sift Science API.
+     * Retrieves a user's score(s) from the Sift Science API.
      *
-     * @param $userId A user's id. This id should be the same as the user_id used in event calls.
-     * This parameter is required.
-     * @param $timeout (optional) The number of seconds to wait before failing the request. By default this is
-     * configured to 2 seconds (see above).
+     * @param string $userId  A user's id. This id should be the same as the user_id used in event
+     *     calls.  This parameter is required.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - array 'abuse_types': List of abuse types, specifying for which abuse types a score
+     *           should be returned.  If not specified, a score will be returned for every abuse
+     *           type to which you are subscribed.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'version': By default, this client's version is used.
+     *
      * @return null|SiftResponse
      */
-    public function score($userId, $timeout = self::DEFAULT_TIMEOUT) {
+    public function score($userId, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'abuse_types' => array(),
+            'timeout' => $this->timeout,
+            'version' => $this->version
+        ));
+
         $this->validateArgument($userId, 'user id', 'string');
 
-        $properties = array('api_key' => $this->api_key);
+        $params = array('api_key' => $this->api_key);
+        if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+
         try {
-            $request = new SiftRequest(self::userScoreApiUrl($userId), SiftRequest::GET, $properties, $timeout);
+            $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']),
+                SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
             return null;
         }
     }
+
 
     /**
      * Labels a user as either good or bad through the Sift Science API.
-     * Check https://siftscience.com/resources/references/labels_api.html for valid $properties fields.
      *
-     * @param $userId A user's id. This id should be the same as the user_id used in event calls.
-     * This parameter is required.
-     * @param $properties An array of name-value pairs that specify the label attributes. This parameter is required.
-     * @param $timeout (optional) The number of seconds to wait before failing the request. By default this is
-     * configured to 2 seconds (see above).
+     * See https://siftscience.com/resources/references/labels_api.html for valid $properties
+     * fields.
+     *
+     * @param string $userId  The ID of a user.  This parameter is required.
+     *
+     * @param $properties An array of name-value pairs that specify the label attributes. This
+     *     parameter is required.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'version': By default, this client's version is used.
+     *
      * @return null|SiftResponse
      */
-    public function label($userId, $properties, $timeout = self::DEFAULT_TIMEOUT) {
+    public function label($userId, $properties, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'timeout' => $this->timeout,
+            'version' => $this->version
+        ));
+
         $this->validateArgument($userId, 'user id', 'string');
         $this->validateArgument($properties, 'properties', 'array');
 
-        return $this->track('$label', $properties, $timeout, $this->userLabelApiUrl($userId));
+        return $this->track('$label', $properties, array(
+            'timeout' => $opts['timeout'],
+            'version' => $opts['version'],
+            'path' => $this->userLabelApiUrl($userId, $opts['version'])
+        ));
     }
+
 
     /**
      * Removes a label from a user
      *
-     * @param $userId A user's id. This id should be the same as the user_id used in event calls.
-     * This parameter is required.
-     * @param $timeout (optional) The number of seconds to wait before failing the request. By default this is
-     * configured to 2 seconds (see above).
+     * @param string $userId  The ID of a user.  This parameter is required.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'abuse_type': The abuse type for which the user should be unlabeled.
+     *           If omitted, the user is unlabeled for all abuse types.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'version': By default, this client's version is used.
+     *
      * @return null|SiftResponse
      */
-    public function unlabel($userId, $timeout = self::DEFAULT_TIMEOUT) {
+    public function unlabel($userId, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'abuse_type' => null,
+            'timeout' => $this->timeout,
+            'version' => $this->version
+        ));
+
         $this->validateArgument($userId, 'user id', 'string');
 
+        $params = array('api_key' => $this->api_key);
+        if ($opts['abuse_type']) $params['abuse_type'] = $opts['abuse_type'];
 
-        $properties = array('api_key' => $this->api_key);
         try {
-            $request = new SiftRequest(self::userLabelApiUrl($userId), SiftRequest::DELETE, $properties, $timeout);
+            $request = new SiftRequest(self::userLabelApiUrl($userId, $opts['version']),
+                SiftRequest::DELETE, $timeout, $version, array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
             return null;
         }
     }
+
+
+    /**
+     * Gets the status of a workflow run.
+     *
+     * @param string $run_id  The ID of a workflow run.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     */
+    public function getWorkflowStatus($run_id, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout
+        ));
+
+        $this->validateArgument($run_id, 'run id', 'string');
+
+        $url = (self::API3_ENDPOINT . '/v3/accounts/'
+                . $opts['account_id'] . '/workflows/runs/' . $run_id);
+
+        try {
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
+                                       array('auth' => $this->api_key . ':'));
+            return $request->send();
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+
+    /**
+     * Gets the status of a workflow run.
+     *
+     * @param string $run_id  The ID of a workflow run.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     */
+    public function getUserDecisions($user_id, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout
+        ));
+
+        $this->validateArgument($user_id, 'user id', 'string');
+
+        $url = (self::API3_ENDPOINT . '/v3/accounts/'
+                . $opts['account_id'] . '/users/' . $user_id . '/decisions');
+
+        try {
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
+                                       array('auth' => $this->api_key . ':'));
+            return $request->send();
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+
+    /**
+     * Gets the latest decision for a user for each abuse type.
+     *
+     * @param string $user_id  The ID of a user.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     */
+    public function getOrderDecisions($order_id, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout
+        ));
+
+        $this->validateArgument($order_id, 'order id', 'string');
+
+        $url = (self::API3_ENDPOINT . '/v3/accounts/'
+                . $opts['account_id'] . '/orders/' . $order_id . '/decisions');
+
+        try {
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
+                                       array('auth' => $this->api_key . ':'));
+            return $request->send();
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+
+    /**
+     * Merges a function's default parameter values into an array of arguments.
+     *
+     * In particular, this method:
+     *  1. Validates that $opts only contains allowed keys -- i.e., those in $defaults.
+     *  2. Modifies $opts in-place by $opts += $defaults.
+     *
+     * @param array &$opts  The array of arguments passed to a function.
+     *
+     * @param array $defaults  The array of default parameter values for a function.
+     *
+     * @throws InvalidArgumentException if $opts contains any keys not in $defaults.
+     */
+    private function mergeArguments(&$opts, $defaults) {
+        if (!is_array($opts)) {
+            throw new InvalidArgumentException("Argument 'opts' must be an array.");
+        }
+        foreach ($opts as $key => $value) {
+            if (!array_key_exists($key, $defaults)) {
+                throw new InvalidArgumentException("${key} is not a valid argument.");
+            }
+        }
+        $opts += $defaults;
+    }
+
 
     private function validateArgument($arg, $name, $type) {
         // Validate type
@@ -136,25 +347,19 @@ class SiftClient {
             throw new InvalidArgumentException("${name} cannot be empty.");
     }
 
-    private static function restApiUrl($returnScore, $returnAction) {
-        $queryParams = array();
-        if ($returnScore) array_push($queryParams, 'return_score=true');
-        if ($returnAction) array_push($queryParams, 'return_action=true');
-        $queryString = empty($queryParams) ? '' : '?' . join('&', $queryParams);
-
-        return self::urlPrefix() . '/events' . $queryString;
+    private static function restApiUrl($version) {
+        return self::urlPrefix($version) . '/events';
     }
 
-    private static function userLabelApiUrl($userId) {
-        return self::urlPrefix() . '/users/' . urlencode($userId) . '/labels';
+    private static function userLabelApiUrl($userId, $version) {
+        return self::urlPrefix($version) . '/users/' . urlencode($userId) . '/labels';
     }
 
-    private static function userScoreApiUrl($userId) {
-        return self::urlPrefix() . '/score/' . urlencode($userId);
+    private static function userScoreApiUrl($userId, $version) {
+        return self::urlPrefix($version) . '/score/' . urlencode($userId);
     }
 
-    private static function urlPrefix() {
-        return self::API_ENDPOINT . '/v' . self::API_VERSION;
+    private static function urlPrefix($version) {
+        return self::API_ENDPOINT . '/v' . $version;
     }
 }
-

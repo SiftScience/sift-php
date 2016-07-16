@@ -28,8 +28,13 @@ class SiftResponse {
         if (!in_array($this->httpStatusCode, array(204,304))) {
             $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
             $this->body = $json->decode($result);
-            $this->apiStatus = intval($this->body['status']);
-            $this->apiErrorMessage = $this->body['error_message'];
+            // NOTE: Responses from /v3 endpoints don't contain status or error_message.
+            if (array_key_exists('status', $this->body)) {
+                $this->apiStatus = intval($this->body['status']);
+            }
+            if (array_key_exists('error_message', $this->body)) {
+                $this->apiErrorMessage = $this->body['error_message'];
+            }
         }
     }
 
@@ -56,7 +61,8 @@ class SiftResponse {
             return 204 === $this->httpStatusCode;
         }
 
-        // Otherwise expect http status 200 and api status 0
-        return $this->apiStatus === 0 && 200 === $this->httpStatusCode;
+        // Otherwise expect http status 200 and api status 0.
+        // NOTE: $this->apiStatus will be null for all /v3 responses.
+        return ($this->apiStatus == 0) && (200 === $this->httpStatusCode);
     }
 }

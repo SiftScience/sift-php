@@ -8,4 +8,4 @@ php:
 install:
   - composer update
 script:
-  - phpunit --bootstrap vendor/autoload.php test/SiftClientTest
+  - phpunit --bootstrap vendor/autoload.php test
