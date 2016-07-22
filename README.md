@@ -5,9 +5,15 @@
 1. Add siftscience/sift-php as a dependency in composer.json.
 
     ```
+	"repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/stevenbitner/sift-php.git"
+        }
+    ],
     "require": {
         ...
-        "siftscience/sift-php" : "1.*"
+		"SiftScience/sift-php" : "dev-master"
         ...
     }
     ```
