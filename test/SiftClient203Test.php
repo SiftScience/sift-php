@@ -5,8 +5,6 @@ class SiftClient203Test extends PHPUnit_Framework_TestCase {
     private static $API_KEY = 'agreatsuccess';
     private $client;
     private $transaction_properties;
-    private $errors;
-
 
     protected function setUp() {
         $this->client = new SiftClient(array('api_key' => SiftClient203Test::$API_KEY));
@@ -32,25 +30,6 @@ class SiftClient203Test extends PHPUnit_Framework_TestCase {
             '$is_bad' => true,
             '$description' => 'Listed a fake item'
         );
-        $this->errors = array();
-        set_error_handler(array($this, "errorHandler"));
-    }
- 
-    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
-        $this->errors[] = compact("errno", "errstr", "errfile",
-            "errline", "errcontext");
-    }
- 
-    public function assertError($errstr, $errno) {
-        foreach ($this->errors as $error) {
-            if ($error["errstr"] === $errstr
-                && $error["errno"] === $errno) {
-                return;
-            }
-        }
-        $this->fail("Error with level " . $errno .
-            " and message '" . $errstr . "' not found in ", 
-            var_export($this->errors, TRUE));
     }
 
     protected function tearDown() {

@@ -213,7 +213,7 @@ class SiftClient {
 
         try {
             $request = new SiftRequest(self::userLabelApiUrl($userId, $opts['version']),
-                SiftRequest::DELETE, $timeout, $version, array('params' => $params));
+                SiftRequest::DELETE, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
             return null;
