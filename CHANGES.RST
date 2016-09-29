@@ -1,3 +1,6 @@
+2.0.1 (2016-09-29)
+=================
+* fixes unlabel function to use array params instead of private variables.
 2.0.0 (2016-07-19)
 =================
 * adds support for v204 of Sift Science's APIs
