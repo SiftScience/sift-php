@@ -4,8 +4,13 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 class SiftClientTest extends PHPUnit_Framework_TestCase {
     private static $API_KEY = 'agreatsuccess';
     private static $ACCOUNT_ID = '90201c25e39320c45b3da37b';
+
+    /*
+     * @var SiftClient Ėclient
+     */
     private $client;
     private $transaction_properties;
+    private $label_properties = [];
 
     protected function setUp() {
         $this->client = new SiftClient(array(
