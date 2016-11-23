@@ -177,7 +177,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     public function testSuccessfulScoreFetch() {
         $mockUrl = 'https://api.sift.com/v205/score/12345?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
-            "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
+            "user_id": "12345", "scores": {"payment_abuse": {"score": 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
         $response = $this->client->score('12345');
@@ -189,7 +189,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     public function testSuccessfulScoreFetchWithAbuseTypes() {
         $mockUrl = 'https://api.sift.com/v205/score/12345?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
-            "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
+            "user_id": "12345", "scores": {"payment_abuse": {"score": 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
         $response = $this->client->score('12345', array(
@@ -203,7 +203,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     public function testSuccessfulGetUserScore() {
         $mockUrl = 'https://api.sift.com/v205/users/12345/score?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
-            "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
+            "user_id": "12345", "scores": {"payment_abuse": {"score": 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
         $response = $this->client->get_user_score('12345');
@@ -224,7 +224,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     public function testSuccessfulGetUserScoreWithAbuseTypes() {
         $mockUrl = 'https://api.sift.com/v205/users/12345/score?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
-            "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
+            "user_id": "12345", "scores": {"payment_abuse": {"score": 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
         $response = $this->client->get_user_score('12345', array(
@@ -238,7 +238,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     public function testSuccessfulRescoreUser() {
         $mockUrl = 'https://api.sift.com/v205/users/12345/score?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
-            "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
+            "user_id": "12345", "scores": {"payment_abuse": {"score": 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
 
         $response = $this->client->rescore_user('12345');
@@ -250,7 +250,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     public function testSuccessfulRescoreUserWithAbuseTypes() {
         $mockUrl = 'https://api.sift.com/v205/users/12345/score?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
-            "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
+            "user_id": "12345", "scores": {"payment_abuse": {"score": 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
 
         $response = $this->client->rescore_user('12345', array(
