@@ -12,23 +12,23 @@ class SiftResponse {
         $this->body = null;
         $this->apiStatus = null;
         $this->apiErrorMessage = null;
-
-        if (function_exists('json_decode')) {
-            $this->body = json_decode($result, true);
-        } else {
-            require_once(dirname(__FILE__) . '/Services_JSON-1.0.3/JSON.php');
-            $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
-            $this->body = $json->decode($result);
-        }
         $this->httpStatusCode = $httpStatusCode;
         $this->request = $request;
         $this->rawResponse = $result;
 
         // Only attempt to get our response body if the http status code expects a body
-        if (!in_array($this->httpStatusCode, array(204,304))) {
-            $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
-            $this->body = $json->decode($result);
-            if (is_array($this->body)) {
+        if (!in_array($this->httpStatusCode, array(204, 304))) {
+            if (function_exists('json_decode')) {
+                $this->body = json_decode($result, true);
+            } else {
+                require_once(dirname(__FILE__) . '/Services_JSON-1.0.3/JSON.php');
+                $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
+                $this->body = $json->decode($result);
+            }
+
+            if (is_null($this->body)) {
+                $this->apiErrorMessage = 'Invalid JSON received from SiftScience API';
+            } elseif (is_array($this->body)) {
                 // NOTE: Responses from /v3 endpoints don't contain status or error_message.
                 if (array_key_exists('status', $this->body)) {
                     $this->apiStatus = intval($this->body['status']);
