@@ -28,6 +28,11 @@ class SiftResponse {
         if (!in_array($this->httpStatusCode, array(204,304))) {
             $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
             $this->body = $json->decode($result);
+			if (is_null($this->body))
+			{
+				$this->apiErrorMessage = 'Invalid JSON received from SiftScience API';
+				return;
+			}
             // NOTE: Responses from /v3 endpoints don't contain status or error_message.
             if (array_key_exists('status', $this->body)) {
                 $this->apiStatus = intval($this->body['status']);
