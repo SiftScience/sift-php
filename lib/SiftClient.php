@@ -311,6 +311,33 @@ class SiftClient {
     }
 
 
+    public function getDecisions($opts = array()) {
+      $this->mergeArguments($opts, array(
+        'account_id' => $this->account_id,
+        'timeout' => $this->timeout
+      ));
+
+      $url = (self::API3_ENDPOINT . '/v3/accounts/' . $opts['account_id']
+              . '/decisions');
+
+      $params = array();
+      if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+      if ($opts['entity_type']) $params['entity_type'] = $opts['entity_type'];
+      if ($opts['limit']) $params['limit'] = $opts['limit'];
+      if ($opts['from']) $params['from'] = $opts['from'];
+
+      try {
+        $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'],
+          self::API3_VERSION,
+          array('auth' => $this->api_key . ':'));
+
+        return $request->send();
+      } catch (Exception $e) {
+        return null;
+      }
+    }
+
+
     /**
      * Merges a function's default parameter values into an array of arguments.
      *
