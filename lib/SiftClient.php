@@ -284,7 +284,7 @@ class SiftClient {
     /**
      * Gets the latest decision for a user for each abuse type.
      *
-     * @param string $user_id  The ID of a user.
+     * @param string $order_id  The ID of an order.
      *
      * @param array $opts  Array of optional parameters for this request:
      *     - string 'account_id': by default, this client's account ID is used.
@@ -310,7 +310,24 @@ class SiftClient {
         }
     }
 
-
+    /**
+     * Gets a list of configured decisions.
+     *
+     * @param array &$opts  The array of arguments passed to a function.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - array 'abuse_types': filters decisions which can be apply to
+     *       listed abuse types
+     *     - string 'entity_type': filters on decisions which can be applied to
+     *       a specified entity_type
+     *     - string 'next_ref': url that will fetch the next page of decisions
+     *     - int 'limit': sets the max number of decisions returned
+     *     - int 'from': will return the next decision from the index given up
+     *       to the limit.
+     *
+     */
     public function getDecisions($opts = array()) {
       $this->mergeArguments($opts, array(
         'account_id' => $this->account_id,
