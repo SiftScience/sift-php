@@ -314,17 +314,27 @@ class SiftClient {
     public function getDecisions($opts = array()) {
       $this->mergeArguments($opts, array(
         'account_id' => $this->account_id,
-        'timeout' => $this->timeout
+        'timeout' => $this->timeout,
+        'abuse_types' => null,
+        'entity_type' => null,
+        'next_ref' => null,
+        'limit' => null,
+        'from' => null
       ));
 
-      $url = (self::API3_ENDPOINT . '/v3/accounts/' . $opts['account_id']
-              . '/decisions');
-
       $params = array();
-      if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
-      if ($opts['entity_type']) $params['entity_type'] = $opts['entity_type'];
-      if ($opts['limit']) $params['limit'] = $opts['limit'];
-      if ($opts['from']) $params['from'] = $opts['from'];
+
+      if ($opts['next_ref']) {
+        $url = $opts['next_ref'];
+      } else {
+        $url = (self::API3_ENDPOINT . '/v3/accounts/' . $opts['account_id']
+                . '/decisions');
+
+        if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+        if ($opts['entity_type']) $params['entity_type'] = $opts['entity_type'];
+        if ($opts['limit']) $params['limit'] = $opts['limit'];
+        if ($opts['from']) $params['from'] = $opts['from'];
+      }
 
       try {
         $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'],

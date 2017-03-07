@@ -35,7 +35,7 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
             '$description' => 'Listed a fake item'
         );
     }
- 
+
     protected function tearDown() {
         SiftRequest::clearMockResponse();
     }
@@ -308,6 +308,50 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
         $response = $this->client->getOrderDecisions('example_order', array('timeout' => 4));
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testGetDecisionList() {
+        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/decisions';
+        $mockResponse = new SiftResponse('{"data": [{' .
+          '"id": "block_user_payment_abuse", "name": "Block user",' .
+          '"description": "cancel and refund all of the user\'s' .
+          ' pending order.", "entity_type": "user,"' .
+          '"abuse_type": "payment_abuse",' .
+          '"category": "block",' .
+          '"webhook_url": "http://webhook.example.com",' .
+          '"created_at": 1468005577348,' .
+          '"created_by": "admin@example.com",' .
+          '"updated_at": 1469229177756,' .
+          '"updated_by": "billy@exmaple.com"' .
+          '}]}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
+
+        $response = $this->client->getDecisions();
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testGetDecisionListNextRef() {
+        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/decisions?from=10&limit=5';
+        $mockResponse = new SiftResponse('{"data": [{' .
+          '"id": "block_user_payment_abuse", "name": "Block user",' .
+          '"description": "cancel and refund all of the user\'s' .
+          ' pending order.", "entity_type": "user,"' .
+          '"abuse_type": "payment_abuse",' .
+          '"category": "block",' .
+          '"webhook_url": "http://webhook.example.com",' .
+          '"created_at": 1468005577348,' .
+          '"created_by": "admin@example.com",' .
+          '"updated_at": 1469229177756,' .
+          '"updated_by": "billy@exmaple.com"' .
+          '}]}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
+
+        $response = $this->client->getDecisions(array(
+          'next_ref' => $mockUrl
+        ));
         $this->assertTrue($response->isOk());
     }
 }
