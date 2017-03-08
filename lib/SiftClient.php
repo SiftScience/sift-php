@@ -313,8 +313,6 @@ class SiftClient {
     /**
      * Gets a list of configured decisions.
      *
-     * @param array &$opts  The array of arguments passed to a function.
-     *
      * @param array $opts  Array of optional parameters for this request:
      *     - string 'account_id': by default, this client's account ID is used.
      *     - int 'timeout': By default, this client's timeout is used.
@@ -364,6 +362,25 @@ class SiftClient {
       }
     }
 
+    /**
+     * Apply a decision to a user. Builds url to apply decision to user and
+     * delegates to applyDecision
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'decision_id': The decision that will be applied to a user
+     *     - string 'source': the source of the decision, i.e. MANUAL_REVIEW,
+     *     AUTOMATED_RULE, CHARGEBACK
+     *     - string 'analyst': when the source is MANUAL_REVIEW, an analyst
+     *     identifier must be passed.
+     *     - string 'user_id': the id of the user that will get this decision
+     *     - string 'description': free form text adding context to why this
+     *     decision is being applied.
+     *     - int 'time': Timestamp of when a decision was applied, mainly used
+     *     for backfilling
+     *
+     */
     public function applyDecisionToUser($opts = array()) {
       $this->mergeArguments($opts, array(
         'account_id' => $this->account_id,
@@ -384,6 +401,25 @@ class SiftClient {
       return $this->applyDecision($url, $opts);
     }
 
+    /**
+     * Apply a decision to a user. Validates presence of order_id and builds
+     * the url to apply a decision to an order and delegates to applyDecision.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'decision_id': The decision that will be applied to a user
+     *     - string 'source': the source of the decision, i.e. MANUAL_REVIEW,
+     *     AUTOMATED_RULE, CHARGEBACK
+     *     - string 'analyst': when the source is MANUAL_REVIEW, an analyst
+     *     identifier must be passed.
+     *     - string 'user_id': the id of the user that will get this decision
+     *     - string 'description': free form text adding context to why this
+     *     decision is being applied.
+     *     - int 'time': Timestamp of when a decision was applied, mainly used
+     *     for backfilling
+     *
+     */
     public function applyDecisionToOrder($opts = array()) {
       $this->mergeArguments($opts, array(
         'account_id' => $this->account_id,
@@ -408,9 +444,6 @@ class SiftClient {
       return $this->applyDecision($url, $opts);
     }
 
-    /**
-     *
-     */
     private function applyDecision($url, $opts = array()) {
       $this->validateArgument($opts['decision_id'], 'decision_id', 'string');
       $this->validateArgument($opts['user_id'], 'user_id', 'string');
@@ -423,6 +456,7 @@ class SiftClient {
 
       if ($opts['analyst']) $body['analyst'] = $opts['analyst'];
       if ($opts['description']) $body['description'] = $opts['description'];
+      if ($opts['time']) $body['time'] = $opts['time'];
 
       try {
         $request = new SiftRequest(
