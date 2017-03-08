@@ -364,6 +364,84 @@ class SiftClient {
       }
     }
 
+    public function applyDecisionToUser($opts = array()) {
+      $this->mergeArguments($opts, array(
+        'account_id' => $this->account_id,
+        'timeout' => $this->timeout,
+        'decision_id' => null,
+        'source' => null,
+        'analyst' => null,
+        'user_id' => null,
+        'description' => null,
+        'time' => null
+      ));
+
+      $url = (self::API3_ENDPOINT .
+        '/v3/accounts/' . $opts['account_id'] .
+        '/users/'. $opts['user_id'] .
+        '/decisions');
+
+      return $this->applyDecision($url, $opts);
+    }
+
+    public function applyDecisionToOrder($opts = array()) {
+      $this->mergeArguments($opts, array(
+        'account_id' => $this->account_id,
+        'timeout' => $this->timeout,
+        'decision_id' => null,
+        'source' => null,
+        'analyst' => null,
+        'user_id' => null,
+        'order_id' => null,
+        'description' => null,
+        'time' => null
+      ));
+
+      $this->validateArgument($opts['order_id'], 'order_id', 'string');
+
+      $url = (self::API3_ENDPOINT .
+        '/v3/accounts/' . $opts['account_id'] .
+        '/users/' . $opts['user_id'] .
+        '/orders/' . $opts['order_id'] .
+        '/decisions');
+
+      return $this->applyDecision($url, $opts);
+    }
+
+    /**
+     *
+     */
+    private function applyDecision($url, $opts = array()) {
+      $this->validateArgument($opts['decision_id'], 'decision_id', 'string');
+      $this->validateArgument($opts['user_id'], 'user_id', 'string');
+      $this->validateArgument($opts['source'], 'source', 'string');
+
+      $body = array(
+        'decision_id' => $opts['decision_id'],
+        'source' => $opts['source']
+      );
+
+      if ($opts['analyst']) $body['analyst'] = $opts['analyst'];
+      if ($opts['description']) $body['description'] = $opts['description'];
+
+      try {
+        $request = new SiftRequest(
+          $url,
+          SiftRequest::POST,
+          $opts['timeout'],
+          self::API3_VERSION,
+          array(
+            'auth' => $this->api_key . ':',
+            'body' => $body
+          )
+        );
+
+        return $request->send();
+      } catch (Exception $e) {
+        return null;
+      }
+    }
+
 
     /**
      * Merges a function's default parameter values into an array of arguments.

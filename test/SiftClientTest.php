@@ -354,4 +354,55 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
         ));
         $this->assertTrue($response->isOk());
     }
+
+    public function testApplyDecisionOnUser() {
+        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/decisions';
+        $mockResponse = new SiftResponse('{' .
+            '"entity": {' .
+                '"id" : "some_user"' .
+                '"type" : "USER"' .
+            '},' .
+            '"decision": {' .
+                '"id": "user_looks_ok_payment_abuse"' .
+            '},' .
+            '"time": "1461963439151"' .
+            '}' .
+        '}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->client->applyDecisionToUser(array(
+          'user_id' => 'some_user',
+          'decision_id' => 'user_looks_ok_payment_abuse',
+          'source' => 'MANUAL_REVIEW',
+          'analyst' => 'analyst@example.com',
+        ));
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testApplyDecisionOnOrder() {
+        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/orders/ORDER_1234/decisions';
+        $mockResponse = new SiftResponse('{' .
+            '"entity": {' .
+                '"id" : "ORDER_1234"' .
+                '"type" : "ORDER"' .
+            '},' .
+            '"decision": {' .
+                '"id": "order_looks_ok_payment_abuse"' .
+            '},' .
+            '"time": "1461963439151"' .
+            '}' .
+        '}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->client->applyDecisionToOrder(array(
+          'user_id' => 'some_user',
+          'order_id' => 'ORDER_1234',
+          'decision_id' => 'order_looks_ok_payment_abuse',
+          'source' => 'MANUAL_REVIEW',
+          'analyst' => 'analyst@example.com',
+        ));
+        $this->assertTrue($response->isOk());
+    }
 }
