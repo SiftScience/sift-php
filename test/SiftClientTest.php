@@ -371,12 +371,11 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
 
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
 
-        $response = $this->client->applyDecisionToUser(array(
-          'user_id' => 'some_user',
-          'decision_id' => 'user_looks_ok_payment_abuse',
-          'source' => 'MANUAL_REVIEW',
-          'analyst' => 'analyst@example.com',
-        ));
+        $response = $this->client->applyDecisionToUser('some_user',
+            'user_looks_ok_payment_abuse',
+            'MANUAL_REVIEW',
+            array('analyst' => 'analyst@example.com')
+        );
         $this->assertTrue($response->isOk());
     }
 
@@ -396,13 +395,13 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
 
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
 
-        $response = $this->client->applyDecisionToOrder(array(
-          'user_id' => 'some_user',
-          'order_id' => 'ORDER_1234',
-          'decision_id' => 'order_looks_ok_payment_abuse',
-          'source' => 'MANUAL_REVIEW',
-          'analyst' => 'analyst@example.com',
-        ));
+        $response = $this->client->applyDecisionToOrder('some_user',
+            'ORDER_1234',
+            'order_looks_ok_payment_abuse',
+            'MANUAL_REVIEW',
+            array('analyst' => 'analyst@example.com')
+        );
+
         $this->assertTrue($response->isOk());
     }
 }
