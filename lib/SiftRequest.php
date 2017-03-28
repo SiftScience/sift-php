@@ -85,10 +85,10 @@ class SiftRequest {
                 $json = new Services_JSON();
                 $jsonString = $json->encodeUnsafe($this->body);
             }
+
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonString);
-            $headers += array(
-                'Content-Type: application/json',
+            array_push($headers, 'Content-Type: application/json',
                 'Content-Length: ' . strlen($jsonString)
             );
 

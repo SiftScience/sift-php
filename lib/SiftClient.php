@@ -352,8 +352,8 @@ class SiftClient {
 
         try {
             $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'],
-              self::API3_VERSION,
-              array('auth' => $this->api_key . ':'));
+                self::API3_VERSION,
+                array('auth' => $this->api_key . ':'));
 
             return $request->send();
         } catch (Exception $e) {
