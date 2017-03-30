@@ -341,8 +341,7 @@ class SiftClient {
         if ($opts['next_ref']) {
             $url = $opts['next_ref'];
         } else {
-            $url = (self::API3_ENDPOINT . '/v3/accounts/' . $opts['account_id']
-                    . '/decisions');
+            $url = (self::API3_ENDPOINT . '/v3/accounts/' . $opts['account_id'] . '/decisions');
 
             if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
             if ($opts['entity_type']) $params['entity_type'] = $opts['entity_type'];
