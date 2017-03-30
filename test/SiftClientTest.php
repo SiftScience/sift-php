@@ -35,7 +35,7 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
             '$description' => 'Listed a fake item'
         );
     }
- 
+
     protected function tearDown() {
         SiftRequest::clearMockResponse();
     }
@@ -308,6 +308,100 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
         $response = $this->client->getOrderDecisions('example_order', array('timeout' => 4));
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testGetDecisionList() {
+        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/decisions';
+        $mockResponse = new SiftResponse('{"data": [{' .
+          '"id": "block_user_payment_abuse", "name": "Block user",' .
+          '"description": "cancel and refund all of the user\'s' .
+          ' pending order.", "entity_type": "user,"' .
+          '"abuse_type": "payment_abuse",' .
+          '"category": "block",' .
+          '"webhook_url": "http://webhook.example.com",' .
+          '"created_at": 1468005577348,' .
+          '"created_by": "admin@example.com",' .
+          '"updated_at": 1469229177756,' .
+          '"updated_by": "billy@exmaple.com"' .
+          '}]}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
+
+        $response = $this->client->getDecisions();
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testGetDecisionListNextRef() {
+        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/decisions?from=10&limit=5';
+        $mockResponse = new SiftResponse('{"data": [{' .
+          '"id": "block_user_payment_abuse", "name": "Block user",' .
+          '"description": "cancel and refund all of the user\'s' .
+          ' pending order.", "entity_type": "user,"' .
+          '"abuse_type": "payment_abuse",' .
+          '"category": "block",' .
+          '"webhook_url": "http://webhook.example.com",' .
+          '"created_at": 1468005577348,' .
+          '"created_by": "admin@example.com",' .
+          '"updated_at": 1469229177756,' .
+          '"updated_by": "billy@exmaple.com"' .
+          '}]}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
+
+        $response = $this->client->getDecisions(array(
+          'next_ref' => $mockUrl
+        ));
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testApplyDecisionOnUser() {
+        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/decisions';
+        $mockResponse = new SiftResponse('{' .
+            '"entity": {' .
+                '"id" : "some_user"' .
+                '"type" : "USER"' .
+            '},' .
+            '"decision": {' .
+                '"id": "user_looks_ok_payment_abuse"' .
+            '},' .
+            '"time": "1461963439151"' .
+            '}' .
+        '}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->client->applyDecisionToUser('some_user',
+            'user_looks_ok_payment_abuse',
+            'MANUAL_REVIEW',
+            array('analyst' => 'analyst@example.com')
+        );
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testApplyDecisionOnOrder() {
+        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/orders/ORDER_1234/decisions';
+        $mockResponse = new SiftResponse('{' .
+            '"entity": {' .
+                '"id" : "ORDER_1234"' .
+                '"type" : "ORDER"' .
+            '},' .
+            '"decision": {' .
+                '"id": "order_looks_ok_payment_abuse"' .
+            '},' .
+            '"time": "1461963439151"' .
+            '}' .
+        '}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->client->applyDecisionToOrder('some_user',
+            'ORDER_1234',
+            'order_looks_ok_payment_abuse',
+            'MANUAL_REVIEW',
+            array('analyst' => 'analyst@example.com')
+        );
+
         $this->assertTrue($response->isOk());
     }
 }

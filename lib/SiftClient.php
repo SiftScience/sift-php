@@ -284,7 +284,7 @@ class SiftClient {
     /**
      * Gets the latest decision for a user for each abuse type.
      *
-     * @param string $user_id  The ID of a user.
+     * @param string $order_id  The ID of an order.
      *
      * @param array $opts  Array of optional parameters for this request:
      *     - string 'account_id': by default, this client's account ID is used.
@@ -304,6 +304,169 @@ class SiftClient {
         try {
             $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
                                        array('auth' => $this->api_key . ':'));
+            return $request->send();
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Gets a list of configured decisions.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - array 'abuse_types': filters decisions which can be appiled to
+     *       listed abuse types
+     *     - string 'entity_type': filters on decisions which can be applied to
+     *       a specified entity_type
+     *     - string 'next_ref': url that will fetch the next page of decisions
+     *     - int 'limit': sets the max number of decisions returned
+     *     - int 'from': will return the next decision from the index given up
+     *       to the limit.
+     */
+    public function getDecisions($opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout,
+            'abuse_types' => null,
+            'entity_type' => null,
+            'next_ref' => null,
+            'limit' => null,
+            'from' => null
+        ));
+
+        $params = array();
+
+        if ($opts['next_ref']) {
+            $url = $opts['next_ref'];
+        } else {
+            $url = (self::API3_ENDPOINT . '/v3/accounts/' . $opts['account_id'] . '/decisions');
+
+            if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+            if ($opts['entity_type']) $params['entity_type'] = $opts['entity_type'];
+            if ($opts['limit']) $params['limit'] = $opts['limit'];
+            if ($opts['from']) $params['from'] = $opts['from'];
+        }
+
+        try {
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'],
+                self::API3_VERSION,
+                array('auth' => $this->api_key . ':'));
+
+            return $request->send();
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Apply a decision to a user. Builds url to apply decision to user and
+     * delegates to applyDecision
+     *
+     * @param string $user_id the id of the user that will get this decision
+     * @param string $decision_id The decision that will be applied to a user
+     * @param string $source the source of the decision, i.e. MANUAL_REVIEW,
+     *     AUTOMATED_RULE, CHARGEBACK
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'analyst': when the source is MANUAL_REVIEW, an analyst
+     *     identifier must be passed.
+     *     - string 'description': free form text adding context to why this
+     *     decision is being applied.
+     *     - int 'time': Timestamp of when a decision was applied, mainly used
+     *     for backfilling
+     */
+    public function applyDecisionToUser($user_id, $decision_id, $source, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout,
+            'decision_id' => $decision_id,
+            'source' => $source,
+            'analyst' => null,
+            'description' => null,
+            'time' => null
+        ));
+
+        $this->validateArgument($user_id, 'user_id', 'string');
+
+        $url = (self::API3_ENDPOINT .
+            '/v3/accounts/' . $opts['account_id'] .
+            '/users/'. $user_id .
+            '/decisions');
+
+        return $this->applyDecision($url, $opts);
+    }
+
+    /**
+     * Apply a decision to a user. Validates presence of order_id and builds
+     * the url to apply a decision to an order and delegates to applyDecision.
+     *
+     * @param string $user_id the id of order's user id
+     * @param string $order_id the id of the order which the decision will be
+     * applied
+     * @param string $decision_id The decision that will be applied to a user
+     * @param string $source the source of the decision, i.e. MANUAL_REVIEW,
+     * @param array $opts  Array of optional parameters for this request:
+     *     AUTOMATED_RULE, CHARGEBACK
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'analyst': when the source is MANUAL_REVIEW, an analyst
+     *     identifier must be passed.
+     *     - string 'description': free form text adding context to why this
+     *     decision is being applied.
+     *     - int 'time': Timestamp of when a decision was applied, mainly used
+     *     for backfilling
+     */
+    public function applyDecisionToOrder($user_id, $order_id, $decision_id, $source, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout,
+            'decision_id' => $decision_id,
+            'source' => $source,
+            'analyst' => null,
+            'description' => null,
+            'time' => null
+        ));
+
+        $this->validateArgument($order_id, 'order_id', 'string');
+        $this->validateArgument($user_id, 'user_id', 'string');
+
+        $url = (self::API3_ENDPOINT .
+            '/v3/accounts/' . $opts['account_id'] .
+            '/users/' . $user_id .
+            '/orders/' . $order_id .
+            '/decisions');
+
+        return $this->applyDecision($url, $opts);
+    }
+
+    private function applyDecision($url, $opts = array()) {
+        $this->validateArgument($opts['decision_id'], 'decision_id', 'string');
+        $this->validateArgument($opts['source'], 'source', 'string');
+
+        $body = array(
+            'decision_id' => $opts['decision_id'],
+            'source' => $opts['source']
+        );
+
+        if ($opts['analyst']) $body['analyst'] = $opts['analyst'];
+        if ($opts['description']) $body['description'] = $opts['description'];
+        if ($opts['time']) $body['time'] = $opts['time'];
+
+        try {
+            $request = new SiftRequest(
+                $url,
+                SiftRequest::POST,
+                $opts['timeout'],
+                self::API3_VERSION,
+                array(
+                    'auth' => $this->api_key . ':',
+                    'body' => $body
+                )
+            );
+
             return $request->send();
         } catch (Exception $e) {
             return null;
