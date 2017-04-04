@@ -16,6 +16,25 @@ class SiftClient {
     private $timeout;
     private $version;
 
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function setLogger($logger)
+    {
+        $this->logger = $logger;
+    }
+
+    private function logError($message, array $context = array()) {
+        if ($this->logger instanceof \Psr\Log\LoggerInterface){
+            $this->logger->error($message, $context);
+        }
+    }
+
 
     /**
      * SiftClient constructor.
@@ -110,6 +129,7 @@ class SiftClient {
                 ));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -147,6 +167,7 @@ class SiftClient {
                 SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -216,6 +237,7 @@ class SiftClient {
                 SiftRequest::DELETE, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -246,6 +268,7 @@ class SiftClient {
                                        array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -276,6 +299,7 @@ class SiftClient {
                                        array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -306,6 +330,7 @@ class SiftClient {
                                        array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
