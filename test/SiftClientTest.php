@@ -6,6 +6,7 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
     private static $ACCOUNT_ID = '90201c25e39320c45b3da37b';
     private $client;
     private $transaction_properties;
+    private $label_properties = array();
 
     protected function setUp() {
         $this->client = new SiftClient(array(
