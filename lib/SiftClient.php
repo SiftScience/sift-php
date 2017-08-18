@@ -160,7 +160,7 @@ class SiftClient {
      *
      * @param string $userId  The ID of a user.  This parameter is required.
      *
-     * @param $properties An array of name-value pairs that specify the label attributes. This
+     * @param array $properties An array of name-value pairs that specify the label attributes. This
      *     parameter is required.
      *
      * @param array $opts  Array of optional parameters for this request:
