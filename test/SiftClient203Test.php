@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-class SiftClient203Test extends PHPUnit_Framework_TestCase {
+class SiftClient203Test extends PHPUnit\Framework\TestCase {
     private static $API_KEY = 'agreatsuccess';
     private $client;
     private $transaction_properties;
