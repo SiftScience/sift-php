@@ -1,4 +1,4 @@
-2.1.1 (2017-03-30)
+2.1.1 (2017-09-13)
 =================
 * Adds logging capabilities
 * Fixes warning logs on empty response body
