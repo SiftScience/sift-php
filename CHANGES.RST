@@ -1,3 +1,9 @@
+2.1.1 (2017-09-13)
+=================
+* Adds logging capabilities
+* Fixes warning logs on empty response body
+* Fixes phpdoc
+
 2.1.0 (2017-03-30)
 =================
 * Adds ability to use new decisions endpoints.
