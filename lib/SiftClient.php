@@ -16,6 +16,26 @@ class SiftClient {
     private $timeout;
     private $version;
 
+    /**
+     * @var null|\Psr\Log\LoggerInterface
+     */
+    private $logger;
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function setLogger(\Psr\Log\LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+    /**
+     * @param string $message
+     * @param array  $context
+     */
+    private function logError($message, array $context = array()) {
+        if ($this->logger) {
+            $this->logger->error($message, $context);
+        }
+    }
 
     /**
      * SiftClient constructor.
@@ -110,6 +130,7 @@ class SiftClient {
                 ));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -147,6 +168,7 @@ class SiftClient {
                 SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -160,8 +182,8 @@ class SiftClient {
      *
      * @param string $userId  The ID of a user.  This parameter is required.
      *
-     * @param $properties An array of name-value pairs that specify the label attributes. This
-     *     parameter is required.
+     * @param array $properties An array of name-value pairs that specify the label attributes.
+     *     This parameter is required.
      *
      * @param array $opts  Array of optional parameters for this request:
      *     - int 'timeout': By default, this client's timeout is used.
@@ -216,6 +238,7 @@ class SiftClient {
                 SiftRequest::DELETE, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -246,6 +269,7 @@ class SiftClient {
                                        array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -276,6 +300,7 @@ class SiftClient {
                                        array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -306,6 +331,7 @@ class SiftClient {
                                        array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -356,6 +382,7 @@ class SiftClient {
 
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }
@@ -469,6 +496,7 @@ class SiftClient {
 
             return $request->send();
         } catch (Exception $e) {
+            $this->logError($e->getMessage());
             return null;
         }
     }

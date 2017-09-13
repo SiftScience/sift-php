@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-class SiftClientTest extends PHPUnit_Framework_TestCase {
+class SiftClientTest extends PHPUnit\Framework\TestCase {
     private static $API_KEY = 'agreatsuccess';
     private static $ACCOUNT_ID = '90201c25e39320c45b3da37b';
     private $client;
@@ -45,92 +45,92 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testGlobalApiKeySuccess() {
-        $this->setExpectedException(null);
         Sift::setApiKey('test_global_api_key');
         new SiftClient();
+        $this->assertTrue(true);
     }
 
     public function testEmptyGlobalApiKeyFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         Sift::setApiKey('');
         new SiftClient();
     }
 
     public function testNullGlobalApiKeyFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         Sift::setApiKey(null);
         new SiftClient();
     }
 
     public function testNonStringGlobalApiKeyFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         Sift::setApiKey(42);
         new SiftClient();
     }
 
     public function testEmptyApiKeyFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         new SiftClient(array('api_key' => ''));
     }
 
     public function testNullApiKeyFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         new SiftClient(array('api_key' => null));
     }
 
     public function testNonStringApiKeyFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         new SiftClient(array('api_key' => 42));
     }
 
     public function testInvalidOptToConstructor() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         Sift::setApiKey('some_key');
         new SiftClient(array('apiKey' => 'typos'));
     }
 
     public function testEmptyEventNameFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->client->track('', $this->transaction_properties);
     }
 
     public function testNullEventNameFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->client->track(null, $this->transaction_properties);
     }
 
     public function testNonStringEventNameFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->client->track(42, $this->transaction_properties);
     }
 
     public function testEmptyPropertiesFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->client->track('event_name', array());
     }
 
     public function testNullPropertiesFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->client->track('event_name', null);
     }
 
     public function testNonArrayPropertiesFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->client->track('event_name', 42);
     }
 
     public function testEmptyUserIdFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->client->score('');
     }
 
     public function testNullUserIdFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->client->score(null);
     }
 
     public function testNonStringUserIdFail() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->client->score(42);
     }
 
@@ -186,7 +186,7 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testInvalidTrackOption() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $response = $this->client->track('$transaction', $this->transaction_properties, array(
             'timeout' => 2,
             'return_score' => true,
@@ -297,7 +297,7 @@ class SiftClientTest extends PHPUnit_Framework_TestCase {
 
 
     public function testGetUserDecisionsWithInvalidOption() {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $response = $this->client->getUserDecisions('example_user', array('return_score' => true));
     }
 
