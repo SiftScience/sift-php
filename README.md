@@ -150,7 +150,7 @@ $response->isOk()
 ### Apply decision to a session
 ```
 $sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
-$response = $sift->applyDecisionToSession('example_user','example_session','example_source',array('analyst' => 'analyst@example.com')
+$response = $sift->applyDecisionToSession('example_user','example_session','example_decision','example_source',array('analyst' => 'analyst@example.com')
 $response->isOk()
 ```
 
