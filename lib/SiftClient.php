@@ -473,7 +473,7 @@ class SiftClient {
      * Apply a decision to a session. Validates presence of order_id and builds
      * the url to apply a decision to a session and delegates to applyDecision.
      *
-     * @param string $user_id the id of order's user id
+     * @param string $user_id the id of session's user id
      * @param string $session_id the id of the session which the decision will be
      * applied
      * @param string $decision_id The decision that will be applied to the session
