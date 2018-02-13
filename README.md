@@ -121,10 +121,44 @@ $response = $sift->getOrderDecisions('example_order');
 $response->body['decisions']['payment_abuse']['decision']['id']; // => "ship_order"
 ```
 
+### List of configured Decisions
+**Optional Params**
+ - `entity_type`: `user` or `order` or `session`
+ - `abuse_types`: `["payment_abuse", "content_abuse", "content_abuse",
+   "account_abuse", "legacy", "account_takeover"]`
+
+```
+$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
+$response = $this->client->getDecisions(array('entity_type' => 'example_entity_type','abuse_types' => 'example_abuse_types'));
+$response->isOk()
+```
+
+### Apply decision to a user
+```
+$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
+$response = $sift->applyDecisionToUser('example_user','example_decision','example_source',array('analyst' => 'analyst@example.com')
+$response->isOk()
+```
+
+### Apply decision to an order
+```
+$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
+$response = $sift->applyDecisionToOrder('example_user','example_order','example_decision','example_source',array('analyst' => 'analyst@example.com')
+$response->isOk()
+```
+
+### Apply decision to a session
+```
+$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
+$response = $sift->applyDecisionToSession('example_user','example_session','example_source',array('analyst' => 'analyst@example.com')
+$response->isOk()
+```
+
 ## Contributing
 Run the tests from the project root with [PHPUnit](http://phpunit.de) like this:
 
 ```
+composer update
 phpunit --bootstrap vendor/autoload.php test
 ```
 

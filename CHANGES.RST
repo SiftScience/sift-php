@@ -1,3 +1,7 @@
+2.2.0 (2018-02-12)
+=================
+* Add session level decisions in Apply Decisions APIs.
+
 2.1.1 (2017-09-13)
 =================
 * Adds logging capabilities
