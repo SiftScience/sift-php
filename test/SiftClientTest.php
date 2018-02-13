@@ -355,7 +355,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
         $this->assertTrue($response->isOk());
     }
 
-    public function testApplyDecisionOnUser() {
+    public function testApplyDecisionToUser() {
         $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/decisions';
         $mockResponse = new SiftResponse('{' .
             '"entity": {' .
@@ -379,7 +379,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
         $this->assertTrue($response->isOk());
     }
 
-    public function testApplyDecisionOnOrder() {
+    public function testApplyDecisionToOrder() {
         $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/orders/ORDER_1234/decisions';
         $mockResponse = new SiftResponse('{' .
             '"entity": {' .
@@ -398,6 +398,32 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
         $response = $this->client->applyDecisionToOrder('some_user',
             'ORDER_1234',
             'order_looks_ok_payment_abuse',
+            'MANUAL_REVIEW',
+            array('analyst' => 'analyst@example.com')
+        );
+
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testApplyDecisionToSession() {
+        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/sessions/SESSION_12345/decisions';
+        $mockResponse = new SiftResponse('{' .
+            '"entity": {' .
+                '"id" : "SESSION_12345"' .
+                '"type" : "SESSION"' .
+            '},' .
+            '"decision": {' .
+                '"id": "session_looks_ok_ato"' .
+            '},' .
+            '"time": "1461963439151"' .
+            '}' .
+        '}', 200, null);
+
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->client->applyDecisionToSession('some_user',
+            'SESSION_12345',
+            'session_looks_ok_ato',
             'MANUAL_REVIEW',
             array('analyst' => 'analyst@example.com')
         );

@@ -427,13 +427,13 @@ class SiftClient {
     }
 
     /**
-     * Apply a decision to a user. Validates presence of order_id and builds
+     * Apply a decision to an order. Validates presence of order_id and builds
      * the url to apply a decision to an order and delegates to applyDecision.
      *
      * @param string $user_id the id of order's user id
      * @param string $order_id the id of the order which the decision will be
      * applied
-     * @param string $decision_id The decision that will be applied to a user
+     * @param string $decision_id The decision that will be applied to the order
      * @param string $source the source of the decision, i.e. MANUAL_REVIEW,
      * @param array $opts  Array of optional parameters for this request:
      *     AUTOMATED_RULE, CHARGEBACK
@@ -464,6 +464,49 @@ class SiftClient {
             '/v3/accounts/' . $opts['account_id'] .
             '/users/' . $user_id .
             '/orders/' . $order_id .
+            '/decisions');
+
+        return $this->applyDecision($url, $opts);
+    }
+
+    /**
+     * Apply a decision to a session. Validates presence of order_id and builds
+     * the url to apply a decision to a session and delegates to applyDecision.
+     *
+     * @param string $user_id the id of session's user id
+     * @param string $session_id the id of the session which the decision will be
+     * applied
+     * @param string $decision_id The decision that will be applied to the session
+     * @param string $source the source of the decision, i.e. MANUAL_REVIEW,
+     * @param array $opts  Array of optional parameters for this request:
+     *     AUTOMATED_RULE, CHARGEBACK
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'analyst': when the source is MANUAL_REVIEW, an analyst
+     *     identifier must be passed.
+     *     - string 'description': free form text adding context to why this
+     *     decision is being applied.
+     *     - int 'time': Timestamp of when a decision was applied, mainly used
+     *     for backfilling
+     */
+    public function applyDecisionToSession($user_id, $session_id, $decision_id, $source, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout,
+            'decision_id' => $decision_id,
+            'source' => $source,
+            'analyst' => null,
+            'description' => null,
+            'time' => null
+        ));
+
+        $this->validateArgument($session_id, 'session_id', 'string');
+        $this->validateArgument($user_id, 'user_id', 'string');
+
+        $url = (self::API3_ENDPOINT .
+            '/v3/accounts/' . $opts['account_id'] .
+            '/users/' . $user_id .
+            '/sessions/' . $session_id .
             '/decisions');
 
         return $this->applyDecision($url, $opts);
