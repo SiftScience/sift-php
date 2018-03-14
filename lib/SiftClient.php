@@ -336,6 +336,38 @@ class SiftClient {
         }
     }
 
+
+    /**
+     * Gets the latest decision for a piece of content.
+     *
+     * @param string $content_id  The ID of a piece of content.
+     * @param string $user_id     The ID of the owner of the content.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     */
+    public function getContentDecisions($user_id, $content_id, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout
+        ));
+
+        $this->validateArgument($content_id, 'content id', 'string');
+
+        $url = (self::API3_ENDPOINT . '/v3/accounts/'
+                . $opts['account_id'] . '/users/' . $user_id . '/content/' . $content_id . '/decisions');
+
+        try {
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
+                                       array('auth' => $this->api_key . ':'));
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
     /**
      * Gets a list of configured decisions.
      *
