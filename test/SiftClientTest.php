@@ -251,7 +251,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
 
     public function testSuccessfulUnlabelUser() {
         $mockUrl = 'https://api.siftscience.com/v205/users/54321/labels?api_key=agreatsuccess';
-        $mockResponse = new SiftResponse('', 205, null);
+        $mockResponse = new SiftResponse('', 204, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::DELETE, $mockResponse);
 
         $response = $this->client->unlabel("54321");
@@ -260,7 +260,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
 
     public function testSuccessfulUnlabelUserWithAbuseType() {
         $mockUrl = 'https://api.siftscience.com/v205/users/54321/labels?api_key=agreatsuccess&abuse_type=account_abuse';
-        $mockResponse = new SiftResponse('', 205, null);
+        $mockResponse = new SiftResponse('', 204, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::DELETE, $mockResponse);
 
         $response = $this->client->unlabel("54321", array('abuse_type' => 'account_abuse'));
@@ -294,7 +294,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     // Test all special characters for Unlabel API
     public function testSuccessfulUnlabelWithAllUserIdCharacters() {
         $mockUrl = 'https://api.siftscience.com/v205/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels?api_key=agreatsuccess';
-        $mockResponse = new SiftResponse('', 205, null);
+        $mockResponse = new SiftResponse('', 204, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::DELETE, $mockResponse);
 
         $response = $this->client->unlabel("54321=.-_+@:&^%!$");
@@ -466,7 +466,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
         $mockResponse = new SiftResponse('{' .
             '"entity": {' .
             '"id" : "CONTENT_12345"' .
-            '"type" : "content"' .
+            '"type" : "CONTENT"' .
             '},' .
             '"decision": {' .
             '"id": "content_looks_ok_content_abuse"' .
@@ -477,7 +477,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
 
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
 
-        $response = $this->client->applyDecisionToSession('some_user',
+        $response = $this->client->applyDecisionToContent('some_user',
             'CONTENT_12345',
             'content_looks_ok_content_abuse',
             'MANUAL_REVIEW',
