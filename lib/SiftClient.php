@@ -5,7 +5,7 @@ class SiftClient {
     const API3_ENDPOINT = 'https://api3.siftscience.com';
 
     // Must be kept in sync with composer.json
-    const API_VERSION = '204';
+    const API_VERSION = '205';
 
     const API3_VERSION = '3';
 
@@ -336,6 +336,38 @@ class SiftClient {
         }
     }
 
+
+    /**
+     * Gets the latest decision for a piece of content.
+     *
+     * @param string $content_id  The ID of a piece of content.
+     * @param string $user_id     The ID of the owner of the content.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     */
+    public function getContentDecisions($user_id, $content_id, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout
+        ));
+
+        $this->validateArgument($content_id, 'content id', 'string');
+
+        $url = (self::API3_ENDPOINT . '/v3/accounts/'
+                . $opts['account_id'] . '/users/' . $user_id . '/content/' . $content_id . '/decisions');
+
+        try {
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
+                                       array('auth' => $this->api_key . ':'));
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
     /**
      * Gets a list of configured decisions.
      *
@@ -464,6 +496,49 @@ class SiftClient {
             '/v3/accounts/' . $opts['account_id'] .
             '/users/' . $user_id .
             '/orders/' . $order_id .
+            '/decisions');
+
+        return $this->applyDecision($url, $opts);
+    }
+
+    /**
+     * Apply a decision to a piece of content. Validates presence of content_id
+     * and builds the url to apply a decision to a piece of content and delegates
+     * to applyDecision.
+     *
+     * @param string $user_id the id of content's user id
+     * @param string $content_id the id of the content which the decision will
+     * be applied
+     * @param string $decision_id The decision that will be applied to the order
+     * @param string $source the source of the decision, i.e. MANUAL_REVIEW,
+     * @param array $opts  Array of optional parameters for this request:
+     *     AUTOMATED_RULE, CHARGEBACK
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'analyst': when the source is MANUAL_REVIEW, an analyst
+     *     identifier must be passed.
+     *     - string 'description': free form text adding context to why this
+     *     decision is being applied.
+     *     - int 'time': Timestamp of when a decision was applied, mainly used
+     *     for backfilling
+     */
+    public function applyDecisionToContent($user_id, $content_id, $decision_id, $source, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout,
+            'decision_id' => $decision_id,
+            'source' => $source,
+            'analyst' => null,
+            'description' => null,
+            'time' => null
+        ));
+
+        $this->validateArgument($content_id, 'content_id', 'string');
+        $this->validateArgument($user_id, 'user_id', 'string');
+        $url = (self::API3_ENDPOINT .
+            '/v3/accounts/' . $opts['account_id'] .
+            '/users/' . $user_id .
+            '/content/' . $content_id .
             '/decisions');
 
         return $this->applyDecision($url, $opts);

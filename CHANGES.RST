@@ -1,3 +1,9 @@
+3.0.0 (2018-03-05)
+=================
+* Add content level decisions in Apply Decisions API.
+* v205 APIs are now called by default -- this is an incompatible change
+  (use :version => 204 to call the previous API version)
+
 2.2.0 (2018-02-12)
 =================
 * Add session level decisions in Apply Decisions APIs.
