@@ -121,6 +121,13 @@ $response = $sift->getOrderDecisions('example_order');
 $response->body['decisions']['payment_abuse']['decision']['id']; // => "ship_order"
 ```
 
+### Get the latest decisions for a session
+```
+$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
+$response = $sift->getSessionDecisions('example_user', 'example_session');
+$response->body['decisions']['account_takeover']['decision']['id']; // => "session_decision"
+```
+
 ### List of configured Decisions
 **Optional Params**
  - `entity_type`: `user` or `order` or `session`
