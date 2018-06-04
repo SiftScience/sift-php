@@ -1,7 +1,7 @@
 3.1.0 (2018-06-04)
 =================
 
-- Adds support for session decisions to [Decisions API](https://siftscience.com/developers/docs/curl/decisions-api)
+- Add support for get latest session decisions to [Decisions API](https://siftscience.com/developers/docs/curl/decisions-api)
 
 3.0.1 (2018-04-06)
 =================
