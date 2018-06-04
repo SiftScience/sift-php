@@ -355,7 +355,7 @@ class SiftClient {
         $this->validateArgument($session_id, 'session id', 'string');
 
         $url = (self::API3_ENDPOINT . '/v3/accounts/'
-                . $opts['account_id'] . '/users/' . $user_id . '/session/' . $session_id . '/decisions');
+                . $opts['account_id'] . '/users/' . $user_id . '/sessions/' . $session_id . '/decisions');
 
         try {
             $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,

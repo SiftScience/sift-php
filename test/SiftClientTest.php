@@ -333,7 +333,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
 
 
     public function testGetSessionDecisions() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/example_user/session/example_session/decisions';
+        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/example_user/sessions/example_session/decisions';
         $mockResponse = new SiftResponse('{"decisions":{"account_takeover":{"decision":{"id":"session_decision"},"time":1468599638005,"webhook_succeeded":false},"time":1468517407135,"webhook_succeeded":true}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
