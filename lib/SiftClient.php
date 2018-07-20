@@ -85,6 +85,8 @@ class SiftClient {
      *           API response.
      *     - bool 'return_workflow_status': Whether to return the status of any workflow run as a
      *           result of the posted event in the API response.
+     *     - bool 'force_workflow_run': Whether to request an asynchronous workflow run if the 
+     *           workflow is configured to only run with API request.      
      *     - array 'abuse_types': List of abuse types, specifying for which abuse types a score
      *          should be returned (if scores were requested).  If not specified, a score will
      *          be returned for every abuse_type to which you are subscribed.
@@ -100,6 +102,7 @@ class SiftClient {
             'return_score' => false,
             'return_action' => false,
             'return_workflow_status' => false,
+            'force_workflow_run' => false,
             'abuse_types' => array(),
             'path' => NULL,
             'timeout' => $this->timeout,
@@ -120,6 +123,7 @@ class SiftClient {
         if ($opts['return_score']) $params['return_score'] = 'true';
         if ($opts['return_action']) $params['return_action'] = 'true';
         if ($opts['return_workflow_status']) $params['return_workflow_status'] = 'true';
+        if ($opts['force_workflow_run']) $params['force_workflow_run'] = 'true';
         if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
 
         try {
