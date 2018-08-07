@@ -1,3 +1,12 @@
+=======
+4.0.0 (2019-03-25)
+
+INCOMPATIBLE CHANGES INTRODUCED IN 4.0.0
+- Fix URL encoding
+  Previously, user id and session id encoding was either missing or handled forward slash
+  incorrectly. Callers with workarounds for this bug must remove these workarounds when upgrading
+  to 4.0.0.
+
 3.4.0 (2019-03-22)
 =================
 
