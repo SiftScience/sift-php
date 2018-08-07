@@ -1,5 +1,7 @@
+4.0.0 (2019-03-28)
 =======
-4.0.0 (2019-03-25)
+
+- Add hooks for changing api endpoint and passing custom curl_opts
 
 INCOMPATIBLE CHANGES INTRODUCED IN 4.0.0
 - Fix URL encoding
