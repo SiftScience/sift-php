@@ -347,8 +347,9 @@ class SiftClient {
 
         $this->validateArgument($run_id, 'run id', 'string');
 
-        $url = (self::API3_ENDPOINT . '/v3/accounts/'
-                . $opts['account_id'] . '/workflows/runs/' . $run_id);
+        $url = (self::API3_ENDPOINT .
+            '/v3/accounts/' . rawurlencode($opts['account_id']) .
+            '/workflows/runs/' . rawurlencode($run_id));
 
         try {
             $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
@@ -378,8 +379,10 @@ class SiftClient {
 
         $this->validateArgument($user_id, 'user id', 'string');
 
-        $url = (self::API3_ENDPOINT . '/v3/accounts/'
-                . $opts['account_id'] . '/users/' . $user_id . '/decisions');
+        $url = (self::API3_ENDPOINT .
+            '/v3/accounts/' . rawurlencode($opts['account_id']) .
+            '/users/' . rawurlencode($user_id) .
+            '/decisions');
 
         try {
             $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
@@ -409,8 +412,10 @@ class SiftClient {
 
         $this->validateArgument($order_id, 'order id', 'string');
 
-        $url = (self::API3_ENDPOINT . '/v3/accounts/'
-                . $opts['account_id'] . '/orders/' . $order_id . '/decisions');
+        $url = (self::API3_ENDPOINT .
+            '/v3/accounts/' . rawurlencode($opts['account_id']) .
+            '/orders/' . rawurlencode($order_id) .
+            '/decisions');
 
         try {
             $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
@@ -440,8 +445,11 @@ class SiftClient {
 
         $this->validateArgument($session_id, 'session id', 'string');
 
-        $url = (self::API3_ENDPOINT . '/v3/accounts/'
-                . $opts['account_id'] . '/users/' . $user_id . '/sessions/' . $session_id . '/decisions');
+        $url = (self::API3_ENDPOINT .
+            '/v3/accounts/' . rawurlencode($opts['account_id']) .
+            '/users/' . rawurlencode($user_id) .
+            '/sessions/' . rawurlencode($session_id) .
+            '/decisions');
 
         try {
             $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
@@ -471,8 +479,11 @@ class SiftClient {
 
         $this->validateArgument($content_id, 'content id', 'string');
 
-        $url = (self::API3_ENDPOINT . '/v3/accounts/'
-                . $opts['account_id'] . '/users/' . $user_id . '/content/' . $content_id . '/decisions');
+        $url = (self::API3_ENDPOINT .
+            '/v3/accounts/' . rawurlencode($opts['account_id']) .
+            '/users/' . rawurlencode($user_id) .
+            '/content/' . rawurlencode($content_id) .
+            '/decisions');
 
         try {
             $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
@@ -515,7 +526,9 @@ class SiftClient {
         if ($opts['next_ref']) {
             $url = $opts['next_ref'];
         } else {
-            $url = (self::API3_ENDPOINT . '/v3/accounts/' . $opts['account_id'] . '/decisions');
+            $url = (self::API3_ENDPOINT .
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/decisions');
 
             if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
             if ($opts['entity_type']) $params['entity_type'] = $opts['entity_type'];
@@ -567,8 +580,8 @@ class SiftClient {
         $this->validateArgument($user_id, 'user_id', 'string');
 
         $url = (self::API3_ENDPOINT .
-            '/v3/accounts/' . $opts['account_id'] .
-            '/users/'. $user_id .
+            '/v3/accounts/' . rawurlencode($opts['account_id']) .
+            '/users/'. rawurlencode($user_id) .
             '/decisions');
 
         return $this->applyDecision($url, $opts);
@@ -609,9 +622,9 @@ class SiftClient {
         $this->validateArgument($user_id, 'user_id', 'string');
 
         $url = (self::API3_ENDPOINT .
-            '/v3/accounts/' . $opts['account_id'] .
-            '/users/' . $user_id .
-            '/orders/' . $order_id .
+            '/v3/accounts/' . rawurlencode($opts['account_id']) .
+            '/users/' . rawurlencode($user_id) .
+            '/orders/' . rawurlencode($order_id) .
             '/decisions');
 
         return $this->applyDecision($url, $opts);
@@ -653,8 +666,8 @@ class SiftClient {
         $this->validateArgument($user_id, 'user_id', 'string');
         $url = (self::API3_ENDPOINT .
             '/v3/accounts/' . $opts['account_id'] .
-            '/users/' . $user_id .
-            '/content/' . $content_id .
+            '/users/' . rawurlencode($user_id) .
+            '/content/' . rawurlencode($content_id) .
             '/decisions');
 
         return $this->applyDecision($url, $opts);
@@ -695,9 +708,9 @@ class SiftClient {
         $this->validateArgument($user_id, 'user_id', 'string');
 
         $url = (self::API3_ENDPOINT .
-            '/v3/accounts/' . $opts['account_id'] .
-            '/users/' . $user_id .
-            '/sessions/' . $session_id .
+            '/v3/accounts/' . rawurlencode($opts['account_id']) .
+            '/users/' . rawurlencode($user_id) .
+            '/sessions/' . rawurlencode($session_id) .
             '/decisions');
 
         return $this->applyDecision($url, $opts);
@@ -777,11 +790,11 @@ class SiftClient {
     }
 
     private static function userLabelApiUrl($userId, $version) {
-        return self::urlPrefix($version) . '/users/' . urlencode($userId) . '/labels';
+        return self::urlPrefix($version) . '/users/' . rawurlencode($userId) . '/labels';
     }
 
     private static function scoreApiUrl($userId, $version) {
-        return self::urlPrefix($version) . '/score/' . urlencode($userId);
+        return self::urlPrefix($version) . '/score/' . rawurlencode($userId);
     }
 
     private static function userScoreApiUrl($userId, $version) {
