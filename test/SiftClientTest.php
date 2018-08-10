@@ -200,6 +200,58 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
         $this->assertEquals($response->body['scores']['payment_abuse']['score'], 0.55);
     }
 
+    public function testSuccessfulGetUserScore() {
+        $mockUrl = 'https://api.siftscience.com/v205/users/12345/score?api_key=agreatsuccess';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
+            "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
+
+        $response = $this->client->get_user_score('12345');
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+        $this->assertEquals($response->body['scores']['payment_abuse']['score'], 0.55);
+    }
+
+    public function testSuccessfulGetUserScoreWithAbuseTypes() {
+        $mockUrl = 'https://api.siftscience.com/v205/users/12345/score?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
+            "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
+
+        $response = $this->client->get_user_score('12345', array(
+            'abuse_types' => array('payment_abuse', 'content_abuse')
+        ));
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+        $this->assertEquals($response->body['scores']['payment_abuse']['score'], 0.55);
+    }
+
+    public function testSuccessfulRescoreUser() {
+        $mockUrl = 'https://api.siftscience.com/v205/users/12345/score?api_key=agreatsuccess';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
+            "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->client->rescore_user('12345');
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+        $this->assertEquals($response->body['scores']['payment_abuse']['score'], 0.55);
+    }
+
+    public function testSuccessfulRescoreUserWithAbuseTypes() {
+        $mockUrl = 'https://api.siftscience.com/v205/users/12345/score?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
+            "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->client->rescore_user('12345', array(
+            'abuse_types' => array('payment_abuse', 'content_abuse')
+        ));
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+        $this->assertEquals($response->body['scores']['payment_abuse']['score'], 0.55);
+    }
+
     public function testSuccessfulSyncScoreFetch() {
         $mockUrl = 'https://api.siftscience.com/v205/events?return_score=true';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",

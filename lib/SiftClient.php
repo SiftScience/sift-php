@@ -168,8 +168,90 @@ class SiftClient {
         if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
 
         try {
+            $request = new SiftRequest(self::scoreApiUrl($userId, $opts['version']),
+                SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+
+    /**
+     * Fetches the latest score(s) computed for the specified user and abuse types from the Sift Science API.
+     *
+     * As opposed to client.score() and client.rescore_user(), this *does not* compute a new score for the
+     * user; it simply fetches the latest score(s) which have computed. These scores may be arbitrarily old.
+     * See https://siftscience.com/developers/docs/php/score-api/get-score for more details.
+     *
+     * @param string $userId  A user's id. This id should be the same as the user_id used in event
+     *     calls.  This parameter is required.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - array 'abuse_types': List of abuse types, specifying for which abuse types a score
+     *           should be returned.  If not specified, a score will be returned for every abuse
+     *           type to which you are subscribed.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'version': By default, this client's version is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function get_user_score($userId, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'abuse_types' => array(),
+            'timeout' => $this->timeout,
+            'version' => $this->version
+        ));
+
+        $this->validateArgument($userId, 'user id', 'string');
+
+        $params = array('api_key' => $this->api_key);
+        if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+
+        try {
             $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']),
                 SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+
+    /**
+     * Rescores the specified user for the specified abuse types and returns the resulting score(s).
+     *
+     * See https://siftscience.com/developers/docs/php/score-api/rescore for more details.
+     *
+     * @param string $userId  A user's id. This id should be the same as the user_id used in event
+     *     calls.  This parameter is required.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - array 'abuse_types': List of abuse types, specifying for which abuse types a score
+     *           should be returned.  If not specified, a score will be returned for every abuse
+     *           type to which you are subscribed.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'version': By default, this client's version is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function rescore_user($userId, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'abuse_types' => array(),
+            'timeout' => $this->timeout,
+            'version' => $this->version
+        ));
+
+        $this->validateArgument($userId, 'user id', 'string');
+
+        $params = array('api_key' => $this->api_key);
+        if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+
+        try {
+            $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']),
+                SiftRequest::POST, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -698,8 +780,12 @@ class SiftClient {
         return self::urlPrefix($version) . '/users/' . urlencode($userId) . '/labels';
     }
 
-    private static function userScoreApiUrl($userId, $version) {
+    private static function scoreApiUrl($userId, $version) {
         return self::urlPrefix($version) . '/score/' . urlencode($userId);
+    }
+
+    private static function userScoreApiUrl($userId, $version) {
+        return self::urlPrefix($version) . '/users/' . urlencode($userId) . '/score';
     }
 
     private static function urlPrefix($version) {

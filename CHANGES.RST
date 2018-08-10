@@ -1,4 +1,11 @@
+3.3.0 (2018-08-02)
+=================
+
+- Add support for rescore_user and get_user_score APIs
+
 3.2.0 (2018-07-05)
+=================
+
 - Add new query parameter force_workflow_run
 
 3.1.0 (2018-06-04)
