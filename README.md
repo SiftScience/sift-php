@@ -68,11 +68,11 @@ $response = $sift->track('$transaction', array(
     '$user_id' => '23056',
     '$user_email' => 'buyer@gmail.com',
     '$seller_user_id' => '2371',
-    '$seller_user_email' => 'seller@gmail.com',
     '$transaction_id' => '573050',
     '$currency_code' => 'USD',
     '$amount' => 15230000,
     '$time' => 1327604222,
+    'seller_user_email' => 'seller@gmail.com',
     'trip_time' => 930,
     'distance_traveled' => 5.26,
 ));
