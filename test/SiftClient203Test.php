@@ -37,7 +37,7 @@ class SiftClient203Test extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulTrackEvent() {
-        $mockUrl = 'https://api.siftscience.com/v203/events';
+        $mockUrl = 'https://api.sift.com/v203/events';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST ,$mockResponse);
         $response = $this->client->track('$transaction', $this->transaction_properties, array(
@@ -50,7 +50,7 @@ class SiftClient203Test extends PHPUnit\Framework\TestCase {
     public function testSuccessfulScoreFetch() {
         $this->client = new SiftClient(array(
             'api_key' => SiftClient203Test::$API_KEY, 'version' => '203'));
-        $mockUrl = 'https://api.siftscience.com/v203/score/12345?api_key=agreatsuccess';
+        $mockUrl = 'https://api.sift.com/v203/score/12345?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
                 "user_id": "12345", "score": 0.55}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
@@ -61,7 +61,7 @@ class SiftClient203Test extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulSyncScoreFetch() {
-        $mockUrl = 'https://api.siftscience.com/v203/events?return_score=true';
+        $mockUrl = 'https://api.sift.com/v203/events?return_score=true';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
                 "score_response": {"user_id": "12345", "score": 0.55}}', 200, null);
 
@@ -79,7 +79,7 @@ class SiftClient203Test extends PHPUnit\Framework\TestCase {
     public function testSuccessfulLabelUser() {
         $this->client = new SiftClient(array(
             'api_key' => SiftClient203Test::$API_KEY, 'version' => '203'));
-        $mockUrl = 'https://api.siftscience.com/v203/users/54321/labels';
+        $mockUrl = 'https://api.sift.com/v203/users/54321/labels';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
 
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
@@ -89,7 +89,7 @@ class SiftClient203Test extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulUnlabelUser() {
-        $mockUrl = 'https://api.siftscience.com/v203/users/54321/labels?api_key=agreatsuccess';
+        $mockUrl = 'https://api.sift.com/v203/users/54321/labels?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('', 204, null);
 
         SiftRequest::setMockResponse($mockUrl, SiftRequest::DELETE, $mockResponse);
@@ -101,7 +101,7 @@ class SiftClient203Test extends PHPUnit\Framework\TestCase {
     public function testSuccessfulScoreFetchWithAllUserIdCharacters() {
         $this->client = new SiftClient(array(
             'api_key' => SiftClient203Test::$API_KEY, 'version' => '203'));
-        $mockUrl = 'https://api.siftscience.com/v203/score/12345' . urlencode('=.-_+@:&^%!$') . '?api_key=agreatsuccess';
+        $mockUrl = 'https://api.sift.com/v203/score/12345' . urlencode('=.-_+@:&^%!$') . '?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
                 "user_id": "12345=.-_+@:&^%!$", "score": 0.55}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
@@ -113,7 +113,7 @@ class SiftClient203Test extends PHPUnit\Framework\TestCase {
 
     // Test all special characters for Label API
     public function testSuccessfulLabelWithAllUserIdCharacters() {
-        $mockUrl = 'https://api.siftscience.com/v203/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels';
+        $mockUrl = 'https://api.sift.com/v203/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
 
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
@@ -128,7 +128,7 @@ class SiftClient203Test extends PHPUnit\Framework\TestCase {
     public function testSuccessfulUnlabelWithAllUserIdCharacters() {
         $this->client = new SiftClient(array(
             'api_key' => SiftClient203Test::$API_KEY, 'version' => '203'));
-        $mockUrl = 'https://api.siftscience.com/v203/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels?api_key=agreatsuccess';
+        $mockUrl = 'https://api.sift.com/v203/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('', 204, null);
 
         SiftRequest::setMockResponse($mockUrl, SiftRequest::DELETE, $mockResponse);
