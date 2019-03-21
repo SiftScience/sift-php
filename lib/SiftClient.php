@@ -15,6 +15,7 @@ class SiftClient {
     private $timeout;
     private $version;
     private $api_endpoint;
+    private $curl_opts;
 
     /**
      * @var null|\Psr\Log\LoggerInterface
@@ -49,6 +50,9 @@ class SiftClient {
      *     - string 'version': The version of Sift Science's API to call.  By default, '204'.
      *     - string 'api_endpoint': The backend api to send requests to.  By default,
      *           'https://api.sift.com'.
+     *     - array 'curl_opts': Array with key-value pairs corresponding to options to pass to
+     *           curl_setopt().  Options override any options set by the SiftClient, so use with
+     *           caution.  By default, array().
      */
     function  __construct($opts = array()) {
         $this->mergeArguments($opts, array(
@@ -57,6 +61,7 @@ class SiftClient {
             'timeout' => self::DEFAULT_TIMEOUT,
             'version' => self::API_VERSION,
             'api_endpoint' => self::API_ENDPOINT,
+            'curl_opts' => array(),
         ));
 
         $this->validateArgument($opts['api_key'], 'api key', 'string');
@@ -66,6 +71,7 @@ class SiftClient {
         $this->timeout = $opts['timeout'];
         $this->version = $opts['version'];
         $this->api_endpoint = $opts['api_endpoint'];
+        $this->curl_opts = $opts['curl_opts'];
     }
 
 
@@ -135,7 +141,9 @@ class SiftClient {
                 $path, SiftRequest::POST, $opts['timeout'], $opts['version'], array(
                     'body' => $properties,
                     'params' => $params
-                ));
+                ),
+                $this->curl_opts
+            );
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
