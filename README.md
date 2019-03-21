@@ -180,6 +180,42 @@ composer exec phpunit -v -- --bootstrap vendor/autoload.php test
     [Packagist](https://packagist.org/packages/siftscience/sift-php) will
     automatically deploy a new package via the configured webhook.
 
+## HTTP connection pooling
+
+You can substantially improve the performance of `SiftClient` by using HTTP connection pooling.
+Because standard PHP/fastcgi deployments don't have a mechanisms for persisting connections between
+requests, the easiest way to pool connections is by running
+[Apache httpd](https://httpd.apache.org/) as a proxy.
+
+```
+Listen 8081
+
+...
+
+LoadModule proxy_module .../mod_proxy.so
+LoadModule proxy_http_module .../mod_proxy_http.so
+LoadModule ssl_module .../mod_ssl.so
+
+<VirtualHost localhost:8081>
+    ServerName api.sift.com
+    SSLProxyEngine on
+    SSLProxyVerify require
+    SSLProxyVerifyDepth 3
+    SSLProxyCACertificateFile ...
+    ProxyPass / https://api.sift.com/
+</VirtualHost>
+```
+
+And instantiating `SiftClient` to route requests through it:
+
+```php
+$sift = new SiftClient(array(
+    'api_key' => 'my_api_key',
+    'account_id' => 'my_account_id',
+    'api_endpoint' => 'http://api.sift.com',
+    'curl_opts' => array(CURLOPT_CONNECT_TO => array('api.sift.com:80:localhost:8081')),
+));
+```
 
 ## License
 
