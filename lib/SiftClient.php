@@ -1,8 +1,7 @@
 <?php
 
 class SiftClient {
-    const API_ENDPOINT = 'https://api.siftscience.com';
-    const API3_ENDPOINT = 'https://api3.siftscience.com';
+    const API_ENDPOINT = 'https://api.sift.com';
 
     // Must be kept in sync with composer.json
     const API_VERSION = '205';
@@ -15,6 +14,7 @@ class SiftClient {
     private $account_id;
     private $timeout;
     private $version;
+    private $api_endpoint;
 
     /**
      * @var null|\Psr\Log\LoggerInterface
@@ -47,13 +47,16 @@ class SiftClient {
      *           Sift::$account_id.
      *     - int 'timeout': The number of seconds to wait before failing a request.  By default, 2.
      *     - string 'version': The version of Sift Science's API to call.  By default, '204'.
+     *     - string 'api_endpoint': The backend api to send requests to.  By default,
+     *           'https://api.sift.com'.
      */
     function  __construct($opts = array()) {
         $this->mergeArguments($opts, array(
             'api_key' => Sift::$api_key,
             'account_id' => Sift::$account_id,
             'timeout' => self::DEFAULT_TIMEOUT,
-            'version' => self::API_VERSION
+            'version' => self::API_VERSION,
+            'api_endpoint' => self::API_ENDPOINT,
         ));
 
         $this->validateArgument($opts['api_key'], 'api key', 'string');
@@ -62,6 +65,7 @@ class SiftClient {
         $this->account_id = $opts['account_id'];
         $this->timeout = $opts['timeout'];
         $this->version = $opts['version'];
+        $this->api_endpoint = $opts['api_endpoint'];
     }
 
 
@@ -347,7 +351,7 @@ class SiftClient {
 
         $this->validateArgument($run_id, 'run id', 'string');
 
-        $url = (self::API3_ENDPOINT .
+        $url = ($this->api_endpoint .
             '/v3/accounts/' . rawurlencode($opts['account_id']) .
             '/workflows/runs/' . rawurlencode($run_id));
 
@@ -379,7 +383,7 @@ class SiftClient {
 
         $this->validateArgument($user_id, 'user id', 'string');
 
-        $url = (self::API3_ENDPOINT .
+        $url = ($this->api_endpoint .
             '/v3/accounts/' . rawurlencode($opts['account_id']) .
             '/users/' . rawurlencode($user_id) .
             '/decisions');
@@ -412,7 +416,7 @@ class SiftClient {
 
         $this->validateArgument($order_id, 'order id', 'string');
 
-        $url = (self::API3_ENDPOINT .
+        $url = ($this->api_endpoint .
             '/v3/accounts/' . rawurlencode($opts['account_id']) .
             '/orders/' . rawurlencode($order_id) .
             '/decisions');
@@ -445,7 +449,7 @@ class SiftClient {
 
         $this->validateArgument($session_id, 'session id', 'string');
 
-        $url = (self::API3_ENDPOINT .
+        $url = ($this->api_endpoint .
             '/v3/accounts/' . rawurlencode($opts['account_id']) .
             '/users/' . rawurlencode($user_id) .
             '/sessions/' . rawurlencode($session_id) .
@@ -479,7 +483,7 @@ class SiftClient {
 
         $this->validateArgument($content_id, 'content id', 'string');
 
-        $url = (self::API3_ENDPOINT .
+        $url = ($this->api_endpoint .
             '/v3/accounts/' . rawurlencode($opts['account_id']) .
             '/users/' . rawurlencode($user_id) .
             '/content/' . rawurlencode($content_id) .
@@ -526,7 +530,7 @@ class SiftClient {
         if ($opts['next_ref']) {
             $url = $opts['next_ref'];
         } else {
-            $url = (self::API3_ENDPOINT .
+            $url = ($this->api_endpoint .
                 '/v3/accounts/' . rawurlencode($opts['account_id']) .
                 '/decisions');
 
@@ -579,7 +583,7 @@ class SiftClient {
 
         $this->validateArgument($user_id, 'user_id', 'string');
 
-        $url = (self::API3_ENDPOINT .
+        $url = ($this->api_endpoint .
             '/v3/accounts/' . rawurlencode($opts['account_id']) .
             '/users/'. rawurlencode($user_id) .
             '/decisions');
@@ -621,7 +625,7 @@ class SiftClient {
         $this->validateArgument($order_id, 'order_id', 'string');
         $this->validateArgument($user_id, 'user_id', 'string');
 
-        $url = (self::API3_ENDPOINT .
+        $url = ($this->api_endpoint .
             '/v3/accounts/' . rawurlencode($opts['account_id']) .
             '/users/' . rawurlencode($user_id) .
             '/orders/' . rawurlencode($order_id) .
@@ -664,7 +668,7 @@ class SiftClient {
 
         $this->validateArgument($content_id, 'content_id', 'string');
         $this->validateArgument($user_id, 'user_id', 'string');
-        $url = (self::API3_ENDPOINT .
+        $url = ($this->api_endpoint .
             '/v3/accounts/' . $opts['account_id'] .
             '/users/' . rawurlencode($user_id) .
             '/content/' . rawurlencode($content_id) .
@@ -707,7 +711,7 @@ class SiftClient {
         $this->validateArgument($session_id, 'session_id', 'string');
         $this->validateArgument($user_id, 'user_id', 'string');
 
-        $url = (self::API3_ENDPOINT .
+        $url = ($this->api_endpoint .
             '/v3/accounts/' . rawurlencode($opts['account_id']) .
             '/users/' . rawurlencode($user_id) .
             '/sessions/' . rawurlencode($session_id) .
@@ -785,23 +789,23 @@ class SiftClient {
             throw new InvalidArgumentException("${name} cannot be empty.");
     }
 
-    private static function restApiUrl($version) {
+    private function restApiUrl($version) {
         return self::urlPrefix($version) . '/events';
     }
 
-    private static function userLabelApiUrl($userId, $version) {
+    private function userLabelApiUrl($userId, $version) {
         return self::urlPrefix($version) . '/users/' . rawurlencode($userId) . '/labels';
     }
 
-    private static function scoreApiUrl($userId, $version) {
+    private function scoreApiUrl($userId, $version) {
         return self::urlPrefix($version) . '/score/' . rawurlencode($userId);
     }
 
-    private static function userScoreApiUrl($userId, $version) {
+    private function userScoreApiUrl($userId, $version) {
         return self::urlPrefix($version) . '/users/' . urlencode($userId) . '/score';
     }
 
-    private static function urlPrefix($version) {
-        return self::API_ENDPOINT . '/v' . $version;
+    private function urlPrefix($version) {
+        return $this->api_endpoint . '/v' . $version;
     }
 }

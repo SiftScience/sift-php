@@ -165,7 +165,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulTrackEvent() {
-        $mockUrl = 'https://api.siftscience.com/v205/events';
+        $mockUrl = 'https://api.sift.com/v205/events';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST ,$mockResponse);
 
@@ -175,7 +175,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulScoreFetch() {
-        $mockUrl = 'https://api.siftscience.com/v205/score/12345?api_key=agreatsuccess';
+        $mockUrl = 'https://api.sift.com/v205/score/12345?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
             "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
@@ -187,7 +187,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulScoreFetchWithAbuseTypes() {
-        $mockUrl = 'https://api.siftscience.com/v205/score/12345?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
+        $mockUrl = 'https://api.sift.com/v205/score/12345?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
             "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
@@ -201,7 +201,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulGetUserScore() {
-        $mockUrl = 'https://api.siftscience.com/v205/users/12345/score?api_key=agreatsuccess';
+        $mockUrl = 'https://api.sift.com/v205/users/12345/score?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
             "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
@@ -222,7 +222,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulGetUserScoreWithAbuseTypes() {
-        $mockUrl = 'https://api.siftscience.com/v205/users/12345/score?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
+        $mockUrl = 'https://api.sift.com/v205/users/12345/score?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
             "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
@@ -236,7 +236,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulRescoreUser() {
-        $mockUrl = 'https://api.siftscience.com/v205/users/12345/score?api_key=agreatsuccess';
+        $mockUrl = 'https://api.sift.com/v205/users/12345/score?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
             "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
@@ -248,7 +248,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulRescoreUserWithAbuseTypes() {
-        $mockUrl = 'https://api.siftscience.com/v205/users/12345/score?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
+        $mockUrl = 'https://api.sift.com/v205/users/12345/score?api_key=agreatsuccess&abuse_types=payment_abuse%2Ccontent_abuse';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
             "user_id": "12345", "scores": {"payment_abuse": {score: 0.55}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
@@ -262,7 +262,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulSyncScoreFetch() {
-        $mockUrl = 'https://api.siftscience.com/v205/events?return_score=true';
+        $mockUrl = 'https://api.sift.com/v205/events?return_score=true';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
             "score_response": {"user_id": "12345", "score": 0.55}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
@@ -286,7 +286,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulSyncWorkflowStatusFetch() {
-        $mockUrl = 'https://api.siftscience.com/v205/events?return_workflow_status=true&abuse_types=legacy%2Caccount_abuse';
+        $mockUrl = 'https://api.sift.com/v205/events?return_workflow_status=true&abuse_types=legacy%2Caccount_abuse';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
             "score_response": {"user_id": "12345", "score": 0.55}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
@@ -301,7 +301,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulLabelUser() {
-        $mockUrl = 'https://api.siftscience.com/v205/users/54321/labels';
+        $mockUrl = 'https://api.sift.com/v205/users/54321/labels';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
 
@@ -311,7 +311,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulUnlabelUser() {
-        $mockUrl = 'https://api.siftscience.com/v205/users/54321/labels?api_key=agreatsuccess';
+        $mockUrl = 'https://api.sift.com/v205/users/54321/labels?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('', 204, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::DELETE, $mockResponse);
 
@@ -320,7 +320,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulUnlabelUserWithAbuseType() {
-        $mockUrl = 'https://api.siftscience.com/v205/users/54321/labels?api_key=agreatsuccess&abuse_type=account_abuse';
+        $mockUrl = 'https://api.sift.com/v205/users/54321/labels?api_key=agreatsuccess&abuse_type=account_abuse';
         $mockResponse = new SiftResponse('', 204, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::DELETE, $mockResponse);
 
@@ -330,7 +330,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
 
     // Test all special characters for score API
     public function testSuccessfulScoreFetchWithAllUserIdCharacters() {
-        $mockUrl = 'https://api.siftscience.com/v205/score/12345' . urlencode('=.-_+@:&^%!$') . '?api_key=agreatsuccess';
+        $mockUrl = 'https://api.sift.com/v205/score/12345' . urlencode('=.-_+@:&^%!$') . '?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
             "user_id": "12345=.-_+@:&^%!$", "score": 0.55}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
@@ -343,7 +343,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
 
     // Test all special characters for Label API
     public function testSuccessfulLabelWithAllUserIdCharacters() {
-        $mockUrl = 'https://api.siftscience.com/v205/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels';
+        $mockUrl = 'https://api.sift.com/v205/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
 
@@ -354,7 +354,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
 
     // Test all special characters for Unlabel API
     public function testSuccessfulUnlabelWithAllUserIdCharacters() {
-        $mockUrl = 'https://api.siftscience.com/v205/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels?api_key=agreatsuccess';
+        $mockUrl = 'https://api.sift.com/v205/users/54321' . urlencode('=.-_+@:&^%!$') . '/labels?api_key=agreatsuccess';
         $mockResponse = new SiftResponse('', 204, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::DELETE, $mockResponse);
 
@@ -364,7 +364,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
 
 
     public function testGetWorkflowStatus() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/5b2fd4ddbcf4254aa6baabb6/workflows/runs/a8r89d6yh3hkn';
+        $mockUrl = 'https://api.sift.com/v3/accounts/5b2fd4ddbcf4254aa6baabb6/workflows/runs/a8r89d6yh3hkn';
         $mockResponse = new SiftResponse('{"id":"4zxwibludiaaa","config":{"id":"5rrbr4iaaa","version":"1468367620871"},"config_display_name":"workflow config","abuse_types":["payment_abuse"],"state":"running","entity":{"id":"example_user","type":"user"},"history":[{"app":"decision","name":"decision","state":"running","config":{"decision_id":"user_decision"}},{"app":"event","name":"Event","state":"finished","config":{}},{"app":"user","name":"Entity","state":"finished","config":{}}]}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
@@ -384,7 +384,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testGetUserDecisions() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/5b2fd4ddbcf4254aa6baabb6/users/example_user/decisions';
+        $mockUrl = 'https://api.sift.com/v3/accounts/5b2fd4ddbcf4254aa6baabb6/users/example_user/decisions';
         $mockResponse = new SiftResponse('{"decisions":{"payment_abuse":{"decision":{"id":"user_decision"},"time":1468707128659,"webhook_succeeded":false}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
@@ -412,7 +412,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testGetSessionDecisions() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/example_user/sessions/example_session/decisions';
+        $mockUrl = 'https://api.sift.com/v3/accounts/90201c25e39320c45b3da37b/users/example_user/sessions/example_session/decisions';
         $mockResponse = new SiftResponse('{"decisions":{"account_takeover":{"decision":{"id":"session_decision"},"time":1468599638005,"webhook_succeeded":false},"time":1468517407135,"webhook_succeeded":true}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
@@ -430,7 +430,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testGetOrderDecisions() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/orders/example_order/decisions';
+        $mockUrl = 'https://api.sift.com/v3/accounts/90201c25e39320c45b3da37b/orders/example_order/decisions';
         $mockResponse = new SiftResponse('{"decisions":{"payment_abuse":{"decision":{"id":"order_decisionz"},"time":1468599638005,"webhook_succeeded":false},"account_abuse":{"decision":{"id":"good_order"},"time":1468517407135,"webhook_succeeded":true}}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
@@ -448,7 +448,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testGetDecisionList() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/decisions';
+        $mockUrl = 'https://api.sift.com/v3/accounts/90201c25e39320c45b3da37b/decisions';
         $mockResponse = new SiftResponse('{"data": [{' .
           '"id": "block_user_payment_abuse", "name": "Block user",' .
           '"description": "cancel and refund all of the user\'s' .
@@ -469,7 +469,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testGetDecisionListNextRef() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/decisions?from=10&limit=5';
+        $mockUrl = 'https://api.sift.com/v3/accounts/90201c25e39320c45b3da37b/decisions?from=10&limit=5';
         $mockResponse = new SiftResponse('{"data": [{' .
           '"id": "block_user_payment_abuse", "name": "Block user",' .
           '"description": "cancel and refund all of the user\'s' .
@@ -492,7 +492,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testApplyDecisionToUser() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/decisions';
+        $mockUrl = 'https://api.sift.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/decisions';
         $mockResponse = new SiftResponse('{' .
             '"entity": {' .
             '"id" : "some_user"' .
@@ -530,7 +530,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testApplyDecisionToOrder() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/orders/ORDER_1234/decisions';
+        $mockUrl = 'https://api.sift.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/orders/ORDER_1234/decisions';
         $mockResponse = new SiftResponse('{' .
             '"entity": {' .
             '"id" : "ORDER_1234"' .
@@ -572,7 +572,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testApplyDecisionToSession() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/sessions/SESSION_12345/decisions';
+        $mockUrl = 'https://api.sift.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/sessions/SESSION_12345/decisions';
         $mockResponse = new SiftResponse('{' .
             '"entity": {' .
             '"id" : "SESSION_12345"' .
@@ -614,7 +614,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testApplyDecisionToContent() {
-        $mockUrl = 'https://api3.siftscience.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/content/CONTENT_12345/decisions';
+        $mockUrl = 'https://api.sift.com/v3/accounts/90201c25e39320c45b3da37b/users/some_user/content/CONTENT_12345/decisions';
         $mockResponse = new SiftResponse('{' .
             '"entity": {' .
             '"id" : "CONTENT_12345"' .
@@ -656,7 +656,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testTrackProfileEvent() {
-        $mockUrl = 'https://api.siftscience.com/v205/events';
+        $mockUrl = 'https://api.sift.com/v205/events';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST ,$mockResponse);
 
