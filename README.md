@@ -1,4 +1,4 @@
-# Sift Bindings <a href="https://travis-ci.org/SiftScience/sift-php"><img src="https://travis-ci.org/SiftScience/sift-php.svg?branch=master">
+# Sift Bindings [![CircleCI](https://circleci.com/gh/SiftScience/sift-php.svg?style=svg)](https://circleci.com/gh/SiftScience/sift-php)
 
 
 ## Installation
