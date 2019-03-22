@@ -1,0 +1,39 @@
+version: 2 
+
+"-": &build7
+  working_directory: ~/sift-php
+  steps:
+    - checkout
+    - run: sudo composer self-update
+    - restore_cache:
+        keys:
+          - composer-v1-{{ checksum "composer.lock" }}
+          - composer-v1-
+    - run: composer install -n --prefer-dist
+    - save_cache:
+        key: composer-v1-{{ checksum "composer.lock" }}
+        paths:
+          - vendor
+    - run: composer exec phpunit -v -- --bootstrap vendor/autoload.php test
+
+jobs:
+  build71: 
+    <<: *build7
+    docker: 
+      - image: circleci/php:7.1.27-stretch
+  build72:
+    <<: *build7
+    docker:
+      - image: circleci/php:7.2.16-stretch
+  build73:
+    <<: *build7
+    docker:
+      - image: circleci/php:7.3.3-stretch
+
+workflows:
+  version: 2
+  check_compile:
+    jobs:
+      - build71
+      - build72
+      - build73
