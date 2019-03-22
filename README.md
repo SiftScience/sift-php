@@ -166,7 +166,7 @@ Run the tests from the project root with [PHPUnit](http://phpunit.de) like this:
 
 ```
 composer update
-phpunit --bootstrap vendor/autoload.php test
+composer exec phpunit -v -- --bootstrap vendor/autoload.php test
 ```
 
 
