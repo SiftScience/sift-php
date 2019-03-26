@@ -10,7 +10,7 @@
     ```
     "require": {
         ...
-        "siftscience/sift-php" : "3.*"
+        "siftscience/sift-php" : "4.*"
         ...
     }
     ```
