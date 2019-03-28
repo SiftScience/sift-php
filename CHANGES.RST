@@ -2,6 +2,7 @@
 =======
 
 - Add hooks for changing api endpoint and passing custom curl_opts
+- Fix autoloading errors when PEAR packages are not present
 
 INCOMPATIBLE CHANGES INTRODUCED IN 4.0.0
 - Fix URL encoding
