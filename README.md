@@ -44,7 +44,6 @@
 3. Include `SiftClient` in your project like this:
 
     ```
-    require 'sift-php/lib/Services_JSON-1.0.3/JSON.php';
     require 'sift-php/lib/SiftRequest.php';
     require 'sift-php/lib/SiftResponse.php';
     require 'sift-php/lib/SiftClient.php';
