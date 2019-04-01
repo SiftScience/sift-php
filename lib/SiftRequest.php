@@ -111,11 +111,11 @@ class SiftRequest {
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         $result = curl_exec($ch);
         $httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        // Close the curl connection
+        $curlErrno = curl_errno($ch);
+        $curlError = curl_error($ch);
         curl_close($ch);
 
-        return new SiftResponse($result, $httpStatusCode, $this);
+        return new SiftResponse($result, $httpStatusCode, $this, $curlErrno, $curlError);
     }
 
     public static function setMockResponse($url, $method, $response) {
