@@ -1,4 +1,4 @@
-4.0.0 (2019-03-28)
+4.0.0 (2019-04-01)
 =======
 
 - Add hooks for changing api endpoint and passing custom curl_opts
