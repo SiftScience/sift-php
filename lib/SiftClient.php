@@ -114,7 +114,7 @@ class SiftClient {
             'return_workflow_status' => false,
             'force_workflow_run' => false,
             'abuse_types' => array(),
-            'path' => NULL,
+            'path' => null,
             'timeout' => $this->timeout,
             'version' => $this->version
         ));
