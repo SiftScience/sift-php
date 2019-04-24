@@ -182,11 +182,12 @@ composer exec phpunit -v -- --bootstrap vendor/autoload.php test
 ## HTTP connection pooling
 
 You can substantially improve the performance of `SiftClient` by using HTTP connection pooling.
-Because standard PHP/fastcgi deployments don't have a mechanisms for persisting connections between
-requests, the easiest way to pool connections is by running
-[Apache httpd](https://httpd.apache.org/) as a proxy.
+Because standard PHP/fastcgi deployments don't have a mechanism for persisting connections between
+requests, the easiest way to pool connections is by routing requests through a proxy like Apache httpd or nginx.
 
-```
+**[Apache httpd](https://httpd.apache.org/)**
+
+```apache
 Listen 8081
 
 ...
@@ -205,7 +206,35 @@ LoadModule ssl_module .../mod_ssl.so
 </VirtualHost>
 ```
 
-And instantiating `SiftClient` to route requests through it:
+**[nginx](https://www.nginx.com/)**
+
+```nginx
+# Read more about nginx keepalive: https://www.nginx.com/blog/tuning-nginx/#keepalive
+upstream sift {
+    server api.sift.com:443;
+    keepalive 16;
+}
+
+server {
+    listen localhost:8081;
+    server_name api.sift.com;
+
+    location / {
+        proxy_pass https://sift;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_ssl_verify on;
+        proxy_ssl_verify_depth 3;
+        proxy_ssl_trusted_certificate ...;
+        proxy_ssl_name api.sift.com;
+        proxy_ssl_server_name on;
+    }
+}
+```
+
+For Debian-based distributions, the certificate file is `/etc/ssl/certs/ca-certificates.crt`
+
+Then, instantiate `SiftClient` to route requests through the proxy:
 
 ```php
 $sift = new SiftClient(array(
