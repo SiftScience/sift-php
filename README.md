@@ -7,7 +7,7 @@
 
 1. Add siftscience/sift-php as a dependency in composer.json.
 
-    ```
+    ```php
     "require": {
         ...
         "siftscience/sift-php" : "4.*"
@@ -20,7 +20,7 @@
 3. Now `SiftClient` will be autoloaded into your project.
 
 
-    ```
+    ```php
     require 'vendor/autoload.php';
 
     $sift = new SiftClient(array(
@@ -43,7 +43,7 @@
 
 3. Include `SiftClient` in your project like this:
 
-    ```
+    ```php
     require 'sift-php/lib/SiftRequest.php';
     require 'sift-php/lib/SiftResponse.php';
     require 'sift-php/lib/SiftClient.php';
@@ -61,7 +61,7 @@
 
 ### Track an event
 Here's an example that sends a `$transaction` event to sift.
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key'));
 $response = $sift->track('$transaction', array(
     '$user_id' => '23056',
@@ -78,7 +78,7 @@ $response = $sift->track('$transaction', array(
 ```
 
 ### Label a user as good/bad
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key'));
 $response = $sift->label('23056', array(
     '$is_bad' => true,
@@ -87,41 +87,41 @@ $response = $sift->label('23056', array(
 ```
 
 ### Unlabel a user
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key'));
 $response = $sift->unlabel('23056', array('abuse_type' => 'content_abuse'));
 ```
 
 ### Get a user's score
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key'));
 $response = $sift->score('23056');
 $response->body['scores']['payment_abuse']['score']; // => 0.030301357270181357
 ```
 
 ### Get the status of a workflow run
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->getWorkflowStatus('my_run_id');
 $response->body['state']; // => "running"
 ```
 
 ### Get the latest decisions for a user
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->getUserDecisions('example_user');
 $response->body['decisions']['account_abuse']['decision']['id']; // => "ban_user"
 ```
 
 ### Get the latest decisions for an order
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->getOrderDecisions('example_order');
 $response->body['decisions']['payment_abuse']['decision']['id']; // => "ship_order"
 ```
 
 ### Get the latest decisions for a session
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->getSessionDecisions('example_user', 'example_session');
 $response->body['decisions']['account_takeover']['decision']['id']; // => "session_decision"
@@ -133,28 +133,28 @@ $response->body['decisions']['account_takeover']['decision']['id']; // => "sessi
  - `abuse_types`: `["payment_abuse", "content_abuse", "content_abuse",
    "account_abuse", "legacy", "account_takeover"]`
 
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $this->client->getDecisions(array('entity_type' => 'example_entity_type','abuse_types' => 'example_abuse_types'));
 $response->isOk()
 ```
 
 ### Apply decision to a user
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->applyDecisionToUser('example_user','example_decision','example_source',array('analyst' => 'analyst@example.com')
 $response->isOk()
 ```
 
 ### Apply decision to an order
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->applyDecisionToOrder('example_user','example_order','example_decision','example_source',array('analyst' => 'analyst@example.com')
 $response->isOk()
 ```
 
 ### Apply decision to a session
-```
+```php
 $sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->applyDecisionToSession('example_user','example_session','example_decision','example_source',array('analyst' => 'analyst@example.com')
 $response->isOk()
@@ -163,7 +163,7 @@ $response->isOk()
 ## Contributing
 Run the tests from the project root with [PHPUnit](http://phpunit.de) like this:
 
-```
+```php
 composer update
 composer exec phpunit -v -- --bootstrap vendor/autoload.php test
 ```
