@@ -62,7 +62,7 @@
 ### Track an event
 Here's an example that sends a `$transaction` event to sift.
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key'));
+$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->track('$transaction', array(
     '$user_id' => '23056',
     '$user_email' => 'buyer@gmail.com',
@@ -79,7 +79,7 @@ $response = $sift->track('$transaction', array(
 
 ### Label a user as good/bad
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key'));
+$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->label('23056', array(
     '$is_bad' => true,
     '$abuse_type' => 'promotion_abuse'
@@ -88,13 +88,13 @@ $response = $sift->label('23056', array(
 
 ### Unlabel a user
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key'));
+$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->unlabel('23056', array('abuse_type' => 'content_abuse'));
 ```
 
 ### Get a user's score
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key'));
+$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
 $response = $sift->score('23056');
 $response->body['scores']['payment_abuse']['score']; // => 0.030301357270181357
 ```
