@@ -4,7 +4,7 @@
     "keywords": ["sift", "sift science", "php", "fraud"],
     "homepage": "https://github.com/SiftScience/sift-php",
     "license": "MIT",
-    "version": "4.0.0",
+    "version": "4.1.0",
     "authors": [
         {
             "name": "Alex Lopatin"
