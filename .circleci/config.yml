@@ -14,7 +14,7 @@ version: 2
         key: composer-v1-{{ checksum "composer.lock" }}
         paths:
           - vendor
-    - run: composer exec phpunit -v -- --bootstrap vendor/autoload.php test
+    - run: composer exec phpunit -v
 
 jobs:
   build71:

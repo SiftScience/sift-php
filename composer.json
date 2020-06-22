@@ -36,5 +36,10 @@
     },
     "autoload": {
         "classmap": ["lib/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SiftScience\\Test\\": "test/"
+        }
     }
 }
