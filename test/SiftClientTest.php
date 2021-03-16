@@ -7,7 +7,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     private $client;
     private $transaction_properties;
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->client = new SiftClient(array(
             'api_key' => SiftClientTest::$API_KEY,
             'account_id' => SiftClientTest::$ACCOUNT_ID
@@ -66,7 +66,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
         );
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         SiftRequest::clearMockResponse();
     }
 
