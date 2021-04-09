@@ -66,6 +66,7 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
                 )
             )
         );
+
         $this->send_properties = array(
             '$user_id' => 'billy_jones_301',
             '$send_to' => 'billy_jones_301@gmail.com',
@@ -82,11 +83,13 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
                 )
             )
         );
+
         $this->resend_properties = array(
             '$user_id' => 'billy_jones_301',
             '$verified_event' => '$login',
             '$verified_entity_id' => 'SOME_SESSION_ID'
         );
+
         $this->check_properties = array(
             '$user_id' => 'billy_jones_301',
             '$code' => 524313,
