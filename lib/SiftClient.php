@@ -817,7 +817,7 @@ class SiftClient {
     }
 
     /**
-     * Regenerate new OTP. 
+     * Regenerate new OTP and send it to user. 
      * See https://sift.com/developers/docs/curl/verification-api/resend for valid $event values
      * and $properties fields.
      * 
