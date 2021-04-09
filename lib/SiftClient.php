@@ -1,13 +1,12 @@
 <?php
 
 class SiftClient {
-    const API_ENDPOINT = 'https://api.sift.com';
 
+    const API_ENDPOINT = 'https://api.sift.com';
     // Must be kept in sync with composer.json
     const API_VERSION = '205';
-
     const API3_VERSION = '3';
-
+    const API4_VERSION = '1.1';
     const DEFAULT_TIMEOUT = 2;
 
     private $api_key;
@@ -21,13 +20,14 @@ class SiftClient {
      * @var null|\Psr\Log\LoggerInterface
      */
     private $logger;
+
     /**
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function setLogger(\Psr\Log\LoggerInterface $logger)
-    {
+    public function setLogger(\Psr\Log\LoggerInterface $logger) {
         $this->logger = $logger;
     }
+
     /**
      * @param string $message
      * @param array  $context
@@ -54,7 +54,7 @@ class SiftClient {
      *           curl_setopt().  Options override any options set by the SiftClient, so use with
      *           caution.  By default, array().
      */
-    function  __construct($opts = array()) {
+    function __construct($opts = array()) {
         $this->mergeArguments($opts, array(
             'api_key' => Sift::$api_key,
             'account_id' => Sift::$account_id,
@@ -73,7 +73,6 @@ class SiftClient {
         $this->api_endpoint = $opts['api_endpoint'];
         $this->curl_opts = $opts['curl_opts'];
     }
-
 
     /**
      * Tracks an event and associated properties through the Sift Science API.
@@ -130,19 +129,23 @@ class SiftClient {
         $properties['$type'] = $event;
 
         $params = array();
-        if ($opts['return_score']) $params['return_score'] = 'true';
-        if ($opts['return_action']) $params['return_action'] = 'true';
-        if ($opts['return_workflow_status']) $params['return_workflow_status'] = 'true';
-        if ($opts['force_workflow_run']) $params['force_workflow_run'] = 'true';
-        if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+        if ($opts['return_score'])
+            $params['return_score'] = 'true';
+        if ($opts['return_action'])
+            $params['return_action'] = 'true';
+        if ($opts['return_workflow_status'])
+            $params['return_workflow_status'] = 'true';
+        if ($opts['force_workflow_run'])
+            $params['force_workflow_run'] = 'true';
+        if ($opts['abuse_types'])
+            $params['abuse_types'] = implode(',', $opts['abuse_types']);
 
         try {
             $request = new SiftRequest(
-                $path, SiftRequest::POST, $opts['timeout'], $opts['version'], array(
-                    'body' => $properties,
-                    'params' => $params
-                ),
-                $this->curl_opts
+                    $path, SiftRequest::POST, $opts['timeout'], $opts['version'], array(
+                'body' => $properties,
+                'params' => $params
+                    ), $this->curl_opts
             );
             return $request->send();
         } catch (Exception $e) {
@@ -150,7 +153,6 @@ class SiftClient {
             return null;
         }
     }
-
 
     /**
      * Retrieves a user's score(s) from the Sift Science API.
@@ -177,18 +179,17 @@ class SiftClient {
         $this->validateArgument($userId, 'user id', 'string');
 
         $params = array('api_key' => $this->api_key);
-        if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+        if ($opts['abuse_types'])
+            $params['abuse_types'] = implode(',', $opts['abuse_types']);
 
         try {
-            $request = new SiftRequest(self::scoreApiUrl($userId, $opts['version']),
-                SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
+            $request = new SiftRequest(self::scoreApiUrl($userId, $opts['version']), SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
             return null;
         }
     }
-
 
     /**
      * Fetches the latest score(s) computed for the specified user and abuse types from the Sift Science API.
@@ -219,18 +220,17 @@ class SiftClient {
         $this->validateArgument($userId, 'user id', 'string');
 
         $params = array('api_key' => $this->api_key);
-        if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+        if ($opts['abuse_types'])
+            $params['abuse_types'] = implode(',', $opts['abuse_types']);
 
         try {
-            $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']),
-                SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
+            $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']), SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
             return null;
         }
     }
-
 
     /**
      * Rescores the specified user for the specified abuse types and returns the resulting score(s).
@@ -259,18 +259,17 @@ class SiftClient {
         $this->validateArgument($userId, 'user id', 'string');
 
         $params = array('api_key' => $this->api_key);
-        if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
+        if ($opts['abuse_types'])
+            $params['abuse_types'] = implode(',', $opts['abuse_types']);
 
         try {
-            $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']),
-                SiftRequest::POST, $opts['timeout'], $opts['version'], array('params' => $params));
+            $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']), SiftRequest::POST, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
             return null;
         }
     }
-
 
     /**
      * Labels a user as either good or bad through the Sift Science API.
@@ -299,12 +298,11 @@ class SiftClient {
         $this->validateArgument($properties, 'properties', 'array');
 
         return $this->track('$label', $properties, array(
-            'timeout' => $opts['timeout'],
-            'version' => $opts['version'],
-            'path' => $this->userLabelApiUrl($userId, $opts['version'])
+                    'timeout' => $opts['timeout'],
+                    'version' => $opts['version'],
+                    'path' => $this->userLabelApiUrl($userId, $opts['version'])
         ));
     }
-
 
     /**
      * Removes a label from a user
@@ -329,18 +327,17 @@ class SiftClient {
         $this->validateArgument($userId, 'user id', 'string');
 
         $params = array('api_key' => $this->api_key);
-        if ($opts['abuse_type']) $params['abuse_type'] = $opts['abuse_type'];
+        if ($opts['abuse_type'])
+            $params['abuse_type'] = $opts['abuse_type'];
 
         try {
-            $request = new SiftRequest(self::userLabelApiUrl($userId, $opts['version']),
-                SiftRequest::DELETE, $opts['timeout'], $opts['version'], array('params' => $params));
+            $request = new SiftRequest(self::userLabelApiUrl($userId, $opts['version']), SiftRequest::DELETE, $opts['timeout'], $opts['version'], array('params' => $params));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
             return null;
         }
     }
-
 
     /**
      * Gets the status of a workflow run.
@@ -360,19 +357,17 @@ class SiftClient {
         $this->validateArgument($run_id, 'run id', 'string');
 
         $url = ($this->api_endpoint .
-            '/v3/accounts/' . rawurlencode($opts['account_id']) .
-            '/workflows/runs/' . rawurlencode($run_id));
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/workflows/runs/' . rawurlencode($run_id));
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
-                                       array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
             return null;
         }
     }
-
 
     /**
      * Gets the status of a workflow run.
@@ -392,20 +387,18 @@ class SiftClient {
         $this->validateArgument($user_id, 'user id', 'string');
 
         $url = ($this->api_endpoint .
-            '/v3/accounts/' . rawurlencode($opts['account_id']) .
-            '/users/' . rawurlencode($user_id) .
-            '/decisions');
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/users/' . rawurlencode($user_id) .
+                '/decisions');
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
-                                       array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
             return null;
         }
     }
-
 
     /**
      * Gets the latest decision for a user for each abuse type.
@@ -425,13 +418,12 @@ class SiftClient {
         $this->validateArgument($order_id, 'order id', 'string');
 
         $url = ($this->api_endpoint .
-            '/v3/accounts/' . rawurlencode($opts['account_id']) .
-            '/orders/' . rawurlencode($order_id) .
-            '/decisions');
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/orders/' . rawurlencode($order_id) .
+                '/decisions');
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
-                                       array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -458,14 +450,13 @@ class SiftClient {
         $this->validateArgument($session_id, 'session id', 'string');
 
         $url = ($this->api_endpoint .
-            '/v3/accounts/' . rawurlencode($opts['account_id']) .
-            '/users/' . rawurlencode($user_id) .
-            '/sessions/' . rawurlencode($session_id) .
-            '/decisions');
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/users/' . rawurlencode($user_id) .
+                '/sessions/' . rawurlencode($session_id) .
+                '/decisions');
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
-                                       array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -492,14 +483,13 @@ class SiftClient {
         $this->validateArgument($content_id, 'content id', 'string');
 
         $url = ($this->api_endpoint .
-            '/v3/accounts/' . rawurlencode($opts['account_id']) .
-            '/users/' . rawurlencode($user_id) .
-            '/content/' . rawurlencode($content_id) .
-            '/decisions');
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/users/' . rawurlencode($user_id) .
+                '/content/' . rawurlencode($content_id) .
+                '/decisions');
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION,
-                                       array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -539,19 +529,21 @@ class SiftClient {
             $url = $opts['next_ref'];
         } else {
             $url = ($this->api_endpoint .
-                '/v3/accounts/' . rawurlencode($opts['account_id']) .
-                '/decisions');
+                    '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                    '/decisions');
 
-            if ($opts['abuse_types']) $params['abuse_types'] = implode(',', $opts['abuse_types']);
-            if ($opts['entity_type']) $params['entity_type'] = $opts['entity_type'];
-            if ($opts['limit']) $params['limit'] = $opts['limit'];
-            if ($opts['from']) $params['from'] = $opts['from'];
+            if ($opts['abuse_types'])
+                $params['abuse_types'] = implode(',', $opts['abuse_types']);
+            if ($opts['entity_type'])
+                $params['entity_type'] = $opts['entity_type'];
+            if ($opts['limit'])
+                $params['limit'] = $opts['limit'];
+            if ($opts['from'])
+                $params['from'] = $opts['from'];
         }
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'],
-                self::API3_VERSION,
-                array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
 
             return $request->send();
         } catch (Exception $e) {
@@ -592,9 +584,9 @@ class SiftClient {
         $this->validateArgument($user_id, 'user_id', 'string');
 
         $url = ($this->api_endpoint .
-            '/v3/accounts/' . rawurlencode($opts['account_id']) .
-            '/users/'. rawurlencode($user_id) .
-            '/decisions');
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/users/' . rawurlencode($user_id) .
+                '/decisions');
 
         return $this->applyDecision($url, $opts);
     }
@@ -634,10 +626,10 @@ class SiftClient {
         $this->validateArgument($user_id, 'user_id', 'string');
 
         $url = ($this->api_endpoint .
-            '/v3/accounts/' . rawurlencode($opts['account_id']) .
-            '/users/' . rawurlencode($user_id) .
-            '/orders/' . rawurlencode($order_id) .
-            '/decisions');
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/users/' . rawurlencode($user_id) .
+                '/orders/' . rawurlencode($order_id) .
+                '/decisions');
 
         return $this->applyDecision($url, $opts);
     }
@@ -677,10 +669,10 @@ class SiftClient {
         $this->validateArgument($content_id, 'content_id', 'string');
         $this->validateArgument($user_id, 'user_id', 'string');
         $url = ($this->api_endpoint .
-            '/v3/accounts/' . $opts['account_id'] .
-            '/users/' . rawurlencode($user_id) .
-            '/content/' . rawurlencode($content_id) .
-            '/decisions');
+                '/v3/accounts/' . $opts['account_id'] .
+                '/users/' . rawurlencode($user_id) .
+                '/content/' . rawurlencode($content_id) .
+                '/decisions');
 
         return $this->applyDecision($url, $opts);
     }
@@ -720,10 +712,10 @@ class SiftClient {
         $this->validateArgument($user_id, 'user_id', 'string');
 
         $url = ($this->api_endpoint .
-            '/v3/accounts/' . rawurlencode($opts['account_id']) .
-            '/users/' . rawurlencode($user_id) .
-            '/sessions/' . rawurlencode($session_id) .
-            '/decisions');
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/users/' . rawurlencode($user_id) .
+                '/sessions/' . rawurlencode($session_id) .
+                '/decisions');
 
         return $this->applyDecision($url, $opts);
     }
@@ -737,20 +729,19 @@ class SiftClient {
             'source' => $opts['source']
         );
 
-        if ($opts['analyst']) $body['analyst'] = $opts['analyst'];
-        if ($opts['description']) $body['description'] = $opts['description'];
-        if ($opts['time']) $body['time'] = $opts['time'];
+        if ($opts['analyst'])
+            $body['analyst'] = $opts['analyst'];
+        if ($opts['description'])
+            $body['description'] = $opts['description'];
+        if ($opts['time'])
+            $body['time'] = $opts['time'];
 
         try {
             $request = new SiftRequest(
-                $url,
-                SiftRequest::POST,
-                $opts['timeout'],
-                self::API3_VERSION,
-                array(
-                    'auth' => $this->api_key . ':',
-                    'body' => $body
-                )
+                    $url, SiftRequest::POST, $opts['timeout'], self::API3_VERSION, array(
+                'auth' => $this->api_key . ':',
+                'body' => $body
+                    )
             );
 
             return $request->send();
@@ -760,6 +751,105 @@ class SiftClient {
         }
     }
 
+    /**
+     * Check user OTP and decides whether the user should be able to proceed or not. 
+     * See https://sift.com/developers/docs/curl/verification-api/check for valid $event values
+     * and $properties fields.
+     * 
+     * @param array $properties An array of name-value pairs that specify the event-specific
+     *     attributes to check.  This parameter is required.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'version': By default, this client's version is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function check($properties, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'timeout' => $this->timeout,
+            'version' => self::API4_VERSION
+        ));
+        $this->validateArgument($properties, 'properties', 'array');
+        $curl_opts[CURLOPT_HTTPHEADER] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
+        try {
+            $request = new SiftRequest(self::checkApiUrl($opts['version']), SiftRequest::POST, $opts['timeout'], $opts['version'], array('body' => $properties), $curl_opts);
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Genaerate OTP code that is stored by Sift and emails the code to the user. 
+     * See https://sift.com/developers/docs/curl/verification-api/send for valid $event values
+     * and $properties fields.
+     * 
+     * @param array $properties An array of name-value pairs .  This parameter is required.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'version': By default, this client's version is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function send($parameters, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'abuse_types' => array(),
+            'timeout' => $this->timeout,
+            'version' => self::API4_VERSION,
+        ));
+
+        $this->validateArgument($parameters['$user_id'], 'user id', 'string');
+        $curl_opts[CURLOPT_HTTPHEADER] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
+        try {
+            $request = new SiftRequest(
+                    self::userSendApiUrl($opts['version']), SiftRequest::POST, $opts['timeout'], $opts['version'], array(
+                'body' => $parameters,
+                    ), $curl_opts
+            );
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Regenerate new OTP. 
+     * See https://sift.com/developers/docs/curl/verification-api/resend for valid $event values
+     * and $properties fields.
+     * 
+     * @param array $properties An array of name-value pairs .  This parameter is required.
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - int 'timeout': By default, this client's timeout is used.
+     *     - string 'version': By default, this client's version is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function resend($parameters, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'abuse_types' => array(),
+            'timeout' => $this->timeout,
+            'version' => self::API4_VERSION,
+        ));
+
+        $this->validateArgument($parameters['$user_id'], 'user id', 'string');
+        $curl_opts[CURLOPT_HTTPHEADER] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
+        try {
+            $request = new SiftRequest(
+                    self::userResendApiUrl($opts['version']), SiftRequest::POST, $opts['timeout'], $opts['version'], array(
+                'body' => $parameters,
+                    ), $curl_opts
+            );
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
 
     /**
      * Merges a function's default parameter values into an array of arguments.
@@ -785,7 +875,6 @@ class SiftClient {
         }
         $opts += $defaults;
     }
-
 
     private function validateArgument($arg, $name, $type) {
         // Validate type
@@ -813,7 +902,20 @@ class SiftClient {
         return self::urlPrefix($version) . '/users/' . urlencode($userId) . '/score';
     }
 
+    private function checkApiUrl($version) {
+        return self::urlPrefix($version) . '/verification/check';
+    }
+
+    private function userSendApiUrl($version) {
+        return self::urlPrefix($version) . '/verification/send';
+    }
+
+    private function userResendApiUrl($version) {
+        return self::urlPrefix($version) . '/verification/resend';
+    }
+
     private function urlPrefix($version) {
         return $this->api_endpoint . '/v' . $version;
     }
+
 }

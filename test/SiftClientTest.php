@@ -66,6 +66,33 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
                 )
             )
         );
+        $this->send_properties = array(
+            '$user_id' => 'billy_jones_301',
+            '$send_to' => 'billy_jones_301@gmail.com',
+            '$verification_type' => '$email',
+            '$brand_name' => 'MyTopBrand',
+            '$language' => 'en',
+            '$event' => array(
+                '$session_id' => '09f7f361575d11ff',
+                '$verified_event' => '$login',
+                '$reason' => '$automated_rule',
+                '$ip' => '192.168.1.1',
+                '$browser' => array(
+                    '$user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
+                )
+            )
+        );
+        $this->resend_properties = array(
+            '$user_id' => 'billy_jones_301',
+            '$verified_event' => '$login',
+            '$verified_entity_id' => 'SOME_SESSION_ID'
+        );
+        $this->check_properties = array(
+            '$user_id' => 'billy_jones_301',
+            '$code' => 524313,
+            '$verified_event' => '$login',
+            '$verified_entity_id' => '09f7f361575d11ff',
+        );
     }
 
     protected function tearDown(): void {
@@ -631,6 +658,36 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
 
         $response = $this->client->track('$create_content', $this->profile_properties);
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+    }
+
+    public function testSend() {
+        $mockUrl = 'https://api.sift.com/v1.1/verification/send';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->client->send($this->send_properties);
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+    }
+
+    public function testResend() {
+        $mockUrl = 'https://api.sift.com/v1.1/verification/resend';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->client->resend($this->resend_properties);
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+    }
+
+    public function testCheck() {
+        $mockUrl = 'https://api.sift.com/v1.1/verification/check';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->client->check($this->check_properties);
         $this->assertTrue($response->isOk());
         $this->assertEquals($response->apiErrorMessage, 'OK');
     }
