@@ -778,7 +778,16 @@ class SiftClient {
         $this->validateArgument($properties, 'properties', 'array');
         $curl_opts[CURLOPT_HTTPHEADER] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
         try {
-            $request = new SiftRequest(self::checkApiUrl($opts['version']), SiftRequest::POST, $opts['timeout'], $opts['version'], array('body' => $properties), $curl_opts);
+            $request = new SiftRequest(
+                self::checkApiUrl($opts['version']), 
+                SiftRequest::POST, 
+                $opts['timeout'], 
+                $opts['version'], 
+                array(
+                    'body' => $properties
+                ),
+                $curl_opts);
+                
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -848,10 +857,17 @@ class SiftClient {
         $this->validateArgument($parameters['$user_id'], 'user id', 'string');
         $curl_opts[CURLOPT_HTTPHEADER] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
         try {
-            $request = new SiftRequest(self::userResendApiUrl($opts['version']), SiftRequest::POST, $opts['timeout'], $opts['version'], array(
-                'body' => $parameters,
-                    ), $curl_opts
+            $request = new SiftRequest(
+                self::userResendApiUrl($opts['version']), 
+                SiftRequest::POST, 
+                $opts['timeout'], 
+                $opts['version'], 
+                array(
+                   'body' => $parameters,
+                ), 
+                $curl_opts
             );
+
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
