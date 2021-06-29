@@ -142,10 +142,11 @@ class SiftClient {
 
         try {
             $request = new SiftRequest(
-                    $path, SiftRequest::POST, $opts['timeout'], $opts['version'], array(
-                'body' => $properties,
-                'params' => $params
-                    ), $this->curl_opts
+                 $path, SiftRequest::POST, $opts['timeout'], $opts['version'], array(
+                      'body' => $properties,
+                      'params' => $params
+                ),
+                $this->curl_opts
             );
             return $request->send();
         } catch (Exception $e) {
@@ -738,9 +739,13 @@ class SiftClient {
 
         try {
             $request = new SiftRequest(
-                    $url, SiftRequest::POST, $opts['timeout'], self::API3_VERSION, array(
-                'auth' => $this->api_key . ':',
-                'body' => $body
+                    $url, 
+                    SiftRequest::POST, 
+                    $opts['timeout'], 
+                    self::API3_VERSION, 
+                    array(
+                       'auth' => $this->api_key . ':',
+                       'body' => $body
                     )
             );
 
@@ -804,9 +809,14 @@ class SiftClient {
         $curl_opts[CURLOPT_HTTPHEADER] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
         try {
             $request = new SiftRequest(
-                    self::userSendApiUrl($opts['version']), SiftRequest::POST, $opts['timeout'], $opts['version'], array(
-                'body' => $parameters,
-                    ), $curl_opts
+                self::userSendApiUrl($opts['version']), 
+                SiftRequest::POST, 
+                $opts['timeout'], 
+                $opts['version'], 
+                array(
+                  'body' => $parameters,
+                ), 
+                $curl_opts
             );
             return $request->send();
         } catch (Exception $e) {
@@ -816,6 +826,7 @@ class SiftClient {
     }
 
     /**
+     * Verification Api- resend
      * Regenerate new OTP and send it to user. 
      * See https://sift.com/developers/docs/curl/verification-api/resend for valid $event values
      * and $properties fields.
