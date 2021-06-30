@@ -6,7 +6,7 @@ class SiftClient {
     // Must be kept in sync with composer.json
     const API_VERSION = '205';
     const API3_VERSION = '3';
-    const API_Verification = '1.1';
+    const API_VERIFICATION = '1.1';
     const DEFAULT_TIMEOUT = 2;
 
     private $api_key;
@@ -773,7 +773,7 @@ class SiftClient {
     public function check($properties, $opts = array()) {
         $this->mergeArguments($opts, array(
             'timeout' => $this->timeout,
-            'version' => self::API4_VERSION
+            'version' => self::API_VERIFICATION
         ));
         $this->validateArgument($properties, 'properties', 'array');
         $curl_opts[CURLOPT_HTTPHEADER] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
@@ -811,7 +811,7 @@ class SiftClient {
     public function send($parameters, $opts = array()) {
         $this->mergeArguments($opts, array(
             'timeout' => $this->timeout,
-            'version' => self::API4_VERSION,
+            'version' => self::API_VERIFICATION,
         ));
 
         $this->validateArgument($parameters['$user_id'], 'user id', 'string');
@@ -851,7 +851,7 @@ class SiftClient {
     public function resend($parameters, $opts = array()) {
         $this->mergeArguments($opts, array(
             'timeout' => $this->timeout,
-            'version' => self::API4_VERSION,
+            'version' => self::API_VERIFICATION,
         ));
 
         $this->validateArgument($parameters['$user_id'], 'user id', 'string');
