@@ -776,7 +776,7 @@ class SiftClient {
             'version' => self::API_VERIFICATION
         ));
         $this->validateArgument($properties, 'properties', 'array');
-        $curl_opts[CURLOPT_HTTPHEADER] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
+        $curl_opts['CURLOPT_HTTPHEADER'] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
         try {
             $request = new SiftRequest(
                 self::checkApiUrl($opts['version']), 
@@ -815,7 +815,7 @@ class SiftClient {
         ));
 
         $this->validateArgument($parameters['$user_id'], 'user id', 'string');
-        $curl_opts[CURLOPT_HTTPHEADER] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
+        $curl_opts['CURLOPT_HTTPHEADER'] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
         try {
             $request = new SiftRequest(
                 self::userSendApiUrl($opts['version']), 
@@ -855,7 +855,7 @@ class SiftClient {
         ));
 
         $this->validateArgument($parameters['$user_id'], 'user id', 'string');
-        $curl_opts[CURLOPT_HTTPHEADER] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
+        $curl_opts['CURLOPT_HTTPHEADER'] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
         try {
             $request = new SiftRequest(
                 self::userResendApiUrl($opts['version']), 
