@@ -111,6 +111,7 @@ class SiftClient {
             'return_score' => false,
             'return_action' => false,
             'return_workflow_status' => false,
+            'return_route_info' => false,
             'force_workflow_run' => false,
             'abuse_types' => array(),
             'path' => null,
@@ -135,6 +136,8 @@ class SiftClient {
             $params['return_action'] = 'true';
         if ($opts['return_workflow_status'])
             $params['return_workflow_status'] = 'true';
+        if ($opts['return_route_info'])
+            $params['return_route_info'] = 'true';
         if ($opts['force_workflow_run'])
             $params['force_workflow_run'] = 'true';
         if ($opts['abuse_types'])

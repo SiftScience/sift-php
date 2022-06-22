@@ -318,13 +318,14 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
     }
 
     public function testSuccessfulSyncWorkflowStatusFetch() {
-        $mockUrl = 'https://api.sift.com/v205/events?return_workflow_status=true&abuse_types=legacy%2Caccount_abuse';
+        $mockUrl = 'https://api.sift.com/v205/events?return_workflow_status=true&return_route_info=true&abuse_types=legacy%2Caccount_abuse';
         $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK",
             "score_response": {"user_id": "12345", "score": 0.55}}', 200, null);
         SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
 
         $response = $this->client->track('$transaction', $this->transaction_properties, array(
             'return_workflow_status' => true,
+            'return_route_info' => true,
             'abuse_types' => array('legacy', 'account_abuse')
         ));
         $this->assertTrue($response->isOk());
