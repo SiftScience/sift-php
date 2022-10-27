@@ -14,6 +14,12 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
             'api_key' => SiftClientTest::$API_KEY,
             'account_id' => SiftClientTest::$ACCOUNT_ID
         ));
+   
+         $this->merchant = new SiftClient(array(
+            'api_key' => '09f7f361575d11ff',
+            'account_id' => '5f053f004025ca08a187fad6'
+        ));
+
         $this->transaction_properties = array(
             '$buyer_user_id' => '123456',
             '$seller_user_id' => '56789',
@@ -95,6 +101,56 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
             '$code' => 524313,
             '$verified_event' => '$login',
             '$verified_entity_id' => '09f7f361575d11ff',
+        );
+
+       $this->merchant_properties = array(
+            'batch_size' => 2,
+        );
+
+        $this->post_merchant_properties = array(
+            'id' => 'api-key-1000',
+            'name' => 'Wonderful Payments In',
+            'description' => 'Wonderful Payments payment provider',
+            'address' => array(
+                'name' => 'Alany',
+                'address_1' => 'Big Payment blvd, 22',
+                'address_2' => 'apt, 8',
+                'city' => 'New Orleans',
+                'region' => 'NA',
+                'country' => 'US',
+                'zipcode' => '76830',
+                'phone' => '0394888320'
+            ),
+            'category' => '1002',
+            'service_level' => 'Platinum',
+            'status' => 'active',
+            'risk_profile' => array(
+                'level' => 'low',
+                'score' => 10,
+            )
+        );
+
+        $this->put_merchant_properties = array(
+            'id' => 'api-key-1',
+            'name' => 'Wonderful Payments Inc',
+            'description' => 'Wonderful Payments payment provider',
+            'address' => array(
+                'name' => 'Alany',
+                'address_1' => 'Big Payment blvd, 22',
+                'address_2' => 'apt, 8',
+                'city' => 'New Orleans',
+                'region' => 'NA',
+                'country' => 'US',
+                'zipcode' => '76830',
+                'phone' => '0394888320'
+            ),
+            'category' => '1002',
+            'service_level' => 'Platinum',
+            'status' => 'active',
+            'risk_profile' => array(
+                'level' => 'low',
+                'score' => 10,
+            )
         );
     }
 
@@ -694,6 +750,43 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
         $response = $this->client->check($this->check_properties);
         $this->assertTrue($response->isOk());
         $this->assertEquals($response->apiErrorMessage, 'OK');
+    }
+
+    public function testMerchants() {
+        $mockUrl = 'https://api.sift.com/v3/accounts/5f053f004025ca08a187fad6/psp_management/merchants';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
+
+        $response = $this->merchant->merchants($this->merchant_properties);
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testPostMerchant() {
+        $mockUrl = 'https://api.sift.com/v3/accounts/5f053f004025ca08a187fad6/psp_management/merchants';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST, $mockResponse);
+
+        $response = $this->merchant->postMerchant($this->post_merchant_properties);
+        $this->assertTrue($response->isOk());
+        $this->assertEquals($response->apiErrorMessage, 'OK');
+    }
+
+    public function testGetMerchant() {
+        $mockUrl = 'https://api.sift.com/v3/accounts/5f053f004025ca08a187fad6/psp_management/merchants/api-key-1';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
+
+        $response = $this->merchant->getMerchant('api-key-1');
+        $this->assertTrue($response->isOk());
+    }
+
+    public function testPutMerchant() {
+        $mockUrl = 'https://api.sift.com/v3/accounts/5f053f004025ca08a187fad6/psp_management/merchants/api-key-1';
+        $mockResponse = new SiftResponse('{"status": 0, "error_message": "OK"}', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::PUT, $mockResponse);
+
+        $response = $this->merchant->putMerchant('api-key-1', $this->put_merchant_properties);
+        $this->assertTrue($response->isOk());
     }
 
 }

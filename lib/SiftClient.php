@@ -878,6 +878,140 @@ class SiftClient {
         }
     }
 
+
+     /**
+     * Get a list of PSP Merchant profiles. 
+     * @param array $parameters An array of name-value pairs .  
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function merchants($parameters, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout,
+        ));
+        if (isset($parameters['batch_token']))
+            $this->validateArgument($parameters['batch_token'], 'batch_token', 'string');
+        if (isset($parameters['batch_size']))
+            $this->validateArgument($parameters['batch_size'], 'batch_size', 'integer');
+        $this->validateArgument($this->account_id, 'accountId', 'string');
+
+        $url = ($this->api_endpoint .
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/psp_management/merchants');
+
+        try {
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':', 'body' => $parameters));
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Create a new PSP Merchant profile. 
+     * @param array $parameters An array of merchant profile data .  
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function postMerchant($parameters, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'timeout' => $this->timeout,
+            'account_id' => $this->account_id,
+        ));
+
+        $this->validateArgument($parameters, 'properties', 'array');
+        $this->validateMerchantArgument($parameters);
+        $url = ($this->api_endpoint .
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/psp_management/merchants');
+        try {
+            $request = new SiftRequest($url, SiftRequest::POST, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':',
+                'body' => $parameters,
+            ));
+
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     *  Get a PSP Merchant profile.. 
+     * @param array $merchant_id :Merchant ID .  
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function getMerchant($merchant_id, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'account_id' => $this->account_id,
+            'timeout' => $this->timeout,
+        ));
+
+        $this->validateArgument($this->account_id, 'accountId', 'string');
+        $this->validateArgument($merchant_id, 'merchantId', 'string');
+
+        $url = ($this->api_endpoint .
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/psp_management/merchants/' . rawurlencode($merchant_id));
+
+        try {
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     *  Update a PSP Merchant profile.. 
+     * @param array $parameters An array of merchant profile data .    
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function putMerchant($merchant_id, $parameters, $opts = array()) {
+        $this->mergeArguments($opts, array(
+            'timeout' => $this->timeout,
+            'account_id' => $this->account_id,
+        ));
+
+        $this->validateArgument($parameters, 'properties', 'array');
+        $this->validateArgument($merchant_id, 'merchantId', 'string');
+        $this->validateMerchantArgument($parameters);
+
+        $url = ($this->api_endpoint .
+                '/v3/accounts/' . rawurlencode($opts['account_id']) .
+                '/psp_management/merchants/' . rawurlencode($merchant_id));
+        try {
+            $request = new SiftRequest($url, SiftRequest::PUT, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':',
+                'body' => $parameters,
+            ));
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
     /**
      * Merges a function's default parameter values into an array of arguments.
      *
@@ -911,6 +1045,27 @@ class SiftClient {
         // Check if empty
         if (empty($arg))
             throw new InvalidArgumentException("${name} cannot be empty.");
+    }
+
+    private function validateMerchantArgument($parameters) {
+        $this->validateArgument($parameters['id'], 'ID', 'string');
+        $this->validateArgument($parameters['name'], 'name', 'string');
+        $this->validateArgument($parameters['address']['address_1'], 'address_1', 'string');
+        $this->validateArgument($parameters['address']['address_2'], 'address_2', 'string');
+        $this->validateArgument($parameters['address']['city'], 'city', 'string');
+        $this->validateArgument($parameters['address']['region'], 'region', 'string');
+        $this->validateArgument($parameters['address']['country'], 'country', 'string');
+        $this->validateArgument($parameters['address']['zipcode'], 'zipcode', 'string');
+        $this->validateArgument($parameters['address']['phone'], 'phone', 'string');
+        $this->validateArgument($parameters['category'], 'category', 'string');
+        $this->validateArgument($parameters['service_level'], 'service_level', 'string');
+        $this->validateArgument($parameters['status'], 'status', 'string');
+        $this->validateArgument($parameters['risk_profile']['level'], 'level', 'string');
+        $this->validateArgument($parameters['risk_profile']['score'], 'Score', 'integer');
+        if (($parameters['risk_profile']['level'] != 'low') && ($parameters['risk_profile']['level'] != 'medium') && ($parameters['risk_profile']['level'] != 'high'))
+            throw new InvalidArgumentException("Invalid Level");
+        if ($parameters['status'] != 'churned' && $parameters['status'] != 'active' && $parameters['status'] != 'inactive' && $parameters['status'] != 'paused')
+            throw new InvalidArgumentException("Invalid Status");
     }
 
     private function restApiUrl($version) {
