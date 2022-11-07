@@ -3,6 +3,7 @@
 class SiftRequest {
     const GET = 'GET';
     const POST = 'POST';
+    const PUT = 'PUT';
     const DELETE = 'DELETE';
 
     private static $mock = null;
@@ -80,7 +81,7 @@ class SiftRequest {
         }
 
         // HTTP-method-specific configuration.
-        if ($this->method == self::POST) {
+        if ($this->method == self::POST || $this->method == self::PUT) {
             if (function_exists('json_encode')) {
                 $jsonString = json_encode($this->body);
             } else {
@@ -89,7 +90,7 @@ class SiftRequest {
                 $jsonString = $json->encodeUnsafe($this->body);
             }
 
-            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonString);
             array_push($headers, 'Content-Type: application/json',
                 'Content-Length: ' . strlen($jsonString)
