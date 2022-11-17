@@ -1,3 +1,8 @@
+4.1.0 (2022-11-18)
+=================
+
+- Replace array curly brackets with square brackets
+
 4.0.1 (2022-02-02)
 =================
 
