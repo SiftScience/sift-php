@@ -4,8 +4,8 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 class SiftClientTest extends PHPUnit\Framework\TestCase {
 
-    private static $API_KEY = 'YOUR_API_KEY';
-    private static $ACCOUNT_ID = 'YOUR_ACCOUNT_ID';
+    private static $API_KEY = 'agreatsuccess';
+    private static $ACCOUNT_ID = '90201c25e39320c45b3da37b';
     private $client;
     private $transaction_properties;
 
@@ -16,8 +16,8 @@ class SiftClientTest extends PHPUnit\Framework\TestCase {
         ));
    
          $this->merchant = new SiftClient(array(
-            'api_key' => 'YOUR_API_KEY',
-            'account_id' => 'YOUR_ACCOUNT_ID'
+            'api_key' => '09f7f361575d11ff',
+            'account_id' => '5f053f004025ca08a187fad6'
         ));
 
         $this->transaction_properties = array(
