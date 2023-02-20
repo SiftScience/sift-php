@@ -18,6 +18,14 @@ class SiftClientTest extends TestCase
     private $transaction_properties;
     private $label_properties;
     private $profile_properties;
+    private $merchant;
+    private $send_properties;
+    private $resend_properties;
+    private $check_properties;
+    private $merchant_properties;
+    private $post_merchant_properties;
+    private $put_merchant_properties;
+    
 
     protected function setUp(): void
     {
