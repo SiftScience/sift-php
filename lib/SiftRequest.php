@@ -30,12 +30,12 @@ class SiftRequest {
      *     - string 'auth': Basic authorization for the request (i.e., "username:password").
      * @param array $curl_opts And associative array of libcurl options to set with curl_setopt
      */
-    function __construct($url, $method, $timeout, $version, $opts = array(), $curl_opts = array()) {
-        $opts += array(
-            'params' => array(),
-            'body' => array(),
+    function __construct($url, $method, $timeout, $version, $opts = [], $curl_opts = []) {
+        $opts += [
+            'params' => [],
+            'body' => [],
             'auth' => null
-        );
+        ];
 
         $this->url = $url;
         $this->method = $method;
@@ -73,15 +73,16 @@ class SiftRequest {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_URL, $curlUrl);
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
-        $headers = array(
+        $headers = [
             'User-Agent: SiftScience/v' . $this->version . ' sift-php/' . Sift::VERSION
-        );
+        ];
         if ($this->auth) {
             curl_setopt($ch, CURLOPT_USERPWD, $this->auth);
         }
 
         // HTTP-method-specific configuration.
         if ($this->method == self::POST || $this->method == self::PUT) {
+            
             $jsonString = json_encode($this->body);
 
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
@@ -114,11 +115,11 @@ class SiftRequest {
     }
 
     public static function setMockResponse($url, $method, $response) {
-        self::$mock = array(
+        self::$mock = [
             'url' => $url,
             'method' => $method,
             'response' => $response
-        );
+        ];
     }
 
     public static function clearMockResponse() {

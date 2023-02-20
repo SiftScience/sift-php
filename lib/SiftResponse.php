@@ -25,7 +25,8 @@ class SiftResponse {
         $this->rawResponse = $result;
 
         // Only attempt to get our response body if the http status code expects a body
-        if ($this->httpStatusCode >= 200 && !in_array($this->httpStatusCode, array(204, 304))) {
+        if ($this->httpStatusCode >= 200 && !in_array($this->httpStatusCode, [204, 304])) {
+            
             $this->body = json_decode($result, true);
 
             if (is_null($this->body)) {
@@ -69,7 +70,7 @@ class SiftResponse {
 
     public function isOk() {
         // If there is no body, check the http status code only (should be 204)
-        if (in_array($this->httpStatusCode, array(204, 304))) {
+        if (in_array($this->httpStatusCode, [204, 304])) {
             return 204 === $this->httpStatusCode;
         }
 
