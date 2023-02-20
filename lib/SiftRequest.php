@@ -82,13 +82,7 @@ class SiftRequest {
 
         // HTTP-method-specific configuration.
         if ($this->method == self::POST || $this->method == self::PUT) {
-            if (function_exists('json_encode')) {
-                $jsonString = json_encode($this->body);
-            } else {
-                require_once(dirname(__FILE__) . '/Services_JSON-1.0.3/JSON.php');
-                $json = new Services_JSON();
-                $jsonString = $json->encodeUnsafe($this->body);
-            }
+            $jsonString = json_encode($this->body);
 
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonString);
