@@ -51,7 +51,7 @@ context: &context
         key: composer-v1-{{ checksum "composer.lock" }}
         paths:
           - vendor
-    - run: composer exec phpunit -v -- --bootstrap vendor/autoload.php test
+    - run: composer exec phpunit -v
     - slack/notify:
         <<: *slack_notify
 
