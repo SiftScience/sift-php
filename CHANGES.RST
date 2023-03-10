@@ -1,3 +1,18 @@
+4.3.0 (2023-02-13)
+=================
+
+- Support optional parameters in getDecisions
+
+4.2.0 (2022-11-07)
+=================
+
+- Updated PSP Merchant Management API
+
+4.1.0 (2022-06-29)
+=================
+
+- Added query param return_route_info for sync workflows
+
 4.0.1 (2022-02-02)
 =================
 
