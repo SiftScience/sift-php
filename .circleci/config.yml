@@ -52,8 +52,12 @@ context: &context
         paths:
           - vendor
     - run: composer exec phpunit -v
-    - slack/notify:
-        <<: *slack_notify
+    - when:
+        condition:
+          equal: [ master, << pipeline.git.branch >> ]
+        steps:
+          - slack/notify:
+              <<: *slack_notify
 
 jobs:
   build71:

@@ -547,8 +547,9 @@ class SiftClient {
         }
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':']);
 
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':', 'params' => $params]);
+          
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());

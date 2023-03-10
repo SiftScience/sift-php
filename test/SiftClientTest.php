@@ -720,7 +720,7 @@ class SiftClientTest extends TestCase
             "return_score" => true,
         ]);
     }
-
+  
     public function testGetUserDecisionsWithSpecialCharacters(): void
     {
         $mockUrl =
@@ -776,6 +776,7 @@ class SiftClientTest extends TestCase
         $this->assertTrue($response->isOk());
     }
 
+
     public function testGetOrderDecisions(): void
     {
         $mockUrl =
@@ -787,6 +788,7 @@ class SiftClientTest extends TestCase
             200,
             null
         );
+
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
         $response = $this->client->getOrderDecisions("example_order", [
@@ -794,6 +796,7 @@ class SiftClientTest extends TestCase
         ]);
         $this->assertTrue($response->isOk());
     }
+
 
     public function testGetOrderDecisionsWithSpecialCharacters(): void
     {
@@ -809,6 +812,7 @@ class SiftClientTest extends TestCase
         ]);
         $this->assertTrue($response->isOk());
     }
+
 
     public function testGetDecisionList(): void
     {
@@ -870,6 +874,7 @@ class SiftClientTest extends TestCase
         $this->assertTrue($response->isOk());
     }
 
+
     public function testApplyDecisionToUser(): void
     {
         $mockUrl =
@@ -906,6 +911,7 @@ class SiftClientTest extends TestCase
         );
         $this->assertTrue($response->isOk());
     }
+
 
     public function testApplyDecisionToUserWithSpecialCharacters(): void
     {
@@ -968,7 +974,7 @@ class SiftClientTest extends TestCase
 
         $this->assertTrue($response->isOk());
     }
-
+  
     public function testApplyDecisionToOrderWithSpecialCharacters(): void
     {
         $mockUrl =
@@ -1032,7 +1038,7 @@ class SiftClientTest extends TestCase
 
         $this->assertTrue($response->isOk());
     }
-
+  
     public function testApplyDecisionToSessionWithSpecialCharacters(): void
     {
         $mockUrl =
@@ -1212,12 +1218,13 @@ class SiftClientTest extends TestCase
             200,
             null
         );
+
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
         $response = $this->merchant->merchants($this->merchant_properties);
         $this->assertTrue($response->isOk());
     }
-
+  
     public function testPostMerchant(): void
     {
         $mockUrl =
