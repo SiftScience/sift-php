@@ -101,7 +101,7 @@ class SiftRequest {
         }
 
         foreach ($this->curl_opts as $option => $value) {
-            if ($option !== CURLOPT_HTTPHEADER) {
+            if ($option !== "CURLOPT_HTTPHEADER") {
                 curl_setopt($ch, $option, $value);
             } else {
                 $headers = array_merge($headers, $value);
