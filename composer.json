@@ -29,12 +29,18 @@
         "email": "support@siftscience.com"
     },
     "require": {
-        "php": ">=7.1.0"
+        "php": ">=7.1.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "7.*"
     },
     "autoload": {
         "classmap": ["lib/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SiftScience\\Test\\": "test/"
+        }
     }
 }

@@ -5,35 +5,29 @@
 
 ### With Composer
 
-1. Add siftscience/sift-php as a dependency in composer.json.
+1. Add siftscience/sift-php as a composer dependency
 
-    ```php
-    "require": {
-        ...
-        "siftscience/sift-php" : "4.*"
-        ...
-    }
-    ```
+```shell script
+composer require siftscience/sift-php
+```
 
-2. Run `composer update`.
+2. Now `SiftClient` will be autoloaded into your project.
 
-3. Now `SiftClient` will be autoloaded into your project.
+```php
+require 'vendor/autoload.php';
 
+$sift = new SiftClient([
+    'api_key' => 'my_api_key',
+    'account_id' => 'my_account_id'
+]);
 
-    ```php
-    require 'vendor/autoload.php';
+// or
 
-    $sift = new SiftClient(array(
-        'api_key' => 'my_api_key',
-        'account_id' => 'my_account_id'
-    ));
+Sift::setApiKey('my_api_key');
+Sift::setAccountId('my_account_id');
+$sift = new SiftClient();
+```
 
-    // or
-
-    Sift::setApiKey('my_api_key');
-    Sift::setAccountId('my_account_id');
-    $sift = new SiftClient();
-    ```
 
 ### Manually
 
@@ -50,10 +44,10 @@
     require 'sift-php/lib/Sift.php';
 
 
-    $sift = new SiftClient(array(
+    $sift = new SiftClient([
         'api_key' => 'my_api_key',
         'account_id' => 'my_account_id'
-    ));
+    ]);
     ```
 
 
@@ -62,8 +56,8 @@
 ### Track an event
 Here's an example that sends a `$transaction` event to sift.
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
-$response = $sift->track('$transaction', array(
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->track('$transaction', [
     '$user_id' => '23056',
     '$user_email' => 'buyer@gmail.com',
     '$seller_user_id' => '2371',
@@ -74,55 +68,55 @@ $response = $sift->track('$transaction', array(
     'seller_user_email' => 'seller@gmail.com',
     'trip_time' => 930,
     'distance_traveled' => 5.26,
-));
+]);
 ```
 
 ### Label a user as good/bad
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
-$response = $sift->label('23056', array(
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->label('23056', [
     '$is_bad' => true,
     '$abuse_type' => 'promotion_abuse'
-));
+]);
 ```
 
 ### Unlabel a user
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
-$response = $sift->unlabel('23056', array('abuse_type' => 'content_abuse'));
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->unlabel('23056', ['abuse_type' => 'content_abuse']);
 ```
 
 ### Get a user's score
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
 $response = $sift->score('23056');
 $response->body['scores']['payment_abuse']['score']; // => 0.030301357270181357
 ```
 
 ### Get the status of a workflow run
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
 $response = $sift->getWorkflowStatus('my_run_id');
 $response->body['state']; // => "running"
 ```
 
 ### Get the latest decisions for a user
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
 $response = $sift->getUserDecisions('example_user');
 $response->body['decisions']['account_abuse']['decision']['id']; // => "ban_user"
 ```
 
 ### Get the latest decisions for an order
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
 $response = $sift->getOrderDecisions('example_order');
 $response->body['decisions']['payment_abuse']['decision']['id']; // => "ship_order"
 ```
 
 ### Get the latest decisions for a session
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
 $response = $sift->getSessionDecisions('example_user', 'example_session');
 $response->body['decisions']['account_takeover']['decision']['id']; // => "session_decision"
 ```
@@ -134,29 +128,29 @@ $response->body['decisions']['account_takeover']['decision']['id']; // => "sessi
    "account_abuse", "legacy", "account_takeover"]`
 
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
-$response = $this->client->getDecisions(array('entity_type' => 'example_entity_type','abuse_types' => 'example_abuse_types'));
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $this->client->getDecisions(['entity_type' => 'example_entity_type','abuse_types' => 'example_abuse_types']);
 $response->isOk()
 ```
 
 ### Apply decision to a user
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
-$response = $sift->applyDecisionToUser('example_user','example_decision','example_source',array('analyst' => 'analyst@example.com')
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->applyDecisionToUser('example_user','example_decision','example_source',['analyst' => 'analyst@example.com']
 $response->isOk()
 ```
 
 ### Apply decision to an order
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
-$response = $sift->applyDecisionToOrder('example_user','example_order','example_decision','example_source',array('analyst' => 'analyst@example.com')
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->applyDecisionToOrder('example_user','example_order','example_decision','example_source',['analyst' => 'analyst@example.com']
 $response->isOk()
 ```
 
 ### Apply decision to a session
 ```php
-$sift = new SiftClient(array('api_key' => 'my_api_key', 'account_id' => 'my_account_id'));
-$response = $sift->applyDecisionToSession('example_user','example_session','example_decision','example_source',array('analyst' => 'analyst@example.com')
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->applyDecisionToSession('example_user','example_session','example_decision','example_source',['analyst' => 'analyst@example.com']
 $response->isOk()
 ```
 
@@ -237,12 +231,12 @@ For Debian-based distributions, the certificate file is `/etc/ssl/certs/ca-certi
 Then, instantiate `SiftClient` to route requests through the proxy:
 
 ```php
-$sift = new SiftClient(array(
+$sift = new SiftClient([
     'api_key' => 'my_api_key',
     'account_id' => 'my_account_id',
     'api_endpoint' => 'http://api.sift.com',
-    'curl_opts' => array(CURLOPT_CONNECT_TO => array('api.sift.com:80:localhost:8081')),
-));
+    'curl_opts' => [CURLOPT_CONNECT_TO => ['api.sift.com:80:localhost:8081']],
+]);
 ```
 
 ## License
