@@ -1032,7 +1032,7 @@ class SiftClient {
         }
         foreach ($opts as $key => $value) {
             if (!array_key_exists($key, $defaults)) {
-                throw new InvalidArgumentException("${key} is not a valid argument.");
+                throw new InvalidArgumentException("{$key} is not a valid argument.");
             }
         }
         $opts += $defaults;
@@ -1041,11 +1041,11 @@ class SiftClient {
     private function validateArgument($arg, $name, $type) {
         // Validate type
         if (gettype($arg) != $type)
-            throw new InvalidArgumentException("${name} must be a ${type}.");
+            throw new InvalidArgumentException("{$name} must be a {$type}.");
 
         // Check if empty
         if (empty($arg))
-            throw new InvalidArgumentException("${name} cannot be empty.");
+            throw new InvalidArgumentException("{$name} cannot be empty.");
     }
 
     private function validateMerchantArgument($parameters) {
