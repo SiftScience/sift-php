@@ -116,7 +116,8 @@ class SiftClient {
             'abuse_types' => array(),
             'path' => null,
             'timeout' => $this->timeout,
-            'version' => $this->version
+            'version' => $this->version,
+            'include_score_percentiles' => false
         ));
         $this->validateArgument($event, 'event', 'string');
         $this->validateArgument($properties, 'properties', 'array');
@@ -142,7 +143,9 @@ class SiftClient {
             $params['force_workflow_run'] = 'true';
         if ($opts['abuse_types'])
             $params['abuse_types'] = implode(',', $opts['abuse_types']);
-
+        if($opts['include_score_percentiles'])
+            $params['fields'] = 'SCORE_PERCENTILES';
+            
         try {
             $request = new SiftRequest(
                  $path, SiftRequest::POST, $opts['timeout'], $opts['version'], array(
