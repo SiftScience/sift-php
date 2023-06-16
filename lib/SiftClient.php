@@ -32,7 +32,7 @@ class SiftClient {
      * @param string $message
      * @param array  $context
      */
-    private function logError($message, array $context = array()) {
+    private function logError($message, array $context = []) {
         if ($this->logger) {
             $this->logger->error($message, $context);
         }
@@ -54,15 +54,15 @@ class SiftClient {
      *           curl_setopt().  Options override any options set by the SiftClient, so use with
      *           caution.  By default, array().
      */
-    function __construct($opts = array()) {
-        $this->mergeArguments($opts, array(
+    function __construct($opts = []) {
+        $this->mergeArguments($opts, [
             'api_key' => Sift::$api_key,
             'account_id' => Sift::$account_id,
             'timeout' => self::DEFAULT_TIMEOUT,
             'version' => self::API_VERSION,
             'api_endpoint' => self::API_ENDPOINT,
-            'curl_opts' => array(),
-        ));
+            'curl_opts' => [],
+        ]);
 
         $this->validateArgument($opts['api_key'], 'api key', 'string');
 
@@ -106,19 +106,20 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function track($event, $properties, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function track($event, $properties, $opts = []) {
+        $this->mergeArguments($opts, [
             'return_score' => false,
             'return_action' => false,
             'return_workflow_status' => false,
             'return_route_info' => false,
             'force_workflow_run' => false,
-            'abuse_types' => array(),
+            'abuse_types' => [],
             'path' => null,
             'timeout' => $this->timeout,
             'version' => $this->version,
             'include_score_percentiles' => false
-        ));
+        ]);
+
         $this->validateArgument($event, 'event', 'string');
         $this->validateArgument($properties, 'properties', 'array');
 
@@ -130,7 +131,7 @@ class SiftClient {
         $properties['$api_key'] = $this->api_key;
         $properties['$type'] = $event;
 
-        $params = array();
+        $params = [];
         if ($opts['return_score'])
             $params['return_score'] = 'true';
         if ($opts['return_action'])
@@ -148,10 +149,10 @@ class SiftClient {
             
         try {
             $request = new SiftRequest(
-                 $path, SiftRequest::POST, $opts['timeout'], $opts['version'], array(
+                 $path, SiftRequest::POST, $opts['timeout'], $opts['version'], [
                       'body' => $properties,
                       'params' => $params
-                ),
+                ],
                 $this->curl_opts
             );
             return $request->send();
@@ -176,21 +177,21 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function score($userId, $opts = array()) {
-        $this->mergeArguments($opts, array(
-            'abuse_types' => array(),
+    public function score($userId, $opts = []) {
+        $this->mergeArguments($opts, [
+            'abuse_types' => [],
             'timeout' => $this->timeout,
             'version' => $this->version
-        ));
+        ]);
 
         $this->validateArgument($userId, 'user id', 'string');
 
-        $params = array('api_key' => $this->api_key);
+        $params = ['api_key' => $this->api_key];
         if ($opts['abuse_types'])
             $params['abuse_types'] = implode(',', $opts['abuse_types']);
 
         try {
-            $request = new SiftRequest(self::scoreApiUrl($userId, $opts['version']), SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
+            $request = new SiftRequest(self::scoreApiUrl($userId, $opts['version']), SiftRequest::GET, $opts['timeout'], $opts['version'], ['params' => $params]);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -217,21 +218,21 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function get_user_score($userId, $opts = array()) {
-        $this->mergeArguments($opts, array(
-            'abuse_types' => array(),
+    public function get_user_score($userId, $opts = []) {
+        $this->mergeArguments($opts, [
+            'abuse_types' => [],
             'timeout' => $this->timeout,
             'version' => $this->version
-        ));
+        ]);
 
         $this->validateArgument($userId, 'user id', 'string');
 
-        $params = array('api_key' => $this->api_key);
+        $params = ['api_key' => $this->api_key];
         if ($opts['abuse_types'])
             $params['abuse_types'] = implode(',', $opts['abuse_types']);
 
         try {
-            $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']), SiftRequest::GET, $opts['timeout'], $opts['version'], array('params' => $params));
+            $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']), SiftRequest::GET, $opts['timeout'], $opts['version'], ['params' => $params]);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -256,21 +257,21 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function rescore_user($userId, $opts = array()) {
-        $this->mergeArguments($opts, array(
-            'abuse_types' => array(),
+    public function rescore_user($userId, $opts = []) {
+        $this->mergeArguments($opts, [
+            'abuse_types' => [],
             'timeout' => $this->timeout,
             'version' => $this->version
-        ));
+        ]);
 
         $this->validateArgument($userId, 'user id', 'string');
 
-        $params = array('api_key' => $this->api_key);
+        $params = ['api_key' => $this->api_key];
         if ($opts['abuse_types'])
             $params['abuse_types'] = implode(',', $opts['abuse_types']);
 
         try {
-            $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']), SiftRequest::POST, $opts['timeout'], $opts['version'], array('params' => $params));
+            $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']), SiftRequest::POST, $opts['timeout'], $opts['version'], ['params' => $params]);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -295,20 +296,20 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function label($userId, $properties, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function label($userId, $properties, $opts = []) {
+        $this->mergeArguments($opts, [
             'timeout' => $this->timeout,
             'version' => $this->version
-        ));
+        ]);
 
         $this->validateArgument($userId, 'user id', 'string');
         $this->validateArgument($properties, 'properties', 'array');
 
-        return $this->track('$label', $properties, array(
+        return $this->track('$label', $properties, [
                     'timeout' => $opts['timeout'],
                     'version' => $opts['version'],
                     'path' => $this->userLabelApiUrl($userId, $opts['version'])
-        ));
+        ]);
     }
 
     /**
@@ -324,21 +325,21 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function unlabel($userId, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function unlabel($userId, $opts = []) {
+        $this->mergeArguments($opts, [
             'abuse_type' => null,
             'timeout' => $this->timeout,
             'version' => $this->version
-        ));
+        ]);
 
         $this->validateArgument($userId, 'user id', 'string');
 
-        $params = array('api_key' => $this->api_key);
+	$params = ['api_key' => $this->api_key];
         if ($opts['abuse_type'])
             $params['abuse_type'] = $opts['abuse_type'];
 
         try {
-            $request = new SiftRequest(self::userLabelApiUrl($userId, $opts['version']), SiftRequest::DELETE, $opts['timeout'], $opts['version'], array('params' => $params));
+            $request = new SiftRequest(self::userLabelApiUrl($userId, $opts['version']), SiftRequest::DELETE, $opts['timeout'], $opts['version'], ['params' => $params]);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -355,11 +356,11 @@ class SiftClient {
      *     - string 'account_id': by default, this client's account ID is used.
      *     - int 'timeout': By default, this client's timeout is used.
      */
-    public function getWorkflowStatus($run_id, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function getWorkflowStatus($run_id, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout
-        ));
+        ]);
 
         $this->validateArgument($run_id, 'run id', 'string');
 
@@ -368,7 +369,7 @@ class SiftClient {
                 '/workflows/runs/' . rawurlencode($run_id));
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':']);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -385,11 +386,11 @@ class SiftClient {
      *     - string 'account_id': by default, this client's account ID is used.
      *     - int 'timeout': By default, this client's timeout is used.
      */
-    public function getUserDecisions($user_id, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function getUserDecisions($user_id, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout
-        ));
+        ]);
 
         $this->validateArgument($user_id, 'user id', 'string');
 
@@ -399,7 +400,7 @@ class SiftClient {
                 '/decisions');
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':']);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -416,11 +417,11 @@ class SiftClient {
      *     - string 'account_id': by default, this client's account ID is used.
      *     - int 'timeout': By default, this client's timeout is used.
      */
-    public function getOrderDecisions($order_id, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function getOrderDecisions($order_id, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout
-        ));
+        ]);
 
         $this->validateArgument($order_id, 'order id', 'string');
 
@@ -430,7 +431,7 @@ class SiftClient {
                 '/decisions');
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':']);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -448,11 +449,11 @@ class SiftClient {
      *     - string 'account_id': by default, this client's account ID is used.
      *     - int 'timeout': By default, this client's timeout is used.
      */
-    public function getSessionDecisions($user_id, $session_id, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function getSessionDecisions($user_id, $session_id, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout
-        ));
+        ]);
 
         $this->validateArgument($session_id, 'session id', 'string');
 
@@ -463,7 +464,7 @@ class SiftClient {
                 '/decisions');
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':']);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -481,11 +482,11 @@ class SiftClient {
      *     - string 'account_id': by default, this client's account ID is used.
      *     - int 'timeout': By default, this client's timeout is used.
      */
-    public function getContentDecisions($user_id, $content_id, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function getContentDecisions($user_id, $content_id, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout
-        ));
+        ]);
 
         $this->validateArgument($content_id, 'content id', 'string');
 
@@ -496,7 +497,7 @@ class SiftClient {
                 '/decisions');
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':']);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -519,8 +520,8 @@ class SiftClient {
      *     - int 'from': will return the next decision from the index given up
      *       to the limit.
      */
-    public function getDecisions($opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function getDecisions($opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout,
             'abuse_types' => null,
@@ -528,9 +529,9 @@ class SiftClient {
             'next_ref' => null,
             'limit' => null,
             'from' => null
-        ));
+        ]);
 
-        $params = array();
+        $params = [];
 
         if ($opts['next_ref']) {
             $url = $opts['next_ref'];
@@ -550,8 +551,9 @@ class SiftClient {
         }
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':', 'params' => $params));
 
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':', 'params' => $params]);
+          
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -577,8 +579,8 @@ class SiftClient {
      *     - int 'time': Timestamp of when a decision was applied, mainly used
      *     for backfilling
      */
-    public function applyDecisionToUser($user_id, $decision_id, $source, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function applyDecisionToUser($user_id, $decision_id, $source, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout,
             'decision_id' => $decision_id,
@@ -586,7 +588,7 @@ class SiftClient {
             'analyst' => null,
             'description' => null,
             'time' => null
-        ));
+        ]);
 
         $this->validateArgument($user_id, 'user_id', 'string');
 
@@ -618,8 +620,8 @@ class SiftClient {
      *     - int 'time': Timestamp of when a decision was applied, mainly used
      *     for backfilling
      */
-    public function applyDecisionToOrder($user_id, $order_id, $decision_id, $source, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function applyDecisionToOrder($user_id, $order_id, $decision_id, $source, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout,
             'decision_id' => $decision_id,
@@ -627,7 +629,7 @@ class SiftClient {
             'analyst' => null,
             'description' => null,
             'time' => null
-        ));
+        ]);
 
         $this->validateArgument($order_id, 'order_id', 'string');
         $this->validateArgument($user_id, 'user_id', 'string');
@@ -662,8 +664,8 @@ class SiftClient {
      *     - int 'time': Timestamp of when a decision was applied, mainly used
      *     for backfilling
      */
-    public function applyDecisionToContent($user_id, $content_id, $decision_id, $source, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function applyDecisionToContent($user_id, $content_id, $decision_id, $source, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout,
             'decision_id' => $decision_id,
@@ -671,7 +673,7 @@ class SiftClient {
             'analyst' => null,
             'description' => null,
             'time' => null
-        ));
+        ]);
 
         $this->validateArgument($content_id, 'content_id', 'string');
         $this->validateArgument($user_id, 'user_id', 'string');
@@ -704,8 +706,8 @@ class SiftClient {
      *     - int 'time': Timestamp of when a decision was applied, mainly used
      *     for backfilling
      */
-    public function applyDecisionToSession($user_id, $session_id, $decision_id, $source, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function applyDecisionToSession($user_id, $session_id, $decision_id, $source, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout,
             'decision_id' => $decision_id,
@@ -713,7 +715,7 @@ class SiftClient {
             'analyst' => null,
             'description' => null,
             'time' => null
-        ));
+        ]);
 
         $this->validateArgument($session_id, 'session_id', 'string');
         $this->validateArgument($user_id, 'user_id', 'string');
@@ -727,14 +729,14 @@ class SiftClient {
         return $this->applyDecision($url, $opts);
     }
 
-    private function applyDecision($url, $opts = array()) {
+    private function applyDecision($url, $opts = []) {
         $this->validateArgument($opts['decision_id'], 'decision_id', 'string');
         $this->validateArgument($opts['source'], 'source', 'string');
 
-        $body = array(
+        $body = [
             'decision_id' => $opts['decision_id'],
             'source' => $opts['source']
-        );
+        ];
 
         if ($opts['analyst'])
             $body['analyst'] = $opts['analyst'];
@@ -749,10 +751,10 @@ class SiftClient {
                     SiftRequest::POST, 
                     $opts['timeout'], 
                     self::API3_VERSION, 
-                    array(
+                    [
                        'auth' => $this->api_key . ':',
                        'body' => $body
-                    )
+                    ]
             );
 
             return $request->send();
@@ -776,22 +778,22 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function check($properties, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function check($properties, $opts = []) {
+        $this->mergeArguments($opts, [
             'timeout' => $this->timeout,
             'version' => self::API_VERIFICATION
-        ));
+        ]);
         $this->validateArgument($properties, 'properties', 'array');
-        $curl_opts['CURLOPT_HTTPHEADER'] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
+        $curl_opts['CURLOPT_HTTPHEADER'] = ['Authorization: Basic ' . base64_encode($this->api_key . ':')];
         try {
             $request = new SiftRequest(
                 self::checkApiUrl($opts['version']), 
                 SiftRequest::POST, 
                 $opts['timeout'], 
                 $opts['version'], 
-                array(
+                [
                     'body' => $properties
-                ),
+                ],
                 $curl_opts);
                 
             return $request->send();
@@ -814,23 +816,23 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function send($parameters, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function send($parameters, $opts = []) {
+        $this->mergeArguments($opts, [
             'timeout' => $this->timeout,
             'version' => self::API_VERIFICATION,
-        ));
+        ]);
 
         $this->validateArgument($parameters['$user_id'], 'user id', 'string');
-        $curl_opts['CURLOPT_HTTPHEADER'] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
+        $curl_opts['CURLOPT_HTTPHEADER'] = ['Authorization: Basic ' . base64_encode($this->api_key . ':')];
         try {
             $request = new SiftRequest(
                 self::userSendApiUrl($opts['version']), 
                 SiftRequest::POST, 
                 $opts['timeout'], 
                 $opts['version'], 
-                array(
+                [
                   'body' => $parameters,
-                ), 
+                ], 
                 $curl_opts
             );
             return $request->send();
@@ -854,23 +856,23 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function resend($parameters, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function resend($parameters, $opts = []) {
+        $this->mergeArguments($opts, [
             'timeout' => $this->timeout,
             'version' => self::API_VERIFICATION,
-        ));
+        ]);
 
         $this->validateArgument($parameters['$user_id'], 'user id', 'string');
-        $curl_opts['CURLOPT_HTTPHEADER'] = array('Authorization: Basic ' . base64_encode($this->api_key . ':'));
+        $curl_opts['CURLOPT_HTTPHEADER'] = ['Authorization: Basic ' . base64_encode($this->api_key . ':')];
         try {
             $request = new SiftRequest(
                 self::userResendApiUrl($opts['version']), 
                 SiftRequest::POST, 
                 $opts['timeout'], 
                 $opts['version'], 
-                array(
+                [
                    'body' => $parameters,
-                ), 
+                ], 
                 $curl_opts
             );
 
@@ -892,11 +894,11 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function merchants($parameters, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function merchants($parameters, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout,
-        ));
+        ]);
         if (isset($parameters['batch_token']))
             $this->validateArgument($parameters['batch_token'], 'batch_token', 'string');
         if (isset($parameters['batch_size']))
@@ -908,7 +910,7 @@ class SiftClient {
                 '/psp_management/merchants');
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':', 'body' => $parameters));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':', 'body' => $parameters]);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -926,11 +928,11 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function postMerchant($parameters, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function postMerchant($parameters, $opts = []) {
+        $this->mergeArguments($opts, [
             'timeout' => $this->timeout,
             'account_id' => $this->account_id,
-        ));
+        ]);
 
         $this->validateArgument($parameters, 'properties', 'array');
         $this->validateMerchantArgument($parameters);
@@ -938,9 +940,9 @@ class SiftClient {
                 '/v3/accounts/' . rawurlencode($opts['account_id']) .
                 '/psp_management/merchants');
         try {
-            $request = new SiftRequest($url, SiftRequest::POST, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':',
+            $request = new SiftRequest($url, SiftRequest::POST, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':',
                 'body' => $parameters,
-            ));
+            ]);
 
             return $request->send();
         } catch (Exception $e) {
@@ -959,11 +961,11 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function getMerchant($merchant_id, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function getMerchant($merchant_id, $opts = []) {
+        $this->mergeArguments($opts, [
             'account_id' => $this->account_id,
             'timeout' => $this->timeout,
-        ));
+        ]);
 
         $this->validateArgument($this->account_id, 'accountId', 'string');
         $this->validateArgument($merchant_id, 'merchantId', 'string');
@@ -973,7 +975,7 @@ class SiftClient {
                 '/psp_management/merchants/' . rawurlencode($merchant_id));
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':'));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':']);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -991,11 +993,11 @@ class SiftClient {
      *
      * @return null|SiftResponse
      */
-    public function putMerchant($merchant_id, $parameters, $opts = array()) {
-        $this->mergeArguments($opts, array(
+    public function putMerchant($merchant_id, $parameters, $opts = []) {
+        $this->mergeArguments($opts, [
             'timeout' => $this->timeout,
             'account_id' => $this->account_id,
-        ));
+        ]);
 
         $this->validateArgument($parameters, 'properties', 'array');
         $this->validateArgument($merchant_id, 'merchantId', 'string');
@@ -1005,9 +1007,9 @@ class SiftClient {
                 '/v3/accounts/' . rawurlencode($opts['account_id']) .
                 '/psp_management/merchants/' . rawurlencode($merchant_id));
         try {
-            $request = new SiftRequest($url, SiftRequest::PUT, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':',
+            $request = new SiftRequest($url, SiftRequest::PUT, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':',
                 'body' => $parameters,
-            ));
+            ]);
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
@@ -1034,7 +1036,7 @@ class SiftClient {
         }
         foreach ($opts as $key => $value) {
             if (!array_key_exists($key, $defaults)) {
-                throw new InvalidArgumentException("${key} is not a valid argument.");
+                throw new InvalidArgumentException("{$key} is not a valid argument.");
             }
         }
         $opts += $defaults;
@@ -1043,11 +1045,11 @@ class SiftClient {
     private function validateArgument($arg, $name, $type) {
         // Validate type
         if (gettype($arg) != $type)
-            throw new InvalidArgumentException("${name} must be a ${type}.");
+            throw new InvalidArgumentException("{$name} must be a {$type}.");
 
         // Check if empty
         if (empty($arg))
-            throw new InvalidArgumentException("${name} cannot be empty.");
+            throw new InvalidArgumentException("{$name} cannot be empty.");
     }
 
     private function validateMerchantArgument($parameters) {
