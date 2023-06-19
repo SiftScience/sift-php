@@ -1,3 +1,8 @@
+4.5.0 (2023-06-19)
+================
+
+- Support for score percentiles (only applicable for the accounts with the feature enabled)
+
 4.4.0 (2023-06-12)
 ================
 
