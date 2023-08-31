@@ -905,7 +905,7 @@ class SiftClient {
                 '/psp_management/merchants');
 
         try {
-            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':', 'body' => $parameters));
+            $request = new SiftRequest($url, SiftRequest::GET, $opts['timeout'], self::API3_VERSION, array('auth' => $this->api_key . ':', 'params' => $parameters));
             return $request->send();
         } catch (Exception $e) {
             $this->logError($e->getMessage());
