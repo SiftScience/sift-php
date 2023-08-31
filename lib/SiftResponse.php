@@ -25,14 +25,9 @@ class SiftResponse {
         $this->rawResponse = $result;
 
         // Only attempt to get our response body if the http status code expects a body
-        if ($this->httpStatusCode >= 200 && !in_array($this->httpStatusCode, array(204, 304))) {
-            if (function_exists('json_decode')) {
-                $this->body = json_decode($result, true);
-            } else {
-                require_once(dirname(__FILE__) . '/Services_JSON-1.0.3/JSON.php');
-                $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
-                $this->body = $json->decode($result);
-            }
+        if ($this->httpStatusCode >= 200 && !in_array($this->httpStatusCode, [204, 304])) {
+            
+            $this->body = json_decode($result, true);
 
             if (is_null($this->body)) {
                 $this->apiErrorMessage = 'Invalid JSON received from Sift API';
@@ -75,7 +70,7 @@ class SiftResponse {
 
     public function isOk() {
         // If there is no body, check the http status code only (should be 204)
-        if (in_array($this->httpStatusCode, array(204, 304))) {
+        if (in_array($this->httpStatusCode, [204, 304])) {
             return 204 === $this->httpStatusCode;
         }
 
