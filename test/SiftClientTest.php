@@ -1212,13 +1212,13 @@ class SiftClientTest extends TestCase
         $mockUrl =
             "https://api.sift.com/v3/accounts/" .
             SiftClientTest::$ACCOUNT_ID_MERCHANT .
-            "/psp_management/merchants";
+            "/psp_management/merchants?batch_size=2";
+
         $mockResponse = new SiftResponse(
             '{"status": 0, "error_message": "OK"}',
             200,
             null
         );
-
         SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
 
         $response = $this->merchant->merchants($this->merchant_properties);
