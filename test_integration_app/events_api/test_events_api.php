@@ -863,13 +863,6 @@
                     '$card_last4'      => '4444'
                 ),
             
-                // Bank account example
-                // "$payment_method"   => array(
-                //     "$payment_type"    => "$electronic_fund_transfer",
-                //     "$routing_number"  => "021001088"
-                //),
-                // See other payment method options in the field description
-            
                 // Supported fields for 3DS
                 '$status_3ds'                     => '$attempted',
                 '$triggered_3ds'                  => '$processor',
