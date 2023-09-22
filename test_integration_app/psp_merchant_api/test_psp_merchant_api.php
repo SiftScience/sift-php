@@ -7,11 +7,12 @@
         function __construct() {
             $this->client = new SiftClient(array('api_key' => getenv("api_key"), 'account_id' => getenv("account_id")));
         }
-        
+
         function create_merchant()
         {
+            $merchant_id = rand(1, 1000000); 
             $merchantObject = array(
-                'id' => "merchant-id-php-0009",
+                'id' => "merchant-id-php-".$merchant_id,
                 'name' => "Watson and Holmes",
                 'description' => "An example of a PSP Merchant. Illustrative.",
                 'address'=> array(

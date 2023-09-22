@@ -69,15 +69,15 @@
             $this->assertEquals(1, $objUtil->isOk($objWorkflows->synchronous_workflows()));
         
             // Score API
-            $this->assertEquals(0, $objUtil->isOk($objScore->user_score()));//403
+            $this->assertEquals(0, $objUtil->isOk($objScore->user_score()));
 
             // Verification API
-            $this->assertEquals(1, $objUtil->isOk($objVerification->Send()));
+            $this->assertEquals(1, $objUtil->isOk($objVerification->send()));
             $this->assertEquals(1, $objUtil->isOk($objVerification->resend()));
             $this->assertEquals(1, $objUtil->isOk($objVerification->check()));
 
             // PSP Merchant Management API
-            $this->assertEquals(0, $objUtil->isOk($objPSPMerchant->create_merchant()));
+            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->create_merchant()));
             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->update_merchant()));
             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_all_merchants()));
             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_merchant()));
@@ -90,7 +90,6 @@
     {
 
         public function isOk($response) {
-            print_r($response);
             // expect http status 200 and api status 0 or http status 201 if apiStatus exists.
             if (isset($response->apiStatus)){
                 return (($response->apiStatus == 0) && (200 === $response->httpStatusCode)) || (201 === $response->httpStatusCode);

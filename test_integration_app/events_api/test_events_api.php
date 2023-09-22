@@ -1400,8 +1400,6 @@
             // Sample $verification event
             $properties = array(
                 // Required Fields
-                '$type'               => '$verification',
-                '$api_key'            => 'ccd68efbe25809bc',
                 '$user_id'            => 'billy_jones_301',
                 '$session_id'         => 'gigtleqddo84l8cm15qe4il',
                 '$status'             => '$pending',
