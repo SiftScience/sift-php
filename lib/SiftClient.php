@@ -103,7 +103,9 @@ class SiftClient {
      *     - string 'version': By default, this client's version is used.
      *     - string 'path': The URL path to use for this call.  By default, the path for the requested
      *           version of the Events API is used.
-     *
+     *     - include_score_percentiles(optional) : Whether to add new parameter in the query parameter.
+     *     - if include_score_percentiles is true then add a new parameter called fields in the query parameter
+     * 
      * @return null|SiftResponse
      */
     public function track($event, $properties, $opts = []) {
@@ -174,6 +176,8 @@ class SiftClient {
      *           type to which you are subscribed.
      *     - int 'timeout': By default, this client's timeout is used.
      *     - string 'version': By default, this client's version is used.
+     *     - include_score_percentiles(optional) : Whether to add new parameter in the query parameter.
+     *     - if include_score_percentiles is true then add a new parameter called fields in the query parameter
      *
      * @return null|SiftResponse
      */
@@ -181,7 +185,8 @@ class SiftClient {
         $this->mergeArguments($opts, [
             'abuse_types' => [],
             'timeout' => $this->timeout,
-            'version' => $this->version
+            'version' => $this->version,
+            'include_score_percentiles' => false
         ]);
 
         $this->validateArgument($userId, 'user id', 'string');
@@ -189,6 +194,9 @@ class SiftClient {
         $params = ['api_key' => $this->api_key];
         if ($opts['abuse_types'])
             $params['abuse_types'] = implode(',', $opts['abuse_types']);
+
+        if($opts['include_score_percentiles'])
+            $params['fields'] = 'SCORE_PERCENTILES';
 
         try {
             $request = new SiftRequest(self::scoreApiUrl($userId, $opts['version']), SiftRequest::GET, $opts['timeout'], $opts['version'], ['params' => $params]);
@@ -215,14 +223,17 @@ class SiftClient {
      *           type to which you are subscribed.
      *     - int 'timeout': By default, this client's timeout is used.
      *     - string 'version': By default, this client's version is used.
-     *
+     *     - include_score_percentiles(optional) : Whether to add new parameter in the query parameter.
+     *     - if include_score_percentiles is true then add a new parameter called fields in the query parameter
+     * 
      * @return null|SiftResponse
      */
     public function get_user_score($userId, $opts = []) {
         $this->mergeArguments($opts, [
             'abuse_types' => [],
             'timeout' => $this->timeout,
-            'version' => $this->version
+            'version' => $this->version,
+            'include_score_percentiles' => false
         ]);
 
         $this->validateArgument($userId, 'user id', 'string');
@@ -230,6 +241,9 @@ class SiftClient {
         $params = ['api_key' => $this->api_key];
         if ($opts['abuse_types'])
             $params['abuse_types'] = implode(',', $opts['abuse_types']);
+
+        if($opts['include_score_percentiles'])
+            $params['fields'] = 'SCORE_PERCENTILES';
 
         try {
             $request = new SiftRequest(self::userScoreApiUrl($userId, $opts['version']), SiftRequest::GET, $opts['timeout'], $opts['version'], ['params' => $params]);
