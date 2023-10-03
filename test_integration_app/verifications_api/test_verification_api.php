@@ -1,5 +1,4 @@
 <?php
-
     class test_verification_api
     { 
         private $client;
@@ -11,7 +10,7 @@
         function send()
         {
             $send_properties = [
-                '$user_id' => "billy_jones_301@example.com",
+                '$user_id' => $GLOBALS['user_id'],
                 '$send_to' => "billy_jones_301@example.com",
                 '$verification_type' => '$email',
                 '$brand_name' => "all",
@@ -34,7 +33,7 @@
         function resend()
         {
             $resend_properties = [
-                '$user_id' => "billy_jones_301@example.com",
+                '$user_id' => $GLOBALS['user_id'],
                 '$send_to' => "billy_jones_301@example.com",
                 '$verification_type' => '$email',
                 '$brand_name' => "MyTopBrand",
@@ -57,7 +56,7 @@
         function check()
         {
             $check_properties = [
-                '$user_id' => "billy_jones_301@example.com",
+                '$user_id' => $GLOBALS['user_id'],
                 '$code' => "404482",
                     '$verified_event' => '$login',
                     '$browser' => [

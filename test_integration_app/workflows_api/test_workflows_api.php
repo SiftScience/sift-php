@@ -1,5 +1,4 @@
 <?php
-
     class test_workflows_api
     { 
         private $client;
@@ -11,8 +10,8 @@
         function synchronous_workflows()
         {
             $properties = array(
-                '$user_id' => 'billy_jones_301@example.com', 
-                '$user_email' => 'billy_jones_301@example.com'
+                '$user_id' => $GLOBALS['user_id'], 
+                '$user_email' => $GLOBALS['user_email']
             );
             $opts = array(
                 'return_workflow_status' => true,

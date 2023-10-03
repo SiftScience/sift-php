@@ -9,7 +9,7 @@
 
         function getUserDecisions()
         {
-            return $this->client->getUserDecisions('billy_jones_301');
+            return $this->client->getUserDecisions($GLOBALS['user_id']);
         }
 
         function getOrderDecisions()
@@ -19,12 +19,12 @@
 
         function getContentDecisions()
         {
-            return $this->client->getContentDecisions('billy_jones_301', 'message-23412');
+            return $this->client->getContentDecisions($GLOBALS['user_id'], 'message-23412');
         }
 
         function getSessionDecisions()
         {
-            return $this->client->getSessionDecisions('billy_jones_301', 'gigtleqddo84l8cm15qe4il');
+            return $this->client->getSessionDecisions($GLOBALS['user_id'], 'gigtleqddo84l8cm15qe4il');
         }
         
         function getDecisions()
@@ -46,7 +46,7 @@
                 'description' => 'User linked to three other payment abusers and ordering high value items'
             );
 
-            return $this->client->applyDecisionToUser('billy_jones_301',
+            return $this->client->applyDecisionToUser($GLOBALS['user_id'],
             'block_user_payment_abuse',
             'MANUAL_REVIEW',
             $options);
@@ -59,7 +59,7 @@
                 'description' => 'applied via the high priority queue, queued user because their risk score exceeded 85'
             );
 
-            return $this->client->applyDecisionToOrder('billy_jones_301',
+            return $this->client->applyDecisionToOrder($GLOBALS['user_id'],
             'ORDER-28168441',
             'user_looks_ok_payment_decision',
             'MANUAL_REVIEW',
@@ -73,7 +73,7 @@
                 'description' => 'compromised account reported to customer service
             ');
 
-            return $this->client->applyDecisionToSession('billy_jones_301',
+            return $this->client->applyDecisionToSession($GLOBALS['user_id'],
             'gigtleqddo84l8cm15qe4il',
             'session_looks_fraud_account_takeover',
             'MANUAL_REVIEW',
@@ -84,10 +84,10 @@
         {
             $options = array(
                 'analyst' => 'analyst@example.com',
-                'description' => 'compromised account reported to customer service
-            ');
+                'description' => 'compromised account reported to customer service'
+            );
 
-            return $this->client->applyDecisionToContent('billy_jones_301',
+            return $this->client->applyDecisionToContent($GLOBALS['user_id'],
             'message-23412',
             'content_looks_fraud_content_abuse',
             'MANUAL_REVIEW',

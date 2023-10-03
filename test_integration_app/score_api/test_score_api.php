@@ -1,5 +1,4 @@
 <?php
-
     class test_score_api
     { 
         private $client;
@@ -10,10 +9,9 @@
 
         function user_score()
         {
-           return $this->client->get_user_score('billy_jones_301@example.com',
+           return $this->client->get_user_score($GLOBALS['user_id'],
                 array('abuse_types' => array('payment_abuse')));
         }
-
-       
+      
     }
 ?>

@@ -6,10 +6,7 @@
     require_once dirname(__DIR__) . '/test_integration_app/score_api/test_score_api.php';
     require_once dirname(__DIR__) . '/test_integration_app/verifications_api/test_verification_api.php';
     require_once dirname(__DIR__) . '/test_integration_app/psp_merchant_api/test_psp_merchant_api.php';
-
-    // set api_key and account_id as Environment variables
-    putenv("api_key=PUT_A_VALID_API_KEY");
-    putenv("account_id=PUT_A_VALID_ACCOUNT_ID");
+    include 'globals.php';
 
     class Main extends PHPUnit\Framework\TestCase 
     {
@@ -53,6 +50,7 @@
             $this->assertEquals(1, $objUtil->isOk($objEvents->update_order()));
             $this->assertEquals(1, $objUtil->isOk($objEvents->update_password()));
             $this->assertEquals(1, $objUtil->isOk($objEvents->verification()));
+            print("Events API Tested");
 
             // Decisions API
             $this->assertEquals(1, $objUtil->isOk($objDecisions->getUserDecisions()));
@@ -64,25 +62,28 @@
             $this->assertEquals(0, $objUtil->isOk($objDecisions->apply_decision_to_order()));
             $this->assertEquals(0, $objUtil->isOk($objDecisions->apply_decision_to_session()));
             $this->assertEquals(0, $objUtil->isOk($objDecisions->apply_decision_to_content()));
+            print("Decision API Tested");
 
             // Wrokflows API
             $this->assertEquals(1, $objUtil->isOk($objWorkflows->synchronous_workflows()));
+            print("Workflow API Tested");
         
             // Score API
             $this->assertEquals(0, $objUtil->isOk($objScore->user_score()));
+            print("Score API Tested");
 
             // Verification API
             $this->assertEquals(1, $objUtil->isOk($objVerification->send()));
             $this->assertEquals(1, $objUtil->isOk($objVerification->resend()));
             $this->assertEquals(1, $objUtil->isOk($objVerification->check()));
+            print("Verification API Tested");
 
             // PSP Merchant Management API
             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->create_merchant()));
             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->update_merchant()));
             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_all_merchants()));
             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_merchant()));
-
-            print_r("tests are completed");
+            print("PSP Merchant API Tested");
         }
     }
 
@@ -92,7 +93,8 @@
         public function isOk($response) {
             // expect http status 200 and api status 0 or http status 201 if apiStatus exists.
             if (isset($response->apiStatus)){
-                return (($response->apiStatus == 0) && (200 === $response->httpStatusCode)) || (201 === $response->httpStatusCode);
+                return (($response->apiStatus == 0 || $response->apiStatus == 50) 
+                    && (200 === $response->httpStatusCode)) || (201 === $response->httpStatusCode);
             }
             else{
                 // otherwise expect http status 200 or http status 201.

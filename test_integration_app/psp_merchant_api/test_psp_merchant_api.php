@@ -1,5 +1,4 @@
 <?php
-
     class test_psp_merchant_api
     { 
         private $client;
@@ -16,21 +15,21 @@
                 'name' => "Watson and Holmes",
                 'description' => "An example of a PSP Merchant. Illustrative.",
                 'address'=> array(
-                'name' => "Dr Watson",
-                'address_1' => "221B, Baker street",
-                'address_2' => "apt., 1",
-                'city' => "London",
-                'region' => "London",
-                'country' => "GB",
-                'zipcode' => "00001",
-                'phone' => "0122334455"
+                    'name' => "Dr Watson",
+                    'address_1' => "221B, Baker street",
+                    'address_2' => "apt., 1",
+                    'city' => "London",
+                    'region' => "London",
+                    'country' => "GB",
+                    'zipcode' => "00001",
+                    'phone' => "0122334455"
                 ),
                 'category' => "1002",
                 'service_level' => "Platinum",
                 'status' => "active",
                 'risk_profile' => array(
-                'level' => "low",
-                'score' => 10
+                    'level' => "low",
+                    'score' => 10
                 )
             );
             return $this->client->postMerchant($merchantObject);
@@ -43,21 +42,21 @@
                 'name' => "Watson and Holmes updated",
                 'description' => "An example of a PSP Merchant. Illustrative.",
                 'address'=> array(
-                'name' => "Dr Watson updated",
-                'address_1' => "221B, Baker street",
-                'address_2' => "apt., 1",
-                'city' => "London",
-                'region' => "London",
-                'country' => "GB",
-                'zipcode' => "00001",
-                'phone' => "0122334455"
+                    'name' => "Dr Watson updated",
+                    'address_1' => "221B, Baker street",
+                    'address_2' => "apt., 1",
+                    'city' => "London",
+                    'region' => "London",
+                    'country' => "GB",
+                    'zipcode' => "00001",
+                    'phone' => "0122334455"
                 ),
                 'category' => "1002",
                 'service_level' => "Platinum",
                 'status' => "active",
                 'risk_profile' => array(
-                'level' => "low",
-                'score' => 10
+                    'level' => "low",
+                    'score' => 10
                 )
             );
             return $this->client->putMerchant("merchant-id-php-0002", $merchantObject);
@@ -80,4 +79,3 @@
     }
 
 ?>
-

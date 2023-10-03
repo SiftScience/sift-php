@@ -1,9 +1,8 @@
 <?php
-    
     class test_events_api
     { 
         private $client;
-        
+       
         function __construct() {
             $this->client = new SiftClient(array('api_key' => getenv("api_key"), 'account_id' => getenv("account_id")));
         }
@@ -13,32 +12,32 @@
             // Sample $add_item_to_cart event
             $add_item_to_cart_properties = array(
                 // Required Fields
-                '$user_id'           => 'billy_jones_301',
+                '$user_id'           => $GLOBALS['user_id'],
             
                 // Supported Fields
                 '$session_id' => 'gigtleqddo84l8cm15qe4il',
                 '$item'       => array(
-                '$item_id'        => 'B004834GQO',
-                '$product_title'  => 'The Slanket Blanket-Texas Tea',
-                '$price'          => 39990000, // $39.99
-                '$currency_code'  => 'USD',
-                '$upc'            => '6786211451001',
-                '$sku'            => '004834GQ',
-                '$brand'          => 'Slanket',
-                '$manufacturer'   => 'Slanket',
-                '$category'       => 'Blankets & Throws',
-                '$tags'           => array('Awesome', 'Wintertime specials'),
-                '$color'          => 'Texas Tea',
-                '$quantity'       => 16
+                    '$item_id'        => 'B004834GQO',
+                    '$product_title'  => 'The Slanket Blanket-Texas Tea',
+                    '$price'          => 39990000, // $39.99
+                    '$currency_code'  => 'USD',
+                    '$upc'            => '6786211451001',
+                    '$sku'            => '004834GQ',
+                    '$brand'          => 'Slanket',
+                    '$manufacturer'   => 'Slanket',
+                    '$category'       => 'Blankets & Throws',
+                    '$tags'           => array('Awesome', 'Wintertime specials'),
+                    '$color'          => 'Texas Tea',
+                    '$quantity'       => 16
                 ),
                 '$brand_name'   => 'sift',
                 '$site_domain'  => 'sift.com',
                 '$site_country' => 'US',
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
 
@@ -50,7 +49,7 @@
             // Sample $add_promotion event
             $add_promotion_properties = array(
                 // Required fields.
-                '$user_id'    => 'billy_jones_301',
+                '$user_id'    => $GLOBALS['user_id'],
             
                 // Supported fields.
                 '$promotions' => array(
@@ -61,23 +60,23 @@
                         '$description'      => '$5 off your first 5 rides',
                         '$referrer_user_id' => 'elon-m93903',
                         '$discount'         => array(
-                        '$amount'         => 5000000,  // $5
-                        '$currency_code'  => 'USD'
+                            '$amount'         => 5000000,  // $5
+                            '$currency_code'  => 'USD'
                         )
                     )
                 ),
 
                 // Send this information an APP client.
                 '$app'        => array(
-                // Example for the iOS Calculator app.
-                '$os'                  => 'iOS',
-                '$os_version'          => '10.1.3',
-                '$device_manufacturer' => 'Apple',
-                '$device_model'        => 'iPhone 4,2',
-                '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
-                '$app_name'            => 'Calculator',
-                '$app_version'         => '3.2.7',
-                '$client_language'     => 'en-US'
+                    // Example for the iOS Calculator app.
+                    '$os'                  => 'iOS',
+                    '$os_version'          => '10.1.3',
+                    '$device_manufacturer' => 'Apple',
+                    '$device_model'        => 'iPhone 4,2',
+                    '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
+                    '$app_name'            => 'Calculator',
+                    '$app_version'         => '3.2.7',
+                    '$client_language'     => 'en-US'
                 )
             );
 
@@ -93,7 +92,7 @@
                 '$transaction_id'    => '719637215',
             
                 // Recommended Fields
-                '$user_id'           => 'billy_jones_301',
+                '$user_id'           => $GLOBALS['user_id'],
                 '$chargeback_state'  => '$lost',
                 '$chargeback_reason' => '$duplicate'
             );
@@ -106,7 +105,7 @@
             // Sample $content_status event
             $content_status_properties = array(
                 // Required Fields
-                '$user_id'    => 'billy_jones_301',
+                '$user_id'    => $GLOBALS['user_id'],
                 '$content_id' => '9671500641',
                 '$status'     => '$paused',
 
@@ -132,11 +131,11 @@
             // Sample $create_account event
             $create_account_properties = array(
                 // Required Fields
-                '$user_id'    => 'billy_jones_301',
+                '$user_id'    => $GLOBALS['user_id'],
             
                 // Supported Fields
                 '$session_id'       => 'gigtleqddo84l8cm15qe4il',
-                '$user_email'       => 'billy_jones_301@example.com',
+                '$user_email'       => $GLOBALS['user_email'],
                 '$name'             => 'Bill Jones',
                 '$phone'            => '1-415-555-6040',
                 '$referrer_user_id' => 'janejane101',
@@ -173,10 +172,10 @@
                         '$status'           => '$success',
                         '$referrer_user_id' => 'janejane102',
                         '$credit_point'     => array(
-                                '$amount'             => 100,
-                                '$credit_point_type'  => 'account karma'
-                            ) 
-                        )
+                            '$amount'             => 100,
+                            '$credit_point_type'  => 'account karma'
+                        ) 
+                    )
                 ),
         
                 '$social_sign_on_type'   => '$twitter',
@@ -192,9 +191,9 @@
             
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
 
@@ -206,7 +205,7 @@
             // Sample $create_content event for comments
             $comment_properties = array(
                 // Required fields
-                '$user_id' => 'fyw3989sjpqr71',
+                '$user_id' => $GLOBALS['user_id'],
                 '$content_id' => 'comment-23412',
             
                 // Recommended fields
@@ -244,7 +243,7 @@
             // Sample $create_content event for listings
             $listing_properties = array(
                 // Required fields
-                '$user_id'              => 'fyw3989sjpqr71',
+                '$user_id'              => $GLOBALS['user_id'],
                 '$content_id'           => 'listing-23412',
             
                 // Supported fields
@@ -254,53 +253,53 @@
             
                 // Required $listing object
                 '$listing'              => array(
-                '$subject'            => '2 Bedroom Apartment for Rent',
+                    '$subject'            => '2 Bedroom Apartment for Rent',
                     '$body'             => 'Capitol Hill Seattle brand new condo. 2 bedrooms and 1 full bath.',
                     '$contact_email'    => 'alex_301@domain.com',
                     '$contact_address'  => array(
-                    '$name'           => 'Bill Jones',
-                    '$phone'          => '1-415-555-6041',
-                    '$city'           => 'New London',
-                    '$region'         => 'New Hampshire',
-                    '$country'        => 'US',
-                    '$zipcode'        => '03257'
-                ),
-                '$locations'          => array(
-                    array(
-                    '$city'                => 'Seattle',
-                    '$region'              => 'Washington',
-                    '$country'             => 'US',
-                    '$zipcode'             => '98112'
-                    )
-                ),
-                '$listed_items'       => array(
-                    array(
-                    '$price'               => 2950000000, // $2950.00
-                    '$currency_code'       => 'USD',
-                    '$tags'                => array('heat', 'washer/dryer')
-                    )
-                ),
-                '$images'             => array(
-                    array(
-                    '$md5_hash'            => '0cc175b9c0f1b6a831c399e269772661',
-                    '$link'                => 'https://www.domain.com/file.png',
-                    '$description'         => 'Billys picture'
-                    )
-                ),
-                '$expiration_time'    => 1549063157000 // UNIX timestamp in milliseconds
+                        '$name'           => 'Bill Jones',
+                        '$phone'          => '1-415-555-6041',
+                        '$city'           => 'New London',
+                        '$region'         => 'New Hampshire',
+                        '$country'        => 'US',
+                        '$zipcode'        => '03257'
+                    ),
+                    '$locations'          => array(
+                        array(
+                            '$city'                => 'Seattle',
+                            '$region'              => 'Washington',
+                            '$country'             => 'US',
+                            '$zipcode'             => '98112'
+                        )
+                    ),
+                    '$listed_items'       => array(
+                        array(
+                            '$price'               => 2950000000, // $2950.00
+                            '$currency_code'       => 'USD',
+                            '$tags'                => array('heat', 'washer/dryer')
+                        )
+                    ),
+                    '$images'             => array(
+                        array(
+                            '$md5_hash'            => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'                => 'https://www.domain.com/file.png',
+                            '$description'         => 'Billys picture'
+                        )
+                    ),
+                    '$expiration_time'    => 1549063157000 // UNIX timestamp in milliseconds
                 ),
                     
                 // Send this information an APP client.
                 '$app'        => array(
-                // Example for the iOS Calculator app.
-                '$os'                  => 'iOS',
-                '$os_version'          => '10.1.3',
-                '$device_manufacturer' => 'Apple',
-                '$device_model'        => 'iPhone 4,2',
-                '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
-                '$app_name'            => 'Calculator',
-                '$app_version'         => '3.2.7',
-                '$client_language'     => 'en-US'
+                    // Example for the iOS Calculator app.
+                    '$os'                  => 'iOS',
+                    '$os_version'          => '10.1.3',
+                    '$device_manufacturer' => 'Apple',
+                    '$device_model'        => 'iPhone 4,2',
+                    '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
+                    '$app_name'            => 'Calculator',
+                    '$app_version'         => '3.2.7',
+                    '$client_language'     => 'en-US'
                 )
             );
 
@@ -312,7 +311,7 @@
             // Sample $create_content event for messages
             $message_properties = array(
                 // Required fields
-                '$user_id'               => 'fyw3989sjpqr71',
+                '$user_id'               => $GLOBALS['user_id'],
                 '$content_id'            => 'message-23412',
             
                 // Recommended fields
@@ -327,24 +326,24 @@
                     '$recipient_user_ids'  => array('fy9h989sjphh71'),
                     '$images'              => array(
                         array(
-                        '$md5_hash'             => '0cc175b9c0f1b6a831c399e269772661',
-                        '$link'                 => 'https://www.domain.com/file.png',
-                        '$description'          => 'My hike today!'
+                            '$md5_hash'             => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'                 => 'https://www.domain.com/file.png',
+                            '$description'          => 'My hike today!'
                         )
                     )
                 ),
                     
                 // Send this information an APP client.
                 '$app'        => array(
-                // Example for the iOS Calculator app.
-                '$os'                  => 'iOS',
-                '$os_version'          => '10.1.3',
-                '$device_manufacturer' => 'Apple',
-                '$device_model'        => 'iPhone 4,2',
-                '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
-                '$app_name'            => 'Calculator',
-                '$app_version'         => '3.2.7',
-                '$client_language'     => 'en-US'
+                    // Example for the iOS Calculator app.
+                    '$os'                  => 'iOS',
+                    '$os_version'          => '10.1.3',
+                    '$device_manufacturer' => 'Apple',
+                    '$device_model'        => 'iPhone 4,2',
+                    '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
+                    '$app_name'            => 'Calculator',
+                    '$app_version'         => '3.2.7',
+                    '$client_language'     => 'en-US'
                 )
             );
     
@@ -356,7 +355,7 @@
             // Sample $create_content event for posts
             $post_properties = array(
                 // Required fields
-                '$user_id' => 'fyw3989sjpqr71',
+                '$user_id' => $GLOBALS['user_id'],
                 '$content_id' => 'post-23412',
             
                 // Recommended fields
@@ -378,18 +377,18 @@
                     ),
                     '$locations'        => array(
                         array(
-                        '$city'              => 'Seattle',
-                        '$region'            => 'Washington',
-                        '$country'           => 'US',
-                        '$zipcode'           => '98112'
+                            '$city'              => 'Seattle',
+                            '$region'            => 'Washington',
+                            '$country'           => 'US',
+                            '$zipcode'           => '98112'
                         )
                     ),
                     '$categories'       => array('Personal'),
                     '$images'           => array(
                         array(
-                        '$md5_hash'          => '0cc175b9c0f1b6a831c399e269772661',
-                        '$link'              => 'https://www.domain.com/file.png',
-                        '$description'       => 'View from the window!'
+                            '$md5_hash'          => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'              => 'https://www.domain.com/file.png',
+                            '$description'       => 'View from the window!'
                         )
                     ),
                     '$expiration_time'  => 1549063157000
@@ -397,15 +396,15 @@
 
                 // Send this information an APP client.
                 '$app'        => array(
-                // Example for the iOS Calculator app.
-                '$os'                  => 'iOS',
-                '$os_version'          => '10.1.3',
-                '$device_manufacturer' => 'Apple',
-                '$device_model'        => 'iPhone 4,2',
-                '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
-                '$app_name'            => 'Calculator',
-                '$app_version'         => '3.2.7',
-                '$client_language'     => 'en-US'
+                    // Example for the iOS Calculator app.
+                    '$os'                  => 'iOS',
+                    '$os_version'          => '10.1.3',
+                    '$device_manufacturer' => 'Apple',
+                    '$device_model'        => 'iPhone 4,2',
+                    '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
+                    '$app_name'            => 'Calculator',
+                    '$app_version'         => '3.2.7',
+                    '$client_language'     => 'en-US'
                 )
             );
         
@@ -417,7 +416,7 @@
             // Sample $create_content event for profiles
             $profile_properties = array(
                 // Required fields
-                '$user_id'            => 'fyw3989sjpqr71',
+                '$user_id'            => $GLOBALS['user_id'],
                 '$content_id'         => 'profile-23412',
             
                 // Recommended fields
@@ -439,9 +438,9 @@
                     ),
                     '$images'           => array(
                         array(
-                        '$md5_hash'          => '0cc175b9c0f1b6a831c399e269772661',
-                        '$link'              => 'https://www.domain.com/file.png',
-                        '$description'       => 'Alexs picture'
+                            '$md5_hash'          => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'              => 'https://www.domain.com/file.png',
+                            '$description'       => 'Alexs picture'
                         )
                     ),
                     '$categories'       => array(
@@ -452,15 +451,15 @@
 
                 // Send this information an APP client.
                 '$app'        => array(
-                // Example for the iOS Calculator app.
-                '$os'                  => 'iOS',
-                '$os_version'          => '10.1.3',
-                '$device_manufacturer' => 'Apple',
-                '$device_model'        => 'iPhone 4,2',
-                '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
-                '$app_name'            => 'Calculator',
-                '$app_version'         => '3.2.7',
-                '$client_language'     => 'en-US'
+                    // Example for the iOS Calculator app.
+                    '$os'                  => 'iOS',
+                    '$os_version'          => '10.1.3',
+                    '$device_manufacturer' => 'Apple',
+                    '$device_model'        => 'iPhone 4,2',
+                    '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
+                    '$app_name'            => 'Calculator',
+                    '$app_version'         => '3.2.7',
+                    '$client_language'     => 'en-US'
                 )
             );
     
@@ -472,7 +471,7 @@
             // Sample $create_content event for reviews
             $review_properties = array(
                 // Required fields
-                '$user_id'                => 'fyw3989sjpqr71',
+                '$user_id'                => $GLOBALS['user_id'],
                 '$content_id'             => 'review-23412',
             
                 // Recommended fields
@@ -487,18 +486,18 @@
                     '$contact_email'        => 'alex_301@domain.com',
                     '$locations'            => array(
                         array(
-                        '$city'                 => 'Seattle',
-                        '$region'               => 'Washington',
-                        '$country'              => 'US',
-                        '$zipcode'              => '98112'
+                            '$city'                 => 'Seattle',
+                            '$region'               => 'Washington',
+                            '$country'              => 'US',
+                            '$zipcode'              => '98112'
                         )
                     ),
                     '$reviewed_content_id'  => 'listing-234234',
                     '$images'               => array(
                         array(
-                        '$md5_hash'             => '0cc175b9c0f1b6a831c399e269772661',
-                        '$link'                 => 'https://www.domain.com/file.png',
-                        '$description'          => 'Calamari tacos.'
+                            '$md5_hash'             => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'                 => 'https://www.domain.com/file.png',
+                            '$description'          => 'Calamari tacos.'
                         )
                     ),
                     '$rating'               => 4.5
@@ -506,15 +505,15 @@
             
                 // Send this information an APP client.
                 '$app'        => array(
-                // Example for the iOS Calculator app.
-                '$os'                  => 'iOS',
-                '$os_version'          => '10.1.3',
-                '$device_manufacturer' => 'Apple',
-                '$device_model'        => 'iPhone 4,2',
-                '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
-                '$app_name'            => 'Calculator',
-                '$app_version'         => '3.2.7',
-                '$client_language'     => 'en-US'
+                    // Example for the iOS Calculator app.
+                    '$os'                  => 'iOS',
+                    '$os_version'          => '10.1.3',
+                    '$device_manufacturer' => 'Apple',
+                    '$device_model'        => 'iPhone 4,2',
+                    '$device_unique_id'    => 'A3D261E4-DE0A-470B-9E4A-720F3D3D22E6',
+                    '$app_name'            => 'Calculator',
+                    '$app_version'         => '3.2.7',
+                    '$client_language'     => 'en-US'
                 )
             );
 
@@ -526,11 +525,11 @@
             // Sample $create_order event
             $properties = array(
                 // Required Fields
-                '$user_id'          => 'billy_jones_301',
+                '$user_id'          => $GLOBALS['user_id'],
                 // Supported Fields
                 '$session_id'       => 'gigtleqddo84l8cm15qe4il',
                 '$order_id'         => 'ORDER-28168441',
-                '$user_email'       => 'bill@gmail.com',
+                '$user_email'       => $GLOBALS['user_email'],
                 '$verification_phone_number' => "+123456789012",
                 '$amount'           => 115940000, // $115.94
                 '$currency_code'    => 'USD',
@@ -619,9 +618,9 @@
                         '$status'       => '$success',
                         '$description'  => '$5 off',
                         '$discount'     => array(
-                        '$amount'                   => 5000000,  // $5.00
-                        '$currency_code'            => 'USD',
-                        '$minimum_purchase_amount'  => 25000000  // $25.00
+                            '$amount'                   => 5000000,  // $5.00
+                            '$currency_code'            => 'USD',
+                            '$minimum_purchase_amount'  => 25000000  // $25.00
                         )
                     )
                 ),
@@ -654,7 +653,7 @@
             // Sample $flag_content event
             $properties = array(
                 // Required Fields
-                '$user_id'    => 'billy_jones_301', // content creator
+                '$user_id'    => $GLOBALS['user_id'], // content creator
                 '$content_id' => '9671500641',
             
                 // Supported Fields
@@ -669,7 +668,7 @@
             // Sample $link_session_to_user event
             $properties = array(
                 // Required Fields
-                '$user_id'    => 'billy_jones_301',
+                '$user_id'    => $GLOBALS['user_id'],
                 '$session_id' => 'gigtleqddo84l8cm15qe4il'
             );
 
@@ -681,14 +680,14 @@
             // Sample $login event
             $properties = array(
                 // Required Fields
-                '$user_id'      => 'billy_jones_301',
+                '$user_id'      => $GLOBALS['user_id'],
                 '$login_status' => '$failure',
             
                 '$session_id' => 'gigtleqddo84l8cm15qe4il',
                 '$ip'         => '128.148.1.135',
             
                 // Optional Fields
-                '$user_email'     => 'billy_jones_301@example.com',
+                '$user_email'     => $GLOBALS['user_email'],
                 '$verification_phone_number' => '+123456789012',
                 '$failure_reason' => '$account_unknown',
                 '$username'       => 'billy_jones_301@example.com',
@@ -700,9 +699,9 @@
             
                 // Send this information with a login from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
     
@@ -714,13 +713,13 @@
             // Sample $logout event
             $properties = array(
                 // Required Fields
-                '$user_id'   => 'billy_jones_301',
+                '$user_id'   => $GLOBALS['user_id'],
             
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
     
@@ -732,7 +731,7 @@
             // Sample $order_status event
             $properties = array(
                 // Required Fields
-                '$user_id'          => 'billy_jones_301',
+                '$user_id'          => $GLOBALS['user_id'],
                 '$order_id'         => 'ORDER-28168441',
                 '$order_status'     => '$canceled',
             
@@ -745,9 +744,9 @@
             
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
 
@@ -759,7 +758,7 @@
             // Sample $remove_item_from_cart event
             $properties = array(
                 // Required Fields
-                '$user_id'    => 'billy_jones_301',
+                '$user_id'    => $GLOBALS['user_id'],
             
                 // Supported Fields
                 '$session_id' => 'gigtleqddo84l8cm15qe4il',
@@ -794,7 +793,7 @@
             // Sample $security_notification event
             $properties = array(
                 // Required Fields
-                '$user_id'    => 'billy_jones_301',
+                '$user_id'    => $GLOBALS['user_id'],
                 '$session_id' => 'gigtleqddo84l8cm15qe4il',
                 '$notification_status'     => '$sent',
                 // Optional fields if applicable
@@ -803,9 +802,9 @@
             
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
 
@@ -817,12 +816,12 @@
             // Sample $transaction event
             $properties = array(
                 // Required Fields
-                '$user_id'          => 'billy_jones_301',
+                '$user_id'          => $GLOBALS['user_id'],
                 '$amount'           => 506790000, // $506.79
                 '$currency_code'    => 'USD',
             
                 // Supported Fields
-                '$user_email'       => 'bill@gmail.com',
+                '$user_email'       => $GLOBALS['user_email'],
                 '$transaction_type' => '$sale',
                 '$transaction_status' => '$failure',
                 '$decline_category' => '$bank_decline',
@@ -892,9 +891,9 @@
             
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
                     
@@ -906,10 +905,10 @@
             // Sample $update_account event
             $properties = array(
                 // Required Fields
-                '$user_id'    => 'billy_jones_301',
+                '$user_id'    => $GLOBALS['user_id'],
                 // Supported Fields
                 '$changed_password' => True,
-                '$user_email'       => 'bill@gmail.com',
+                '$user_email'       => $GLOBALS['user_email'],
                 '$name'             => 'Bill Jones',
                 '$phone'            => '1-415-555-6040',
                 '$referrer_user_id' => 'janejane102',
@@ -945,9 +944,9 @@
             
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
 
@@ -959,7 +958,7 @@
             // Sample $update_content event for comments
             $comment_properties = array(
                 // Required fields
-                '$user_id' => 'fyw3989sjpqr71',
+                '$user_id' => $GLOBALS['user_id'],
                 '$content_id' => 'comment-23412',
             
                 // Recommended fields
@@ -975,18 +974,18 @@
                     '$root_content_id'    => 'listing-12923213',
                     '$images'             => array(
                         array(
-                        '$md5_hash'            => '0cc175b9c0f1b6a831c399e269772661',
-                        '$link'                => 'https://www.domain.com/file.png',
-                        '$description'         => 'An old picture'
+                            '$md5_hash'            => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'                => 'https://www.domain.com/file.png',
+                            '$description'         => 'An old picture'
                         )
                     )
                 ),
             
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
                     
@@ -998,7 +997,7 @@
             // Sample $update_content event for listings
             $listing_properties = array(
                 // Required fields
-                '$user_id'            => 'fyw3989sjpqr71',
+                '$user_id'            => $GLOBALS['user_id'],
                 '$content_id'         => 'listing-23412',
             
                 // Supported fields
@@ -1008,47 +1007,47 @@
             
                 // Required $listing object
                 '$listing'            => array(
-                '$subject'          => '2 Bedroom Apartment for Rent',
-                '$body'             => 'Capitol Hill Seattle brand new condo. 2 bedrooms and 1 full bath.',
-                '$contact_email'    => 'alex_301@domain.com',
-                '$contact_address'  => array(
-                    '$name'           => 'Bill Jones',
-                    '$phone'          => '1-415-555-6041',
-                    '$city'           => 'New London',
-                    '$region'         => 'New Hampshire',
-                    '$country'        => 'US',
-                    '$zipcode'        => '03257'
-                ),
-                '$locations'        => array(
-                    array(
-                    '$city'             => 'Seattle',
-                    '$region'           => 'Washington',
-                    '$country'          => 'US',
-                    '$zipcode'          => '98112'
-                    )
-                ),
-                '$listed_items'     => array(
-                    array(
-                    '$price'             => 2950000000, // $2950.00
-                    '$currency_code'     => 'USD',
-                    '$tags'              => array('heat', 'washer/dryer')
-                    )
-                ),
-                '$images'           => array(
-                    array(
-                    '$md5_hash'          => '0cc175b9c0f1b6a831c399e269772661',
-                    '$link'              => 'https://www.domain.com/file.png',
-                    '$description'       => 'Billy’s picture'
-                    )
-                ),
-                '$expiration_time'  => 1549063157000 // UNIX timestamp in milliseconds
+                    '$subject'          => '2 Bedroom Apartment for Rent',
+                    '$body'             => 'Capitol Hill Seattle brand new condo. 2 bedrooms and 1 full bath.',
+                    '$contact_email'    => 'alex_301@domain.com',
+                    '$contact_address'  => array(
+                        '$name'           => 'Bill Jones',
+                        '$phone'          => '1-415-555-6041',
+                        '$city'           => 'New London',
+                        '$region'         => 'New Hampshire',
+                        '$country'        => 'US',
+                        '$zipcode'        => '03257'
+                    ),
+                    '$locations'        => array(
+                        array(
+                            '$city'             => 'Seattle',
+                            '$region'           => 'Washington',
+                            '$country'          => 'US',
+                            '$zipcode'          => '98112'
+                        )
+                    ),
+                    '$listed_items'     => array(
+                        array(
+                            '$price'             => 2950000000, // $2950.00
+                            '$currency_code'     => 'USD',
+                            '$tags'              => array('heat', 'washer/dryer')
+                        )
+                    ),
+                    '$images'           => array(
+                        array(
+                            '$md5_hash'          => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'              => 'https://www.domain.com/file.png',
+                            '$description'       => 'Billy’s picture'
+                        )
+                    ),
+                    '$expiration_time'  => 1549063157000 // UNIX timestamp in milliseconds
                 ),
             
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
     
@@ -1060,7 +1059,7 @@
             // Sample $update_content event for messages
             $message_properties = array(
                 // Required fields
-                '$user_id'               => 'fyw3989sjpqr71',
+                '$user_id'               => $GLOBALS['user_id'],
                 '$content_id'            => 'message-23412',
             
                 // Recommended fields
@@ -1075,18 +1074,18 @@
                     '$recipient_user_ids'  => array('fy9h989sjphh71'),
                     '$images'              => array(
                         array(
-                        '$md5_hash'             => '0cc175b9c0f1b6a831c399e269772661',
-                        '$link'                 => 'https://www.domain.com/file.png',
-                        '$description'          => 'My hike today!'
+                            '$md5_hash'             => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'                 => 'https://www.domain.com/file.png',
+                            '$description'          => 'My hike today!'
                         )
                     )
                 ),
             
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
-                '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                '$accept_language'  => 'en-US',
-                '$content_language' => 'en-GB'
+                    '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    '$accept_language'  => 'en-US',
+                    '$content_language' => 'en-GB'
                 )
             );
     
@@ -1098,7 +1097,7 @@
             // Sample $update_content event for posts
             $post_properties = array(
                 // Required fields
-                '$user_id' => 'fyw3989sjpqr71',
+                '$user_id' => $GLOBALS['user_id'],
                 '$content_id' => 'post-23412',
             
                 // Recommended fields
@@ -1120,18 +1119,18 @@
                     ),
                     '$locations'        => array(
                         array(
-                        '$city'              => 'Seattle',
-                        '$region'            => 'Washington',
-                        '$country'           => 'US',
-                        '$zipcode'           => '98112'
+                            '$city'              => 'Seattle',
+                            '$region'            => 'Washington',
+                            '$country'           => 'US',
+                            '$zipcode'           => '98112'
                         )
                     ),
                     '$categories'       => array('Personal'),
                     '$images'           => array(
                         array(
-                        '$md5_hash'          => '0cc175b9c0f1b6a831c399e269772661',
-                        '$link'              => 'https://www.domain.com/file.png',
-                        '$description'       => 'View from the window!'
+                            '$md5_hash'          => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'              => 'https://www.domain.com/file.png',
+                            '$description'       => 'View from the window!'
                         )
                     ),
                     '$expiration_time'  => 1549063157000
@@ -1153,7 +1152,7 @@
             // Sample $update_content event for profiles
             $profile_properties = array(
                 // Required fields
-                '$user_id'            => 'fyw3989sjpqr71',
+                '$user_id'            => $GLOBALS['user_id'],
                 '$content_id'         => 'profile-23412',
             
                 // Recommended fields
@@ -1175,9 +1174,9 @@
                     ),
                     '$images'           => array(
                         array(
-                        '$md5_hash'          => '0cc175b9c0f1b6a831c399e269772661',
-                        '$link'              => 'https://www.domain.com/file.png',
-                        '$description'       => 'Alex’s picture'
+                            '$md5_hash'          => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'              => 'https://www.domain.com/file.png',
+                            '$description'       => 'Alex’s picture'
                         )
                     ),
                     '$categories'       => array(
@@ -1202,7 +1201,7 @@
             // Sample $update_content event for reviews
             $review_properties = array(
                 // Required fields
-                '$user_id'                => 'fyw3989sjpqr71',
+                '$user_id'                => $GLOBALS['user_id'],
                 '$content_id'             => 'review-23412',
             
                 // Recommended fields
@@ -1217,18 +1216,18 @@
                     '$contact_email'        => 'alex_301@domain.com',
                     '$locations'            => array(
                         array(
-                        '$city'                 => 'Seattle',
-                        '$region'               => 'Washington',
-                        '$country'              => 'US',
-                        '$zipcode'              => '98112'
+                            '$city'                 => 'Seattle',
+                            '$region'               => 'Washington',
+                            '$country'              => 'US',
+                            '$zipcode'              => '98112'
                         )
                     ),
                     '$reviewed_content_id'  => 'listing-234234',
                     '$images'               => array(
                         array(
-                        '$md5_hash'             => '0cc175b9c0f1b6a831c399e269772661',
-                        '$link'                 => 'https://www.domain.com/file.png',
-                        '$description'          => 'Calamari tacos.'
+                            '$md5_hash'             => '0cc175b9c0f1b6a831c399e269772661',
+                            '$link'                 => 'https://www.domain.com/file.png',
+                            '$description'          => 'Calamari tacos.'
                         )
                     ),
                     '$rating'               => 4.5
@@ -1250,11 +1249,11 @@
             // Sample $update_order event
             $properties = array(
                 // Required Fields
-                '$user_id'          => 'billy_jones_301',
+                '$user_id'          => $GLOBALS['user_id'],
                 // Supported Fields
                 '$session_id'       => 'gigtleqddo84l8cm15qe4il',
                 '$order_id'         => 'ORDER-28168441',
-                '$user_email'       => 'bill@gmail.com',
+                '$user_email'       => $GLOBALS['user_email'],
                 '$amount'           => 115940000, // $115.94
                 '$currency_code'    => 'USD',
                 '$billing_address'  => array(
@@ -1342,9 +1341,9 @@
                         '$status'       => '$success',
                         '$description'  => '$5 off',
                         '$discount'     => array(
-                        '$amount'                   => 5000000,  // $5.00
-                        '$currency_code'            => 'USD',
-                        '$minimum_purchase_amount'  => 25000000  // $25.00
+                            '$amount'                   => 5000000,  // $5.00
+                            '$currency_code'            => 'USD',
+                            '$minimum_purchase_amount'  => 25000000  // $25.00
                         )
                     )
                 ),
@@ -1371,7 +1370,7 @@
             // Sample $update_password event
             $properties = array(
                 // Required Fields
-                '$user_id'   => 'billy_jones_301',
+                '$user_id'   => $GLOBALS['user_id'],
                 '$session_id' => 'gigtleqddo84l8cm15qe4il',
                 '$status'     => '$success',
                 '$reason'     => '$forced_reset',
@@ -1393,7 +1392,7 @@
             // Sample $verification event
             $properties = array(
                 // Required Fields
-                '$user_id'            => 'billy_jones_301',
+                '$user_id'            => $GLOBALS['user_id'],
                 '$session_id'         => 'gigtleqddo84l8cm15qe4il',
                 '$status'             => '$pending',
             
