@@ -1285,4 +1285,124 @@ class SiftClientTest extends TestCase
         );
         $this->assertTrue($response->isOk());
     }
+
+    public function testSuccessfulTrackEventWithScorePercentiles(): void {
+        $mockUrl = 'https://api.sift.com/v205/events?fields=SCORE_PERCENTILES';
+        $mockResponse = new SiftResponse('
+        {
+            "status": 0, "error_message": "OK",
+            "score_response":
+                {
+                    "user_id": "billy_jones_301",
+                    "latest_labels": {},
+                    "workflow_statuses": [],
+                    "scores": {
+                        "account_abuse": {
+                            "score": 0.32787917675535705,
+                            "reasons": [{
+                                "name": "Latest item product title",
+                                "value": "The Slanket Blanket-Texas Tea"
+                            }],
+                            "percentiles": {
+                                "last_7_days": -1.0,
+                                "last_1_days": -1.0,
+                                "last_10_days": -1.0,
+                                "last_5_days": -1.0
+                            }
+                        },
+                        "acontent_abuse": {
+                            "score": 0.28056292905897995,
+                            "reasons": [{
+                                "name": "timeSinceFirstEvent",
+                                "value": "13.15 minutes"
+                            }],
+                            "percentiles": {
+                                "last_7_days": -1.0,
+                                "last_1_days": -1.0,
+                                "last_10_days": -1.0,
+                                "last_5_days": -1.0
+                            }
+                        },
+                        "payment_abuse": {
+                            "score": 0.28610507028376797,
+                            "reasons": [{
+                                "name": "Latest item currency code",
+                                "value": "USD"
+                            }, {
+                                "name": "Latest item item ID",
+                                "value": "B004834GQO"
+                            }, {
+                                "name": "Latest item product title",
+                                "value": "The Slanket Blanket-Texas Tea"
+                            }],
+                            "percentiles": {
+                                "last_7_days": -1.0,
+                                "last_1_days": -1.0,
+                                "last_10_days": -1.0,
+                                "last_5_days": -1.0
+                            }
+                        },
+                        "promotion_abuse": {
+                            "score": 0.05731508921450917,
+                            "percentiles": {
+                                "last_7_days": -1.0,
+                                "last_1_days": -1.0,
+                                "last_10_days": -1.0,
+                                "last_5_days": -1.0
+                            }
+                        }
+                    }
+                }
+            }', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST ,$mockResponse);
+        $response = $this->client->track('$transaction', $this->transaction_properties, [
+            "version" => "205","include_score_percentiles" => true
+        ]);
+       
+         $this->assertTrue($response->isOk());
+         $this->assertEquals($response->apiErrorMessage, 'OK');
+         $this->assertEquals(-1.0, $response->body["score_response"]["scores"]["account_abuse"]["percentiles"]["last_7_days"]);
+    }
+
+    public function testScoreAPIWithScorePercentiles(): void {
+        $mockUrl = 'https://api.sift.com/v205/score/12345?api_key=agreatsuccess&fields=SCORE_PERCENTILES';
+        $mockResponse = new SiftResponse(
+            '{"status": 0, "error_message": "OK",
+            "user_id": "12345", "scores": {"payment_abuse": {"score": 0.55}}}',
+            200,
+            null
+        );
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET ,$mockResponse);
+        $response = $this->client->score('12345',  [
+            "version" => "205","include_score_percentiles" => true
+        ]);
+       
+        $this->assertTrue($response->isOk());
+        $this->assertEquals("OK", $response->apiErrorMessage);
+        $this->assertEquals(
+            0.55,
+            $response->body["scores"]["payment_abuse"]["score"]
+        );
+    }
+
+    public function testGetUserScoreWithScorePercentiles(): void
+    {
+        $mockUrl =
+            "https://api.sift.com/v205/users/12345/score?api_key=agreatsuccess&fields=SCORE_PERCENTILES";
+        $mockResponse = new SiftResponse(
+            '{"status": 0, "error_message": "OK",
+            "user_id": "12345", "scores": {"payment_abuse": {"score": 0.55}}}',
+            200,
+            null
+        );
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::GET, $mockResponse);
+
+        $response = $this->client->get_user_score("12345", ["include_score_percentiles" => true]);
+        $this->assertTrue($response->isOk());
+        $this->assertEquals("OK", $response->apiErrorMessage);
+        $this->assertEquals(
+            0.55,
+            $response->body["scores"]["payment_abuse"]["score"]
+        );
+    }
 }
