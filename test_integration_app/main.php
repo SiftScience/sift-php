@@ -75,7 +75,7 @@
             // Verification API
             $this->assertEquals(1, $objUtil->isOk($objVerification->send()));
             $this->assertEquals(1, $objUtil->isOk($objVerification->resend()));
-            $this->assertEquals(1, $objUtil->isOk($objVerification->check()));
+            $this->assertEquals(1, $objUtil->isOkCheck($objVerification->check()));
             print("Verification API Tested");
 
             // PSP Merchant Management API
@@ -90,15 +90,26 @@
     class Utils 
     {
 
-        public function isOk($response) {
+        public function isOk($response) {          
             // expect http status 200 and api status 0 or http status 201 if apiStatus exists.
             if (isset($response->apiStatus)){
-                return (($response->apiStatus == 0 || $response->apiStatus == 50) 
+                return (($response->apiStatus == 0) 
                     && (200 === $response->httpStatusCode)) || (201 === $response->httpStatusCode);
             }
             else{
                 // otherwise expect http status 200 or http status 201.
                 return ((200 === $response->httpStatusCode) || (201 === $response->httpStatusCode));
+            }
+        }
+
+        public function isOkCheck($response) {
+            // expect http status 200 and api status 50
+            if (isset($response->apiStatus)){
+                return (($response->apiStatus == 50) 
+                    && (200 === $response->httpStatusCode));
+            }
+            else{
+                return false;
             }
         }
     }
