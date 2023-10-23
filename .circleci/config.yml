@@ -89,7 +89,7 @@ jobs:
           name: Install the lib and run tests
           command: |
             composer install -n --prefer-dist
-            php test_integration_app/main.py
+            php test_integration_app/main.php
 
 workflows:
   version: 2
