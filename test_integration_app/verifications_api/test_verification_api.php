@@ -4,7 +4,7 @@
         private $client;
     
         function __construct() {
-            $this->client = new SiftClient(array('api_key' => getenv("api_key")));
+            $this->client = new SiftClient(array('api_key' => getenv("API_KEY")));
         }
 
         function send()

@@ -72,6 +72,10 @@ jobs:
     <<: *build7
     docker:
       - image: circleci/php:7.3.3-stretch
+  build74:
+    <<: *build7
+    docker:
+      - image: circleci/php:7.4.25-cli-buster-node
 
 workflows:
   version: 2
@@ -82,4 +86,6 @@ workflows:
       - build72:
           context: *context
       - build73:
+          context: *context
+      - build74:
           context: *context

@@ -50,7 +50,7 @@
             $this->assertEquals(1, $objUtil->isOk($objEvents->update_order()));
             $this->assertEquals(1, $objUtil->isOk($objEvents->update_password()));
             $this->assertEquals(1, $objUtil->isOk($objEvents->verification()));
-            print("Events API Tested");
+            print("Events API Tested \n");
 
             // Decisions API
             $this->assertEquals(1, $objUtil->isOk($objDecisions->getUserDecisions()));
@@ -58,32 +58,33 @@
             $this->assertEquals(1, $objUtil->isOk($objDecisions->getContentDecisions()));
             $this->assertEquals(1, $objUtil->isOk($objDecisions->getSessionDecisions()));
             $this->assertEquals(1, $objUtil->isOk($objDecisions->getDecisions()));
-            $this->assertEquals(0, $objUtil->isOk($objDecisions->apply_decision_to_user()));
-            $this->assertEquals(0, $objUtil->isOk($objDecisions->apply_decision_to_order()));
-            $this->assertEquals(0, $objUtil->isOk($objDecisions->apply_decision_to_session()));
-            $this->assertEquals(0, $objUtil->isOk($objDecisions->apply_decision_to_content()));
-            print("Decision API Tested");
+            $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_user()));
+            $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_order()));
+            $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_session()));
+            $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_content()));
+            print("Decision API Tested \n");
 
             // Wrokflows API
             $this->assertEquals(1, $objUtil->isOk($objWorkflows->synchronous_workflows()));
-            print("Workflow API Tested");
-        
+            print("Workflow API Tested \n");
+
             // Score API
-            $this->assertEquals(0, $objUtil->isOk($objScore->user_score()));
-            print("Score API Tested");
+            $this->assertEquals(1, $objUtil->isOk($objScore->user_score()));
+            print("Score API Tested \n");
 
             // Verification API
             $this->assertEquals(1, $objUtil->isOk($objVerification->send()));
             $this->assertEquals(1, $objUtil->isOk($objVerification->resend()));
             $this->assertEquals(1, $objUtil->isOkCheck($objVerification->check()));
-            print("Verification API Tested");
+            print("Verification API Tested \n");
 
             // PSP Merchant Management API
-            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->create_merchant()));
-            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->update_merchant()));
+            $merchant_id = "merchant_id_test_sift_php_".strval(floor(microtime(true) * 1000));
+            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->create_merchant($merchant_id)));
+            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->update_merchant($merchant_id)));
             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_all_merchants()));
-            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_merchant()));
-            print("PSP Merchant API Tested");
+            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_merchant($merchant_id)));
+            print("PSP Merchant API Tested \n");
         }
     }
 

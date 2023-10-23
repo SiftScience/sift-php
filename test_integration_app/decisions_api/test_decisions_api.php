@@ -4,7 +4,7 @@
         private $client;
     
         function __construct() {
-            $this->client = new SiftClient(array('api_key' => getenv("api_key"), 'account_id' => getenv("account_id")));
+            $this->client = new SiftClient(array('api_key' => getenv("API_KEY"), 'account_id' => getenv("ACCOUNT_ID")));
         }
 
         function getUserDecisions()
@@ -24,9 +24,9 @@
 
         function getSessionDecisions()
         {
-            return $this->client->getSessionDecisions($GLOBALS['user_id'], 'gigtleqddo84l8cm15qe4il');
+            return $this->client->getSessionDecisions($GLOBALS['user_id'], $GLOBALS['session_id']);
         }
-        
+
         function getDecisions()
         {
             $options = array(
@@ -47,7 +47,7 @@
             );
 
             return $this->client->applyDecisionToUser($GLOBALS['user_id'],
-            'block_user_payment_abuse',
+            'integration_app_watch_account_abuse',
             'MANUAL_REVIEW',
             $options);
         }
@@ -61,7 +61,7 @@
 
             return $this->client->applyDecisionToOrder($GLOBALS['user_id'],
             'ORDER-28168441',
-            'user_looks_ok_payment_decision',
+            'block_order_payment_abuse',
             'MANUAL_REVIEW',
             $options);
         }
@@ -74,8 +74,8 @@
             ');
 
             return $this->client->applyDecisionToSession($GLOBALS['user_id'],
-            'gigtleqddo84l8cm15qe4il',
-            'session_looks_fraud_account_takeover',
+            $GLOBALS['session_id'],
+            'integration_app_watch_account_takeover',
             'MANUAL_REVIEW',
             $options);
         }
@@ -89,7 +89,7 @@
 
             return $this->client->applyDecisionToContent($GLOBALS['user_id'],
             'message-23412',
-            'content_looks_fraud_content_abuse',
+            'integration_app_watch_content_abuse',
             'MANUAL_REVIEW',
             $options);
         }
