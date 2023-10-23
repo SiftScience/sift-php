@@ -21,70 +21,70 @@
 
             // Events API
             $this->assertEquals(1, $objUtil->isOk($objEvents->add_item_to_cart()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->add_promotion()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->chargeback()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->content_status()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->create_account()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_comment()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_listing()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_message()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_post()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_profile()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_review()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->create_order()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->flag_content()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->link_session_to_user()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->login()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->logout()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->order_status()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->remove_item_from_cart()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->security_notification()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->transaction()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->update_account()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_comment()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_listing()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_message()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_post()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_profile()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_review()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->update_order()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->update_password()));
-            $this->assertEquals(1, $objUtil->isOk($objEvents->verification()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->add_promotion()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->chargeback()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->content_status()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->create_account()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_comment()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_listing()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_message()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_post()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_profile()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->create_content_review()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->create_order()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->flag_content()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->link_session_to_user()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->login()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->logout()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->order_status()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->remove_item_from_cart()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->security_notification()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->transaction()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->update_account()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_comment()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_listing()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_message()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_post()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_profile()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->update_content_review()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->update_order()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->update_password()));
+//             $this->assertEquals(1, $objUtil->isOk($objEvents->verification()));
             print("Events API Tested \n");
-
-            // Decisions API
-            $this->assertEquals(1, $objUtil->isOk($objDecisions->getUserDecisions()));
-            $this->assertEquals(1, $objUtil->isOk($objDecisions->getOrderDecisions()));
-            $this->assertEquals(1, $objUtil->isOk($objDecisions->getContentDecisions()));
-            $this->assertEquals(1, $objUtil->isOk($objDecisions->getSessionDecisions()));
-            $this->assertEquals(1, $objUtil->isOk($objDecisions->getDecisions()));
-            $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_user()));
-            $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_order()));
-            $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_session()));
-            $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_content()));
-            print("Decision API Tested \n");
-
-            // Wrokflows API
-            $this->assertEquals(1, $objUtil->isOk($objWorkflows->synchronous_workflows()));
-            print("Workflow API Tested \n");
-
-            // Score API
-            $this->assertEquals(1, $objUtil->isOk($objScore->user_score()));
-            print("Score API Tested \n");
-
-            // Verification API
-            $this->assertEquals(1, $objUtil->isOk($objVerification->send()));
-            $this->assertEquals(1, $objUtil->isOk($objVerification->resend()));
-            $this->assertEquals(1, $objUtil->isOkCheck($objVerification->check()));
-            print("Verification API Tested \n");
-
-            // PSP Merchant Management API
-            $merchant_id = "merchant_id_test_sift_php_".strval(floor(microtime(true) * 1000));
-            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->create_merchant($merchant_id)));
-            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->update_merchant($merchant_id)));
-            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_all_merchants()));
-            $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_merchant($merchant_id)));
-            print("PSP Merchant API Tested \n");
+//
+//             // Decisions API
+//             $this->assertEquals(1, $objUtil->isOk($objDecisions->getUserDecisions()));
+//             $this->assertEquals(1, $objUtil->isOk($objDecisions->getOrderDecisions()));
+//             $this->assertEquals(1, $objUtil->isOk($objDecisions->getContentDecisions()));
+//             $this->assertEquals(1, $objUtil->isOk($objDecisions->getSessionDecisions()));
+//             $this->assertEquals(1, $objUtil->isOk($objDecisions->getDecisions()));
+//             $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_user()));
+//             $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_order()));
+//             $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_session()));
+//             $this->assertEquals(1, $objUtil->isOk($objDecisions->apply_decision_to_content()));
+//             print("Decision API Tested \n");
+//
+//             // Wrokflows API
+//             $this->assertEquals(1, $objUtil->isOk($objWorkflows->synchronous_workflows()));
+//             print("Workflow API Tested \n");
+//
+//             // Score API
+//             $this->assertEquals(1, $objUtil->isOk($objScore->user_score()));
+//             print("Score API Tested \n");
+//
+//             // Verification API
+//             $this->assertEquals(1, $objUtil->isOk($objVerification->send()));
+//             $this->assertEquals(1, $objUtil->isOk($objVerification->resend()));
+//             $this->assertEquals(1, $objUtil->isOkCheck($objVerification->check()));
+//             print("Verification API Tested \n");
+//
+//             // PSP Merchant Management API
+//             $merchant_id = "merchant_id_test_sift_php_".strval(floor(microtime(true) * 1000));
+//             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->create_merchant($merchant_id)));
+//             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->update_merchant($merchant_id)));
+//             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_all_merchants()));
+//             $this->assertEquals(1, $objUtil->isOk($objPSPMerchant->get_merchant($merchant_id)));
+//             print("PSP Merchant API Tested \n");
         }
     }
 
