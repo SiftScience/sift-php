@@ -106,4 +106,4 @@ workflows:
       - run-integration-tests-php74:
           filters:
             branches:
-              only: API-7365-ci-for-testing-app
+              only: master
