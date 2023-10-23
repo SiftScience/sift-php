@@ -239,6 +239,24 @@ $sift = new SiftClient([
 ]);
 ```
 
+## Integration testing app
+
+For testing the app with real calls it is possible to run the integration testing app,
+it makes calls to almost all our public endpoints to make sure the library integrates
+well. At the moment, the app is run on every merge to master
+
+#### How to run it locally
+
+1. Add env variable `ACCOUNT_ID` with the valid account id
+2. Add env variable `API_KEY` with the valid Api Key associated from the account
+3. Run the following under the project root folder
+```
+# install the lib from the local source code
+composer install -n
+# run the app
+php test_integration_app/main.php
+```
+
 ## License
 
 MIT

@@ -4,7 +4,7 @@
         private $client;
     
         function __construct() {
-            $this->client = new SiftClient(array('api_key' => getenv("api_key"), 'account_id' => getenv("account_id")));
+            $this->client = new SiftClient(array('api_key' => getenv("API_KEY"), 'account_id' => getenv("ACCOUNT_ID")));
         }
 
         function user_score()

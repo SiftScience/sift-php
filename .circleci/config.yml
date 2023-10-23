@@ -64,14 +64,32 @@ jobs:
     <<: *build7
     docker:
       - image: circleci/php:7.1.27-stretch
+
   build72:
     <<: *build7
     docker:
       - image: circleci/php:7.2.16-stretch
+
   build73:
     <<: *build7
     docker:
       - image: circleci/php:7.3.3-stretch
+
+  build74:
+    <<: *build7
+    docker:
+      - image: circleci/php:7.4.25-cli-buster-node
+
+  run-integration-tests-php74:
+    docker:
+      - image: circleci/php:7.4.25-cli-buster-node
+    steps:
+      - checkout
+      - run:
+          name: Install the lib and run tests
+          command: |
+            composer install -n --prefer-dist
+            php test_integration_app/main.php
 
 workflows:
   version: 2
@@ -83,3 +101,9 @@ workflows:
           context: *context
       - build73:
           context: *context
+      - build74:
+          context: *context
+      - run-integration-tests-php74:
+          filters:
+            branches:
+              only: master

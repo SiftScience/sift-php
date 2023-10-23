@@ -4,14 +4,13 @@
         private $client;
     
         function __construct() {
-            $this->client = new SiftClient(array('api_key' => getenv("api_key"), 'account_id' => getenv("account_id")));
+            $this->client = new SiftClient(array('api_key' => getenv("API_KEY"), 'account_id' => getenv("ACCOUNT_ID")));
         }
 
-        function create_merchant()
+        function create_merchant($merchant_id)
         {
-            $merchant_id = rand(1, 1000000); 
             $merchantObject = array(
-                'id' => "merchant-id-php-".$merchant_id,
+                'id' => $merchant_id,
                 'name' => "Watson and Holmes",
                 'description' => "An example of a PSP Merchant. Illustrative.",
                 'address'=> array(
@@ -35,10 +34,10 @@
             return $this->client->postMerchant($merchantObject);
         }
 
-        function update_merchant()
+        function update_merchant($merchant_id)
         {
             $merchantObject = array(
-                'id' => "merchant-id-php-0002",
+                'id' => $merchant_id,
                 'name' => "Watson and Holmes updated",
                 'description' => "An example of a PSP Merchant. Illustrative.",
                 'address'=> array(
@@ -59,12 +58,12 @@
                     'score' => 10
                 )
             );
-            return $this->client->putMerchant("merchant-id-php-0002", $merchantObject);
+            return $this->client->putMerchant($merchant_id, $merchantObject);
         }
 
-        function get_merchant()
-        {   
-            return $this->client->getMerchant("merchant-id-php-0001");;
+        function get_merchant($merchant_id)
+        {
+            return $this->client->getMerchant($merchant_id);
         }
 
         function get_all_merchants()

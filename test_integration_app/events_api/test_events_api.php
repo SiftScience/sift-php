@@ -4,18 +4,18 @@
         private $client;
        
         function __construct() {
-            $this->client = new SiftClient(array('api_key' => getenv("api_key"), 'account_id' => getenv("account_id")));
+            $this->client = new SiftClient(array('api_key' => getenv("API_KEY"), 'account_id' => getenv("ACCOUNT_ID")));
         }
 
         function add_item_to_cart()
-        {           
+        {
             // Sample $add_item_to_cart event
             $add_item_to_cart_properties = array(
                 // Required Fields
-                '$user_id'           => $GLOBALS['user_id'],
-            
+                '$user_id' => $GLOBALS['user_id'],
+
                 // Supported Fields
-                '$session_id' => 'gigtleqddo84l8cm15qe4il',
+                '$session_id' => $GLOBALS['session_id'],
                 '$item'       => array(
                     '$item_id'        => 'B004834GQO',
                     '$product_title'  => 'The Slanket Blanket-Texas Tea',
@@ -50,7 +50,7 @@
             $add_promotion_properties = array(
                 // Required fields.
                 '$user_id'    => $GLOBALS['user_id'],
-            
+
                 // Supported fields.
                 '$promotions' => array(
                 // Example of a promotion for monetary discounts off good or services
@@ -90,7 +90,7 @@
                 // Required Fields
                 '$order_id'          => 'ORDER-123124124',
                 '$transaction_id'    => '719637215',
-            
+
                 // Recommended Fields
                 '$user_id'           => $GLOBALS['user_id'],
                 '$chargeback_state'  => '$lost',
@@ -122,19 +122,19 @@
                     '$client_language'     => 'en-US'
                 )
             );
-    
+
             return $this->client->track('$content_status', $content_status_properties);
         }
-    
+
         function create_account()
         {
             // Sample $create_account event
             $create_account_properties = array(
                 // Required Fields
                 '$user_id'    => $GLOBALS['user_id'],
-            
+
                 // Supported Fields
-                '$session_id'       => 'gigtleqddo84l8cm15qe4il',
+                '$session_id'       => $GLOBALS['session_id'],
                 '$user_email'       => $GLOBALS['user_email'],
                 '$name'             => 'Bill Jones',
                 '$phone'            => '1-415-555-6040',
@@ -174,10 +174,10 @@
                         '$credit_point'     => array(
                             '$amount'             => 100,
                             '$credit_point_type'  => 'account karma'
-                        ) 
+                        )
                     )
                 ),
-        
+
                 '$social_sign_on_type'   => '$twitter',
                 '$account_types'         => ['merchant', 'premium'],
 
@@ -188,7 +188,7 @@
                 'referral_code'           => 'MIKEFRIENDS',
                 'email_confirmed_status'  => '$pending',
                 'phone_confirmed_status'  => '$pending',
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -207,12 +207,12 @@
                 // Required fields
                 '$user_id' => $GLOBALS['user_id'],
                 '$content_id' => 'comment-23412',
-            
+
                 // Recommended fields
                 '$session_id'           => 'a234ksjfgn435sfg',
                 '$status'               => '$active',
                 '$ip'                   => '255.255.255.0',
-            
+
                 // Required $comment object
                 '$comment'              => array(
                     '$body'               => 'Congrats on the new role!',
@@ -234,7 +234,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-    
+
             return $this->client->track('$create_content', $comment_properties);
         }
 
@@ -245,12 +245,12 @@
                 // Required fields
                 '$user_id'              => $GLOBALS['user_id'],
                 '$content_id'           => 'listing-23412',
-            
+
                 // Supported fields
                 '$session_id'           => 'a234ksjfgn435sfg',
                 '$status'               => '$active',
                 '$ip'                   => '255.255.255.0',
-            
+
                 // Required $listing object
                 '$listing'              => array(
                     '$subject'            => '2 Bedroom Apartment for Rent',
@@ -288,7 +288,7 @@
                     ),
                     '$expiration_time'    => 1549063157000 // UNIX timestamp in milliseconds
                 ),
-                    
+
                 // Send this information an APP client.
                 '$app'        => array(
                     // Example for the iOS Calculator app.
@@ -313,12 +313,12 @@
                 // Required fields
                 '$user_id'               => $GLOBALS['user_id'],
                 '$content_id'            => 'message-23412',
-            
+
                 // Recommended fields
                 '$session_id'            => 'a234ksjfgn435sfg',
                 '$status'                => '$active',
                 '$ip'                    => '255.255.255.0',
-            
+
                 // Required $message object
                 '$message'               => array(
                     '$body'                => 'Let’s meet at 5pm',
@@ -332,7 +332,7 @@
                         )
                     )
                 ),
-                    
+
                 // Send this information an APP client.
                 '$app'        => array(
                     // Example for the iOS Calculator app.
@@ -346,7 +346,7 @@
                     '$client_language'     => 'en-US'
                 )
             );
-    
+
             return $this->client->track('$create_content', $message_properties);
         }
 
@@ -357,12 +357,12 @@
                 // Required fields
                 '$user_id' => $GLOBALS['user_id'],
                 '$content_id' => 'post-23412',
-            
+
                 // Recommended fields
                 '$session_id'         => 'a234ksjfgn435sfg',
                 '$status'             => '$active',
                 '$ip'                 => '255.255.255.0',
-            
+
                 // Required $post object
                 '$post'               => array(
                     '$subject'          => 'My new apartment!',
@@ -407,7 +407,7 @@
                     '$client_language'     => 'en-US'
                 )
             );
-        
+
             return $this->client->track('$create_content', $post_properties);
         }
 
@@ -418,12 +418,12 @@
                 // Required fields
                 '$user_id'            => $GLOBALS['user_id'],
                 '$content_id'         => 'profile-23412',
-            
+
                 // Recommended fields
                 '$session_id'         => 'a234ksjfgn435sfg',
                 '$status'             => '$active',
                 '$ip'                 => '255.255.255.0',
-            
+
                 // Required $profile object
                 '$profile'            => array(
                     '$body'             => 'Hi! My name is Alex and I just moved to New London!',
@@ -462,10 +462,10 @@
                     '$client_language'     => 'en-US'
                 )
             );
-    
+
             return $this->client->track('$create_content', $profile_properties);
         }
-    
+
         function create_content_review()
         {
             // Sample $create_content event for reviews
@@ -473,12 +473,12 @@
                 // Required fields
                 '$user_id'                => $GLOBALS['user_id'],
                 '$content_id'             => 'review-23412',
-            
+
                 // Recommended fields
                 '$session_id'             => 'a234ksjfgn435sfg',
                 '$status'                 => '$active',
                 '$ip'                     => '255.255.255.0',
-            
+
                 // Required $review object
                 '$review'                 => array(
                     '$subject'              => 'Amazing Tacos!',
@@ -502,7 +502,7 @@
                     ),
                     '$rating'               => 4.5
                 ),
-            
+
                 // Send this information an APP client.
                 '$app'        => array(
                     // Example for the iOS Calculator app.
@@ -527,7 +527,7 @@
                 // Required Fields
                 '$user_id'          => $GLOBALS['user_id'],
                 // Supported Fields
-                '$session_id'       => 'gigtleqddo84l8cm15qe4il',
+                '$session_id'       => $GLOBALS['session_id'],
                 '$order_id'         => 'ORDER-28168441',
                 '$user_email'       => $GLOBALS['user_email'],
                 '$verification_phone_number' => "+123456789012",
@@ -611,7 +611,7 @@
                 ),
                 // For marketplaces, use $seller_user_id to identify the seller
                 '$seller_user_id'     => 'slinkys_emporium',
-            
+
                 '$promotions'         => array(
                     array(
                         '$promotion_id' => 'FirstTimeBuyer',
@@ -624,13 +624,13 @@
                         )
                     )
                 ),
-            
+
                 // Sample Custom Fields
                 'digital_wallet'      => 'apple_pay', // 'google_wallet', etc.
                 'coupon_code'         => 'dollarMadness',
                 'shipping_choice'     => 'FedEx Ground Courier',
                 'is_first_time_buyer' => false,
-                    
+
                 // Send this information an APP client.
                 '$app'        => array(
                     // Example for the iOS Calculator app.
@@ -644,7 +644,7 @@
                     '$client_language'     => 'en-US'
                 )
             );
-    
+
             return $this->client->track('$create_order', $properties);
         }
 
@@ -655,11 +655,11 @@
                 // Required Fields
                 '$user_id'    => $GLOBALS['user_id'], // content creator
                 '$content_id' => '9671500641',
-            
+
                 // Supported Fields
                 '$flagged_by' => 'jamieli89'
             );
-    
+
             return $this->client->track('$flag_content', $properties);
         }
 
@@ -669,7 +669,7 @@
             $properties = array(
                 // Required Fields
                 '$user_id'    => $GLOBALS['user_id'],
-                '$session_id' => 'gigtleqddo84l8cm15qe4il'
+                '$session_id' => $GLOBALS['session_id']
             );
 
             return $this->client->track('$link_session_to_user', $properties);
@@ -682,10 +682,10 @@
                 // Required Fields
                 '$user_id'      => $GLOBALS['user_id'],
                 '$login_status' => '$failure',
-            
+
                 '$session_id' => 'gigtleqddo84l8cm15qe4il',
                 '$ip'         => '128.148.1.135',
-            
+
                 // Optional Fields
                 '$user_email'     => $GLOBALS['user_email'],
                 '$verification_phone_number' => '+123456789012',
@@ -696,7 +696,7 @@
                 '$brand_name'   => 'sift',
                 '$site_domain'  => 'sift.com',
                 '$site_country' => 'US',
-            
+
                 // Send this information with a login from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -704,7 +704,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-    
+
             return $this->client->track('$login', $properties);
         }
 
@@ -714,7 +714,7 @@
             $properties = array(
                 // Required Fields
                 '$user_id'   => $GLOBALS['user_id'],
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -722,7 +722,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-    
+
             return $this->client->track('$logout', $properties);
         }
 
@@ -734,14 +734,14 @@
                 '$user_id'          => $GLOBALS['user_id'],
                 '$order_id'         => 'ORDER-28168441',
                 '$order_status'     => '$canceled',
-            
+
                 // Optional Fields
                 '$reason'           => '$payment_risk',
                 '$source'           => '$manual_review',
                 '$analyst'          => 'someone@your-site.com',
                 '$webhook_id'       => '3ff1082a4aea8d0c58e3643ddb7a5bb87ffffeb2492dca33',
                 '$description'      => 'Canceling because multiple fraudulent users on device',
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -759,7 +759,7 @@
             $properties = array(
                 // Required Fields
                 '$user_id'    => $GLOBALS['user_id'],
-            
+
                 // Supported Fields
                 '$session_id' => 'gigtleqddo84l8cm15qe4il',
                 '$item'       => array(
@@ -776,14 +776,14 @@
                     '$tags'           => array('Awesome', 'Wintertime specials'),
                     '$color'          => 'Texas Tea'
                 ),
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
                     '$accept_language'  => 'en-US',
                     '$content_language' => 'en-GB'
                 )
-            );  
+            );
 
             return $this->client->track('$remove_item_from_cart', $properties);
         }
@@ -799,7 +799,7 @@
                 // Optional fields if applicable
                 '$notification_type' => '$email',
                 '$notified_value'    => 'billy123@domain.com',
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -819,7 +819,7 @@
                 '$user_id'          => $GLOBALS['user_id'],
                 '$amount'           => 506790000, // $506.79
                 '$currency_code'    => 'USD',
-            
+
                 // Supported Fields
                 '$user_email'       => $GLOBALS['user_email'],
                 '$transaction_type' => '$sale',
@@ -827,7 +827,7 @@
                 '$decline_category' => '$bank_decline',
                 '$order_id'         => 'ORDER-123124124',
                 '$transaction_id'   => '719637215',
-            
+
                 '$billing_address'  => array( // or "$sent_address" // or "$received_address"
                     '$name'         => 'Bill Jones',
                     '$phone'        => '1-415-555-6041',
@@ -861,12 +861,12 @@
                     '$card_bin'        => '542486',
                     '$card_last4'      => '4444'
                 ),
-            
+
                 // Supported fields for 3DS
                 '$status_3ds'                     => '$attempted',
                 '$triggered_3ds'                  => '$processor',
                 '$merchant_initiated_transaction' => false,
-            
+
                 // Supported Fields
                 '$shipping_address' => array(
                     '$name'         => 'Bill Jones',
@@ -879,16 +879,16 @@
                     '$zipcode'      => '03257'
                 ),
                 '$session_id'       => 'gigtleqddo84l8cm15qe4il',
-            
+
                 // For marketplaces, use $seller_user_id to identify the seller
                 '$seller_user_id'     => 'slinkys_emporium',
-            
+
                 // Sample Custom Fields
                 'digital_wallet'      => 'apple_pay', // 'google_wallet', etc.
                 'coupon_code'         => 'dollarMadness',
                 'shipping_choice'     => 'FedEx Ground Courier',
                 'is_first_time_buyer' => false,
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -896,7 +896,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-                    
+
             return $this->client->track('$transaction', $properties);
         }
 
@@ -941,7 +941,7 @@
                 ),
                 '$social_sign_on_type'   => '$twitter',
                 '$account_types'         => ['merchant', 'premium'],
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -960,12 +960,12 @@
                 // Required fields
                 '$user_id' => $GLOBALS['user_id'],
                 '$content_id' => 'comment-23412',
-            
+
                 // Recommended fields
                 '$session_id'           => 'a234ksjfgn435sfg',
                 '$status'               => '$active',
                 '$ip'                   => '255.255.255.0',
-            
+
                 // Required $comment object
                 '$comment'              => array(
                     '$body'               => 'Congrats on the new role!',
@@ -980,7 +980,7 @@
                         )
                     )
                 ),
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -988,7 +988,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-                    
+
             return $this->client->track('$update_content', $comment_properties);
         }
 
@@ -999,12 +999,12 @@
                 // Required fields
                 '$user_id'            => $GLOBALS['user_id'],
                 '$content_id'         => 'listing-23412',
-            
+
                 // Supported fields
                 '$session_id'         => 'a234ksjfgn435sfg',
                 '$status'             => '$active',
                 '$ip'                 => '255.255.255.0',
-            
+
                 // Required $listing object
                 '$listing'            => array(
                     '$subject'          => '2 Bedroom Apartment for Rent',
@@ -1042,7 +1042,7 @@
                     ),
                     '$expiration_time'  => 1549063157000 // UNIX timestamp in milliseconds
                 ),
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -1050,7 +1050,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-    
+
             return $this->client->track('$update_content', $listing_properties);
         }
 
@@ -1061,12 +1061,12 @@
                 // Required fields
                 '$user_id'               => $GLOBALS['user_id'],
                 '$content_id'            => 'message-23412',
-            
+
                 // Recommended fields
                 '$session_id'            => 'a234ksjfgn435sfg',
                 '$status'                => '$active',
                 '$ip'                    => '255.255.255.0',
-            
+
                 // Required $message object
                 '$message'               => array(
                     '$body'                => 'Let’s meet at 5pm',
@@ -1080,7 +1080,7 @@
                         )
                     )
                 ),
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -1088,7 +1088,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-    
+
             return $this->client->track('$update_content', $message_properties);
         }
 
@@ -1099,12 +1099,12 @@
                 // Required fields
                 '$user_id' => $GLOBALS['user_id'],
                 '$content_id' => 'post-23412',
-            
+
                 // Recommended fields
                 '$session_id'         => 'a234ksjfgn435sfg',
                 '$status'             => '$active',
                 '$ip'                 => '255.255.255.0',
-            
+
                 // Required $post object
                 '$post'               => array(
                     '$subject'          => 'My new apartment!',
@@ -1135,7 +1135,7 @@
                     ),
                     '$expiration_time'  => 1549063157000
                 ),
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -1143,7 +1143,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-            
+
             return $this->client->track('$update_content', $post_properties);
         }
 
@@ -1154,12 +1154,12 @@
                 // Required fields
                 '$user_id'            => $GLOBALS['user_id'],
                 '$content_id'         => 'profile-23412',
-            
+
                 // Recommended fields
                 '$session_id'         => 'a234ksjfgn435sfg',
                 '$status'             => '$active',
                 '$ip'                 => '255.255.255.0',
-            
+
                 // Required $profile object
                 '$profile'            => array(
                     '$body'             => 'Hi! My name is Alex and I just moved to New London!',
@@ -1184,7 +1184,7 @@
                         'Long-term dating'
                     )
                 ),
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -1192,7 +1192,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-    
+
             return $this->client->track('$update_content', $profile_properties);
         }
 
@@ -1203,12 +1203,12 @@
                 // Required fields
                 '$user_id'                => $GLOBALS['user_id'],
                 '$content_id'             => 'review-23412',
-            
+
                 // Recommended fields
                 '$session_id'             => 'a234ksjfgn435sfg',
                 '$status'                 => '$active',
                 '$ip'                     => '255.255.255.0',
-            
+
                 // Required $review object
                 '$review'                 => array(
                     '$subject'              => 'Amazing Tacos!',
@@ -1232,7 +1232,7 @@
                     ),
                     '$rating'               => 4.5
                 ),
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -1240,7 +1240,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-            
+
             return $this->client->track('$update_content', $review_properties);
         }
 
@@ -1251,7 +1251,7 @@
                 // Required Fields
                 '$user_id'          => $GLOBALS['user_id'],
                 // Supported Fields
-                '$session_id'       => 'gigtleqddo84l8cm15qe4il',
+                '$session_id'       => $GLOBALS['session_id'],
                 '$order_id'         => 'ORDER-28168441',
                 '$user_email'       => $GLOBALS['user_email'],
                 '$amount'           => 115940000, // $115.94
@@ -1334,7 +1334,7 @@
                 ),
                 // For marketplaces, use $seller_user_id to identify the seller
                 '$seller_user_id'     => 'slinkys_emporium',
-            
+
                 '$promotions'         => array(
                     array(
                         '$promotion_id' => 'FirstTimeBuyer',
@@ -1347,13 +1347,13 @@
                         )
                     )
                 ),
-            
+
                 // Sample Custom Fields
                 'digital_wallet'      => 'apple_pay', // 'google_wallet', etc.
                 'coupon_code'         => 'dollarMadness',
                 'shipping_choice'     => 'FedEx Ground Courier',
                 'is_first_time_buyer' => False,
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -1361,7 +1361,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-            
+
             return $this->client->track('$update_order', $properties);
         }
 
@@ -1375,7 +1375,7 @@
                 '$status'     => '$success',
                 '$reason'     => '$forced_reset',
                 '$ip'         => '128.148.1.135',     // IP of the user that entered the new password after the old password was reset
-            
+
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
                     '$user_agent'       =>  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -1383,7 +1383,7 @@
                     '$content_language' => 'en-GB'
                 )
             );
-    
+
             return $this->client->track('$update_password', $properties);
         }
 
@@ -1393,7 +1393,7 @@
             $properties = array(
                 // Required Fields
                 '$user_id'            => $GLOBALS['user_id'],
-                '$session_id'         => 'gigtleqddo84l8cm15qe4il',
+                '$session_id'         => $GLOBALS['session_id'],
                 '$status'             => '$pending',
             
                 // Optional fields if applicable
