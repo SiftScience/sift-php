@@ -25,6 +25,8 @@ class SiftClientTest extends TestCase
     private $merchant_properties;
     private $post_merchant_properties;
     private $put_merchant_properties;
+
+    private $webhook_properties;
     
 
     protected function setUp(): void
@@ -169,6 +171,15 @@ class SiftClientTest extends TestCase
                 "level" => "low",
                 "score" => 10,
             ],
+        ];
+
+        $this->webhook_properties = [
+            "payload_type" => "ORDER_V1_0",
+            "status" => "active",
+            "url" => "https://example.com/",
+            "enabled_events" => ['$create_order'],
+            "name" => "My webhook name",
+            "description" => "This is a webhook!"
         ];
     }
 
@@ -1404,5 +1415,128 @@ class SiftClientTest extends TestCase
             0.55,
             $response->body["scores"]["payment_abuse"]["score"]
         );
+    }
+
+    public function testPostWebhook(): void
+    {
+        $mockUrl =
+        "https://api.sift.com/v3/accounts/" .
+        SiftClientTest::$ACCOUNT_ID .
+        "/webhooks";
+
+        $mockResponse = new SiftResponse(
+            '{"status": 0, "error_message": "OK"}',
+            200,
+            null
+        );
+
+        SiftRequest::setMockResponse(
+            $mockUrl,
+            SiftRequest::POST,
+            $mockResponse
+        );
+
+        $response = $this->client->postWebhooks(
+            $this->webhook_properties
+        );
+        $this->assertTrue($response->isOk());
+        $this->assertEquals("OK", $response->apiErrorMessage);
+    }
+
+    public function testRetrieveWebhook(): void
+    {
+        $mockUrl =
+        "https://api.sift.com/v3/accounts/" .
+        SiftClientTest::$ACCOUNT_ID .
+        "/webhooks/webhook_id";
+
+        $mockResponse = new SiftResponse(
+            '{"status": 0, "error_message": "OK"}',
+            200,
+            null
+        );
+
+        SiftRequest::setMockResponse(
+            $mockUrl,
+            SiftRequest::GET,
+            $mockResponse
+        );
+
+        $response = $this->client->retrieveWebhook('webhook_id');
+        $this->assertTrue($response->isOk());
+        $this->assertEquals("OK", $response->apiErrorMessage);
+    }
+
+    public function testListAllWebhooks(): void
+    {
+        $mockUrl =
+        "https://api.sift.com/v3/accounts/" .
+        SiftClientTest::$ACCOUNT_ID .
+        "/webhooks";
+
+        $mockResponse = new SiftResponse(
+            '{"status": 0, "error_message": "OK"}',
+            200,
+            null
+        );
+
+        SiftRequest::setMockResponse(
+            $mockUrl,
+            SiftRequest::GET,
+            $mockResponse
+        );
+
+        $response = $this->client->listAllWebhooks();
+        $this->assertTrue($response->isOk());
+        $this->assertEquals("OK", $response->apiErrorMessage);
+    }
+
+    public function testUpdateWebhook(): void
+    {
+        $mockUrl =
+        "https://api.sift.com/v3/accounts/" .
+        SiftClientTest::$ACCOUNT_ID .
+        "/webhooks/webhook_id";
+
+        $mockResponse = new SiftResponse(
+            '{"status": 0, "error_message": "OK"}',
+            200,
+            null
+        );
+
+        SiftRequest::setMockResponse(
+            $mockUrl,
+            SiftRequest::PUT,
+            $mockResponse
+        );
+
+        $response = $this->client->updateWebhook('webhook_id', $this->webhook_properties);
+        $this->assertTrue($response->isOk());
+        $this->assertEquals("OK", $response->apiErrorMessage);
+    }
+
+    public function testDeleteWebhook(): void
+    {
+        $mockUrl =
+        "https://api.sift.com/v3/accounts/" .
+        SiftClientTest::$ACCOUNT_ID .
+        "/webhooks/webhook_id";
+
+        $mockResponse = new SiftResponse(
+            '{"status": 0, "error_message": ""}',
+            204,
+            null
+        );
+
+        SiftRequest::setMockResponse(
+            $mockUrl,
+            SiftRequest::DELETE,
+            $mockResponse
+        );
+
+        $response = $this->client->deleteWebhook('webhook_id');
+        $this->assertTrue($response->isOk());
+        $this->assertEquals("", $response->apiErrorMessage);
+        $this->assertEquals("204", $response->httpStatusCode);
     }
 }

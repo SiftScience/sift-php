@@ -153,6 +153,46 @@ $sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_i
 $response = $sift->applyDecisionToSession('example_user','example_session','example_decision','example_source',['analyst' => 'analyst@example.com']
 $response->isOk()
 ```
+### Creates a new webhook with a specified URL.
+```php
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->postWebhooks(["payload_type" => "ORDER_V1_0",
+    "status"=> "active",
+    "url"=> "https://example1.com/",
+    "enabled_events" => ['$create_order'],
+    "name"=> "My webhook name",
+    "description"=> "This is a webhook!"]);
+$response->isOk()
+```
+### Retrieves a webhook when given an ID.
+```php
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->retrieveWebhook('webhook_id');
+$response->isOk()
+```
+### List All Webhooks
+```php
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->listAllWebhooks();
+$response->isOk()
+```
+### Update a Webhook
+```php
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->updateWebhook('webhook_id', ["payload_type" => "ORDER_V1_0",
+    "status"=> "active",
+    "url"=> "https://example1.com/",
+    "enabled_events" => ['$create_order'],
+    "name"=> "My webhook name update",
+    "description"=> "This is a webhook! update"]);
+$response->isOk()
+```
+### Deletes a webhook when given an ID.
+```php
+$sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
+$response = $sift->deleteWebhook('webhook_id');
+$response->isOk()
+```
 
 ## Contributing
 Run the tests from the project root with [PHPUnit](http://phpunit.de) like this:
