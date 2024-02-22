@@ -1032,6 +1032,180 @@ class SiftClient {
     }
 
     /**
+     * Webhooks to receive notifications about particular events in Sift.
+     *
+     * See https://sift.com/developers/docs/php/webhooks-api/create for valid $properties fields
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function postWebhooks($parameters, $opts = array()) {
+        $this->mergeArguments($opts, [
+            'timeout' => $this->timeout,
+            'version' => self::API3_VERSION,
+            'account_id' => $this->account_id
+        ]);
+
+        $this->validateArgument($parameters, 'properties', 'array');
+        $this->validateArgument($this->account_id, 'account_id', 'string');
+        $this->validateWebhookArgument($parameters);
+
+        try {
+            $request = new SiftRequest(self::webhookApiUrl($opts['version'], $opts['account_id']), 
+             SiftRequest::POST, $opts['timeout'],
+               self::API3_VERSION,
+               ['auth' => $this->api_key . ':',
+                'body' => $parameters,
+            ]);
+
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+     /**
+     *  Retrieves a webhook when given an ID. 
+     * @param integer $webhook_id :Webhook ID .  
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function retrieveWebhook($webhook_id, $opts = []) {
+        $this->mergeArguments($opts, [
+            'account_id' => $this->account_id,
+            'version' => self::API3_VERSION,
+            'timeout' => $this->timeout
+        ]);
+
+        $this->validateArgument($this->account_id, 'account_id', 'string');
+        $this->validateArgument($webhook_id, 'webhook_id', 'string');
+
+        $url = ($this->webhookApiUrl($opts['version'], $opts['account_id']). '/'.rawurlencode($webhook_id));
+
+        try {
+            $request = new SiftRequest($url, 
+                SiftRequest::GET, $opts['timeout'],
+                self::API3_VERSION,
+                ['auth' => $this->api_key . ':'
+            ]);
+
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     *  Returns a list of all webhooks. 
+     *
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function listAllWebhooks($opts = []) {
+        $this->mergeArguments($opts, [
+            'account_id' => $this->account_id,
+            'version' => self::API3_VERSION,
+            'timeout' => $this->timeout
+        ]);
+
+        $this->validateArgument($this->account_id, 'account_id', 'string');
+
+        try {
+            $request = new SiftRequest(self::webhookApiUrl($opts['version'], $opts['account_id']), 
+                SiftRequest::GET, $opts['timeout'],
+                self::API3_VERSION,
+                ['auth' => $this->api_key . ':'
+            ]);
+
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Updates a webhook when given an ID. This will overwrite the entire existing webhook object.
+     * @param integer $webhook_id :Webhook ID .    
+     *  
+     * See https://sift.com/developers/docs/php/webhooks-api/update for valid $properties fields
+     * @param array $properties An array of name-value pairs.  This parameter is required.
+     * 
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function updateWebhook($webhook_id, $parameters, $opts = []) {
+        $this->mergeArguments($opts, [
+            'timeout' => $this->timeout,
+            'version' => self::API3_VERSION,
+            'account_id' => $this->account_id
+        ]);
+
+        $this->validateArgument($parameters, 'properties', 'array');
+        $this->validateArgument($webhook_id, 'webhook_id', 'string');
+        $this->validateArgument($this->account_id, 'account_id', 'string');
+        $this->validateWebhookArgument($parameters);
+
+        $url = ($this->webhookApiUrl($opts['version'], $opts['account_id']). '/'.rawurlencode($webhook_id));
+        try {
+            $request = new SiftRequest($url, SiftRequest::PUT, $opts['timeout'], self::API3_VERSION, ['auth' => $this->api_key . ':',
+                'body' => $parameters,
+            ]);
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Deletes a webhook when given an ID.
+     * @param integer $webhook_id :Webhook ID .    
+     *  
+     * @param array $opts  Array of optional parameters for this request:
+     *     - string 'account_id': by default, this client's account ID is used.
+     *     - int 'timeout': By default, this client's timeout is used.
+     *
+     * @return null|SiftResponse
+     */
+    public function deleteWebhook($webhook_id, $opts = []) {
+        $this->mergeArguments($opts, [
+            'timeout' => $this->timeout,
+            'version' => self::API3_VERSION,
+            'account_id' => $this->account_id
+        ]);
+
+        $this->validateArgument($webhook_id, 'webhook_id', 'string');
+        $this->validateArgument($this->account_id, 'account_id', 'string');
+
+        $url = ($this->webhookApiUrl($opts['version'], $opts['account_id']). '/'.rawurlencode($webhook_id));
+        try {
+            $request = new SiftRequest($url, SiftRequest::DELETE, $opts['timeout'],
+                 self::API3_VERSION, ['auth' => $this->api_key . ':'
+            ]);
+            return $request->send();
+        } catch (Exception $e) {
+            $this->logError($e->getMessage());
+            return null;
+        }
+    }
+
+    /**
      * Merges a function's default parameter values into an array of arguments.
      *
      * In particular, this method:
@@ -1117,6 +1291,23 @@ class SiftClient {
 
     private function urlPrefix($version) {
         return $this->api_endpoint . '/v' . $version;
+    }
+
+    private function webhookApiUrl($version, $account_id) {       
+        return  $this->urlPrefix($version) . '/accounts/'. rawurlencode($account_id). '/webhooks';
+    }
+
+    private function validateWebhookArgument($parameters) {
+        $this->validateArgument($parameters['payload_type'], 'payload_type', 'string');
+        $this->validateArgument($parameters['status'], 'status', 'string');
+        $this->validateArgument($parameters['url'], 'url', 'string');
+        $this->validateArgument($parameters['enabled_events'], 'enabled_events', 'array');
+        if ($parameters['enabled_events'][0] != '$create_order' && $parameters['enabled_events'][0] != '$update_order' 
+        && $parameters['enabled_events'][0] != '$order_status' && $parameters['enabled_events'][0] != '$transaction'
+        && $parameters['enabled_events'][0] != '$chargeback')
+            throw new InvalidArgumentException("Invalid Enabled Events");
+        if ($parameters['status'] != 'draft' && $parameters['status'] != 'active' )
+            throw new InvalidArgumentException("Invalid Status");
     }
 
 }
