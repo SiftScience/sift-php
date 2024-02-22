@@ -1,3 +1,7 @@
+4.7.0 (2024-02-22)
+================
+- Webhooks API
+
 4.6.0 (2023-10-05)
 ================
 - Score percentiles in Score API

@@ -12,7 +12,7 @@ abstract class Sift
      */
     public static $account_id;
 
-    const VERSION = '4.6.0';
+    const VERSION = '4.7.0';
 
     public static function setApiKey($api_key)
     {
