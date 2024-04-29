@@ -41,67 +41,21 @@ pipeline {
             steps {
                 script {
                     def workflows = [:]
+
                     // Unit tests
-                    def phpVersion = "7.1"
-                    def stageName = "Tests - php ${phpVersion}"
-                    workflows[stageName] = {
-                        stage(stageName) {
-                            ciUtil.updateGithubCommitStatus(repoName, stageName, 'Started', 'pending', commitSha)
-                            try {
-                                siftPhpWorkflow.runSiftPhpTest('php-7-1-pod-template.yaml', "php${phpVersion}-${BUILD_TAG}", phpVersion)
-                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'SUCCESS', 'success', commitSha)
-                            } catch (Exception e) {
-                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'FAILURE', 'failure', commitSha)
-                                print("${stageName} failed")
-                                throw e
-                            }
-                        }
-                    }
-
-                    def phpVersion = "7.2"
-                    def stageName = "Tests - php ${phpVersion}"
-                    workflows[stageName] = {
-                        stage(stageName) {
-                            ciUtil.updateGithubCommitStatus(repoName, stageName, 'Started', 'pending', commitSha)
-                            try {
-                                siftPhpWorkflow.runSiftPhpTest('php-7-2-pod-template.yaml', "php${phpVersion}-${BUILD_TAG}". phpVersion)
-                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'SUCCESS', 'success', commitSha)
-                            } catch (Exception e) {
-                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'FAILURE', 'failure', commitSha)
-                                print("${stageName} failed")
-                                throw e
-                            }
-                        }
-                    }
-
-                    def phpVersion = "7.3"
-                    def stageName = "Tests - php ${phpVersion}"
-                    workflows[stageName] = {
-                        stage(stageName) {
-                            ciUtil.updateGithubCommitStatus(repoName, stageName, 'Started', 'pending', commitSha)
-                            try {
-                                siftPhpWorkflow.runSiftPhpTest('php-7-3-pod-template.yaml', "php${phpVersion}-${BUILD_TAG}")
-                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'SUCCESS', 'success', commitSha)
-                            } catch (Exception e) {
-                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'FAILURE', 'failure', commitSha)
-                                print("${stageName} failed")
-                                throw e
-                            }
-                        }
-                    }
-
-                    def phpVersion = "7.4"
-                    def stageName = "Tests - php ${phpVersion}"
-                    workflows[stageName] = {
-                        stage(stageName) {
-                            ciUtil.updateGithubCommitStatus(repoName, stageName, 'Started', 'pending', commitSha)
-                            try {
-                                siftPhpWorkflow.runSiftPhpTest('php-7-4-pod-template.yaml', "php${phpVersion}-${BUILD_TAG}")
-                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'SUCCESS', 'success', commitSha)
-                            } catch (Exception e) {
-                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'FAILURE', 'failure', commitSha)
-                                print("${stageName} failed")
-                                throw e
+                    for (phpVersion in ['7.1', '7.2', '7.3', '7.4']) {
+                        def stageName = "Tests - php ${phpVersion}"
+                        workflows[stageName] = {
+                            stage(stageName) {
+                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'Started', 'pending', commitSha)
+                                try {
+                                    siftPhpWorkflow.runSiftPhpTest('php-7-1-pod-template.yaml', "php${phpVersion}-${BUILD_TAG}", phpVersion)
+                                    ciUtil.updateGithubCommitStatus(repoName, stageName, 'SUCCESS', 'success', commitSha)
+                                } catch (Exception e) {
+                                    ciUtil.updateGithubCommitStatus(repoName, stageName, 'FAILURE', 'failure', commitSha)
+                                    print("${stageName} failed")
+                                    throw e
+                                }
                             }
                         }
                     }
