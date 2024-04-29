@@ -55,7 +55,7 @@ pipeline {
                             stage(stageName) {
                                 ciUtil.updateGithubCommitStatus(repoName, stageName, 'Started', 'pending', commitSha)
                                 try {
-                                    siftPhpWorkflow.runSiftPhpTest("php-${phpVersion.replace('.', '-')}-pod-template.yaml", "php${phpVersion}-${BUILD_TAG}", phpVersion)
+                                    siftPhpWorkflow.runSiftPhpTest("php-${phpVersion.replace('.', '-')}-pod-template.yaml", "php${phpVersion}-${BUILD_TAG}")
                                     ciUtil.updateGithubCommitStatus(repoName, stageName, 'SUCCESS', 'success', commitSha)
                                 } catch (Exception e) {
                                     ciUtil.updateGithubCommitStatus(repoName, stageName, 'FAILURE', 'failure', commitSha)
@@ -73,7 +73,7 @@ pipeline {
                         stage(integrationTestsStageName) {
                             ciUtil.updateGithubCommitStatus(repoName, integrationTestsStageName, 'Started', 'pending', commitSha)
                             try {
-                                siftPhpWorkflow.runSiftPhpIntegration("php-${phpIntegrationTestsVersion.replace('.','-')}-pod-template.yaml", "php${phpIntegrationTestsVersion}-${BUILD_TAG}", "")
+                                siftPhpWorkflow.runSiftPhpIntegration("php-${phpIntegrationTestsVersion.replace('.','-')}-pod-template.yaml", "php${phpIntegrationTestsVersion}-${BUILD_TAG}")
                                 ciUtil.updateGithubCommitStatus(repoName, integrationTestsStageName, 'SUCCESS', 'success', commitSha)
                             } catch (Exception e) {
                                 ciUtil.updateGithubCommitStatus(repoName, integrationTestsStageName, 'FAILURE', 'failure', commitSha)
