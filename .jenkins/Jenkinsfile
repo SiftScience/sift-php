@@ -2,7 +2,7 @@
 jenkinsBranch = 'CI-15481-sift-php'
 sharedLib = library("shared-lib@${jenkinsBranch}")
 
-def siftPhpWorkflow = sharedLib.com.sift.ci.siftPhpWorkflow.new()
+def siftPhpWorkflow = sharedLib.com.sift.ci.SiftPhpWorkflow.new()
 def ciUtil = sharedLib.com.sift.ci.CIUtil.new()
 def stackdriver = sharedLib.com.sift.ci.StackDriverMetrics.new()
 
