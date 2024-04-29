@@ -49,7 +49,7 @@ pipeline {
                             stage(stageName) {
                                 ciUtil.updateGithubCommitStatus(repoName, stageName, 'Started', 'pending', commitSha)
                                 try {
-                                    siftPhpWorkflow.runSiftPhpTest('php-7-1-pod-template.yaml', "php${phpVersion}-${BUILD_TAG}", phpVersion)
+                                    siftPhpWorkflow.runSiftPhpTest("php-${phpVersion.replace('.', '-')}-pod-template.yaml", "php${phpVersion}-${BUILD_TAG}", phpVersion)
                                     ciUtil.updateGithubCommitStatus(repoName, stageName, 'SUCCESS', 'success', commitSha)
                                 } catch (Exception e) {
                                     ciUtil.updateGithubCommitStatus(repoName, stageName, 'FAILURE', 'failure', commitSha)
