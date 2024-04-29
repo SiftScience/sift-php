@@ -43,8 +43,14 @@ pipeline {
                     def workflows = [:]
 
                     // Unit tests
-                    for (phpVersion in ['7.1', '7.2', '7.3', '7.4']) {
-                        def stageName = "Tests - php ${phpVersion}"
+                    def unitTestStages = [
+                        'Tests - php 7.1':'7.1',
+                        'Tests - php 7.2':'7.2',
+                        'Tests - php 7.3':'7.3',
+                        'Tests - php 7.4':'7.4'
+                    ]
+
+                    unitTestStages.each { stageName, phpVersion ->
                         workflows[stageName] = {
                             stage(stageName) {
                                 ciUtil.updateGithubCommitStatus(repoName, stageName, 'Started', 'pending', commitSha)
@@ -61,22 +67,21 @@ pipeline {
                     }
 
                     // Integration tests
-                    def phpVersion = "7.4"
-                    def stageName = "Integration Tests - php ${phpVersion}"
-                    workflows[stageName] = {
-                        stage(stageName) {
-                            ciUtil.updateGithubCommitStatus(repoName, stageName, 'Started', 'pending', commitSha)
+                    def phpIntegrationTestsVersion = "7.4"
+                    def integrationTestsStageName = "Integration Tests - php ${phpIntegrationTestsVersion}"
+                    workflows[integrationTestsStageName] = {
+                        stage(integrationTestsStageName) {
+                            ciUtil.updateGithubCommitStatus(repoName, integrationTestsStageName, 'Started', 'pending', commitSha)
                             try {
-                                siftPhpWorkflow.runSiftPhpIntegration('php-7-4-pod-template.yaml', "php${phpVersion}-${BUILD_TAG}")
-                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'SUCCESS', 'success', commitSha)
+                                siftPhpWorkflow.runSiftPhpIntegration("php-${phpIntegrationTestsVersion.replace('.','-')}-pod-template.yaml", "php${phpIntegrationTestsVersion}-${BUILD_TAG}", "")
+                                ciUtil.updateGithubCommitStatus(repoName, integrationTestsStageName, 'SUCCESS', 'success', commitSha)
                             } catch (Exception e) {
-                                ciUtil.updateGithubCommitStatus(repoName, stageName, 'FAILURE', 'failure', commitSha)
-                                print("${stageName} failed")
+                                ciUtil.updateGithubCommitStatus(repoName, integrationTestsStageName, 'FAILURE', 'failure', commitSha)
+                                print("${integrationTestsStageName} failed")
                                 throw e
                             }
                         }
                     }
-
 
                     parallel workflows
                 }
