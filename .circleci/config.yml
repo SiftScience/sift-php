@@ -106,6 +106,4 @@ workflows:
       - run-integration-tests-php74:
           filters:
             branches:
-              only: 
-                - master
-                - CI-15481-sift-php
+              only: master
