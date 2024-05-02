@@ -1,6 +1,7 @@
 # Sift Bindings [![CircleCI](https://circleci.com/gh/SiftScience/sift-php.svg?style=svg)](https://circleci.com/gh/SiftScience/sift-php)
 
 
+
 ## Installation
 
 ### With Composer
