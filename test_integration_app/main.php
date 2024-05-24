@@ -50,6 +50,7 @@
             $this->assertEquals(1, $objUtil->isOk($objEvents->update_order()));
             $this->assertEquals(1, $objUtil->isOk($objEvents->update_password()));
             $this->assertEquals(1, $objUtil->isOk($objEvents->verification()));
+            $this->assertEquals(1, $objUtil->hasWarnings($objEvents->verification_with_warnings()));
             print("Events API Tested \n");
 
             // Decisions API
@@ -112,6 +113,16 @@
             else{
                 return false;
             }
+        }
+
+        public function hasWarnings($response) {
+            // expect http status 200, api status 0, and warnings present
+            if (isset($response->apiStatus)){
+                return ($response->apiStatus == 0)
+                    && (200 === $response->httpStatusCode)
+                    && ($response->body["warnings"]);
+            }
+            return false;
         }
     }
 
