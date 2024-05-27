@@ -1,3 +1,7 @@
+4.8.0 (2024-05-27)
+================
+- Added support for warnings in Events API
+
 4.7.0 (2024-02-22)
 ================
 - Webhooks API
