@@ -105,7 +105,9 @@ class SiftClient {
      *           version of the Events API is used.
      *     - include_score_percentiles(optional) : Whether to add new parameter in the query parameter.
      *     - if include_score_percentiles is true then add a new parameter called fields in the query parameter
-     * 
+     *     - include_warnings(optional) : Whether to add list of warnings (if any) to response.
+     *     - if include_warnings is true then add 'warnings' to the 'fields' query parameter.
+     *
      * @return null|SiftResponse
      */
     public function track($event, $properties, $opts = []) {
@@ -119,7 +121,8 @@ class SiftClient {
             'path' => null,
             'timeout' => $this->timeout,
             'version' => $this->version,
-            'include_score_percentiles' => false
+            'include_score_percentiles' => false,
+            'include_warnings' => false
         ]);
 
         $this->validateArgument($event, 'event', 'string');
@@ -146,8 +149,16 @@ class SiftClient {
             $params['force_workflow_run'] = 'true';
         if ($opts['abuse_types'])
             $params['abuse_types'] = implode(',', $opts['abuse_types']);
-        if($opts['include_score_percentiles'])
-            $params['fields'] = 'SCORE_PERCENTILES';
+        if ($opts['include_score_percentiles'] || $opts['include_warnings']) {
+            $fields = [];
+            if ($opts['include_score_percentiles']) {
+                $fields[] = 'SCORE_PERCENTILES';
+            }
+            if ($opts['include_warnings']) {
+                $fields[] = 'WARNINGS';
+            }
+            $params['fields'] = implode(',', $fields);
+        }
             
         try {
             $request = new SiftRequest(

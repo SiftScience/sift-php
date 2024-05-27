@@ -1417,6 +1417,31 @@ class SiftClientTest extends TestCase
         );
     }
 
+    public function testSuccessfulTrackEventWithWarnings(): void {
+        $mockUrl = 'https://api.sift.com/v205/events?fields=WARNINGS';
+        $mockResponse = new SiftResponse('
+        {
+            "status": 0, "error_message": "OK",
+            "warnings": {
+                "count": 1,
+                "items": [
+                    {
+                        "message": "Invalid field value"
+                    }
+                ]
+            }
+        }', 200, null);
+        SiftRequest::setMockResponse($mockUrl, SiftRequest::POST ,$mockResponse);
+        $response = $this->client->track('$transaction', $this->transaction_properties, [
+            "version" => "205", "include_warnings" => true
+        ]);
+
+        $this->assertTrue($response->isOk());
+        $this->assertEquals('OK', $response->apiErrorMessage);
+        $this->assertEquals(1, $response->body["warnings"]["count"]);
+        $this->assertEquals('Invalid field value', $response->body["warnings"]["items"][0]["message"]);
+    }
+
     public function testPostWebhook(): void
     {
         $mockUrl =

@@ -1400,10 +1400,30 @@
                 '$verified_event'     => '$login',
                 '$reason'             => '$automated_rule', // Verification was triggered based on risk score
                 '$verification_type'  => '$sms',
-                '$verified_value'     => '14155551212'
+                '$verified_value'     => '14155551212',
+                '$verified_entity_id' => $GLOBALS['session_id']
             );
     
             return $this->client->track('$verification', $properties);
+        }
+
+        function verification_with_warnings()
+        {
+            // Sample $verification event
+            $properties = array(
+                // Required Fields
+                '$user_id'            => $GLOBALS['user_id'],
+                '$session_id'         => $GLOBALS['session_id'],
+                '$status'             => '$pending',
+
+                // $verified_entity_id is not provided to generate warnings
+                '$verified_event'     => '$login',
+                '$reason'             => '$automated_rule',
+                '$verification_type'  => '$sms',
+                '$verified_value'     => '14155551212'
+            );
+
+            return $this->client->track('$verification', $properties, ["include_warnings" => true]);
         }
 
     }

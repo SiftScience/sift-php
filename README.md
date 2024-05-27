@@ -54,7 +54,19 @@ $sift = new SiftClient();
 ## Usage
 
 ### Track an event
-Here's an example that sends a `$transaction` event to sift.
+To learn more about the Events API visit our [developer docs](https://developers.sift.com/docs/php/events-api/overview).
+
+**Optional Params**
+- `return_score`: `:true` or `:false`
+- `return_action`: `:true` or `:false`
+- `return_workflow_status`: `:true` or `:false`
+- `return_route_info`: `:true` or `:false`
+- `force_workflow_run`: `:true` or `:false`
+- `include_score_percentiles`: `:true` or `:false`
+- `warnings`: `:true` or `:false`
+- `abuse_types`: `["payment_abuse", "content_abuse", "content_abuse", "account_abuse", "legacy", "account_takeover"]`
+
+Here's an example that sends a `$transaction` event to Sift.
 ```php
 $sift = new SiftClient(['api_key' => 'my_api_key', 'account_id' => 'my_account_id']);
 $response = $sift->track('$transaction', [
