@@ -44,10 +44,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: setup and run-integration-tests
+      - name: setup php74
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4.25'
+      - name: run-integration-tests
         run: |
         composer install --prefer-dist --no-progress
         php test_integration_app/main.php
