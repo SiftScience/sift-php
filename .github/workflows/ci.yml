@@ -22,6 +22,7 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: |
           composer validate --strict
+        working-directory: sift-php
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v3
