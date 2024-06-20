@@ -50,3 +50,5 @@ jobs:
           php-version: '7.4.25'
       - run: |
           composer install --prefer-dist --no-progress
+      - run: |
+          php test_integration_app/main.php
