@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working_directory: /sift-php
+        working_directory: ./sift-php
     steps:
       - name: setup PHP
         uses: shivammathur/setup-php@v2
