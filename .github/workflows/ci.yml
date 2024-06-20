@@ -17,10 +17,9 @@ jobs:
     steps:
       - uses: shivammathur/setup-php@v2
       - with:
-        php-version: '7.1.27'
+          php-version: '7.1.27'
       - name: Validate composer.json and composer.lock
         run: |
-          composer update
           composer validate --strict
       - name: Cache Composer packages
         id: composer-cache
