@@ -28,12 +28,12 @@ jobs:
           restore-keys: |
             composer-v1-
       - run: |
-         cd /home/runner/work/sift-php/
+         cd /home/runner/work/sift-php/sift-php
          ls -ltr
          composer install --prefer-dist --no-progress
       - name: siftPhpTest
         run: |
-          cd /home/runner/work/sift-php/
+          cd /home/runner/work/sift-php/sift-php
           composer exec phpunit -v
 
   run-integration-tests-php74:
