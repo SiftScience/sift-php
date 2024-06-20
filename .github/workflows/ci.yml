@@ -15,10 +15,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: shivammathur/setup-php@v2
-      - with:
-          php-version: '7.1.27'
       - name: Validate composer.json and composer.lock
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.1.27'
         run: |
           composer validate --strict
       - name: Cache Composer packages
