@@ -29,6 +29,7 @@ jobs:
             composer-v1-
       - run: |
          cd /home/runner/work/sift-php/
+         ls -ltr
          composer install --prefer-dist --no-progress
       - name: siftPhpTest
         run: |
