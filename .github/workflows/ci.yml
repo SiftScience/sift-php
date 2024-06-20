@@ -10,7 +10,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.operating-system }}
+      strategy:
+        matrix:
+          operating-system: [ ubuntu-latest, windows-latest, macos-latest ]
+          php-versions: [ '7.1.27', '7.2.16', '7.3.3', '7.4.25' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,7 +22,7 @@ jobs:
       - name: setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.1.27'
+          php-version: ${{ matrix.php-versions }}
       - name: Validate composer.json and composer.lock
         run: |
           sudo composer self-update
@@ -31,12 +35,9 @@ jobs:
           restore-keys: |
             composer-v1-
       - run: |
-         cd /home/runner/work/sift-php/sift-php
-         ls -ltr
          composer install --prefer-dist --no-progress
       - name: siftPhpTest
         run: |
-          cd /home/runner/work/sift-php/sift-php
           composer exec phpunit -v
 
   run-integration-tests-php74:
