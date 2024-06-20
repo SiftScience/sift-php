@@ -3,7 +3,7 @@ name: PHP Composer
 on:
   push:
     branches:
-      - "*"
+      - master
   pull_request:
     branches:
       - master
@@ -45,6 +45,7 @@ jobs:
 
   run-integration-tests-php74:
     runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/master' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
