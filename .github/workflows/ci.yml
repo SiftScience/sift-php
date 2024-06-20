@@ -8,6 +8,10 @@ on:
     branches:
       - master
 
+env:
+  ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+  API_KEY: ${{ secrets.API_KEY }}
+
 jobs:
   build:
     runs-on: ${{ matrix.operating-system }}
