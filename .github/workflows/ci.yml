@@ -11,9 +11,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .
     steps:
       - name: setup PHP
         uses: shivammathur/setup-php@v2
@@ -30,9 +27,13 @@ jobs:
           key: composer-v1-{{ checksum "composer.lock" }}
           restore-keys: |
             composer-v1-
-      - run: composer install --prefer-dist --no-progress
+      - run: |
+         cd /home/runner/work/sift-php/
+         composer install --prefer-dist --no-progress
       - name: siftPhpTest
-        run: composer exec phpunit -v
+        run: |
+          cd /home/runner/work/sift-php/
+          composer exec phpunit -v
 
   run-integration-tests-php74:
     runs-on: ubuntu-latest
