@@ -29,14 +29,6 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: |
           sudo composer self-update
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: composer-v1-{{ checksum "composer.lock" }}
-          restore-keys: |
-            composer-v1-
       - run: |
          composer install --prefer-dist --no-progress
       - name: siftPhpTest
