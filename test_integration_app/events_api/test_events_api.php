@@ -181,6 +181,23 @@
                 '$social_sign_on_type'   => '$twitter',
                 '$account_types'         => ['merchant', 'premium'],
 
+                // Structured fields (KYC / geo / bot detection)
+                '$nationality'   => 'US',
+                '$year_of_birth' => 1985,
+                '$kyc' => array(
+                    '$names_match' => true,
+                    '$kyc_level'   => '$basic',
+                    '$provider'    => 'lexisnexis'
+                ),
+                '$geo' => array(
+                    '$uuid'     => 'gc-abc-123',
+                    '$provider' => 'geocomply'
+                ),
+                '$bot_identification' => array(
+                    '$result'   => '$human',
+                    '$provider' => 'datadome'
+                ),
+
                 // Suggested Custom Fields
                 'twitter_handle'          => 'billyjones',
                 'work_phone'              => '1-347-555-5921',
@@ -625,6 +642,21 @@
                     )
                 ),
 
+                // Structured fields (KYC / geo / bot detection)
+                '$kyc' => array(
+                    '$names_match' => true,
+                    '$kyc_level'   => '$basic',
+                    '$provider'    => 'lexisnexis'
+                ),
+                '$geo' => array(
+                    '$uuid'     => 'gc-abc-123',
+                    '$provider' => 'geocomply'
+                ),
+                '$bot_identification' => array(
+                    '$result'   => '$human',
+                    '$provider' => 'datadome'
+                ),
+
                 // Sample Custom Fields
                 'digital_wallet'      => 'apple_pay', // 'google_wallet', etc.
                 'coupon_code'         => 'dollarMadness',
@@ -696,6 +728,16 @@
                 '$brand_name'   => 'sift',
                 '$site_domain'  => 'sift.com',
                 '$site_country' => 'US',
+
+                // Structured fields (geo / bot detection)
+                '$geo' => array(
+                    '$uuid'     => 'gc-abc-123',
+                    '$provider' => 'geocomply'
+                ),
+                '$bot_identification' => array(
+                    '$result'   => '$human',
+                    '$provider' => 'datadome'
+                ),
 
                 // Send this information with a login from a BROWSER client.
                 '$browser'    => array(
@@ -883,6 +925,21 @@
                 // For marketplaces, use $seller_user_id to identify the seller
                 '$seller_user_id'     => 'slinkys_emporium',
 
+                // Structured fields (KYC / geo / bot detection)
+                '$kyc' => array(
+                    '$names_match'           => true,
+                    '$bin_nationality_match' => false,
+                    '$provider'              => 'prove'
+                ),
+                '$geo' => array(
+                    '$uuid'     => 'gc-abc-123',
+                    '$provider' => 'geocomply'
+                ),
+                '$bot_identification' => array(
+                    '$result'   => '$suspected',
+                    '$provider' => 'human_security'
+                ),
+
                 // Sample Custom Fields
                 'digital_wallet'      => 'apple_pay', // 'google_wallet', etc.
                 'coupon_code'         => 'dollarMadness',
@@ -941,6 +998,23 @@
                 ),
                 '$social_sign_on_type'   => '$twitter',
                 '$account_types'         => ['merchant', 'premium'],
+
+                // Structured fields (KYC / geo / bot detection)
+                '$nationality'   => 'US',
+                '$year_of_birth' => 1985,
+                '$kyc' => array(
+                    '$names_match' => true,
+                    '$kyc_level'   => '$full',
+                    '$provider'    => 'prove'
+                ),
+                '$geo' => array(
+                    '$uuid'     => 'gc-abc-123',
+                    '$provider' => 'geocomply'
+                ),
+                '$bot_identification' => array(
+                    '$result'   => '$human',
+                    '$provider' => 'datadome'
+                ),
 
                 // Send this information from a BROWSER client.
                 '$browser'    => array(
@@ -1348,6 +1422,21 @@
                     )
                 ),
 
+                // Structured fields (KYC / geo / bot detection)
+                '$kyc' => array(
+                    '$names_match' => true,
+                    '$kyc_level'   => '$basic',
+                    '$provider'    => 'lexisnexis'
+                ),
+                '$geo' => array(
+                    '$uuid'     => 'gc-abc-123',
+                    '$provider' => 'geocomply'
+                ),
+                '$bot_identification' => array(
+                    '$result'   => '$human',
+                    '$provider' => 'datadome'
+                ),
+
                 // Sample Custom Fields
                 'digital_wallet'      => 'apple_pay', // 'google_wallet', etc.
                 'coupon_code'         => 'dollarMadness',
@@ -1401,7 +1490,15 @@
                 '$reason'             => '$automated_rule', // Verification was triggered based on risk score
                 '$verification_type'  => '$sms',
                 '$verified_value'     => '14155551212',
-                '$verified_entity_id' => $GLOBALS['session_id']
+                '$verified_entity_id' => $GLOBALS['session_id'],
+
+                // Structured fields (KYC)
+                '$kyc' => array(
+                    '$names_match'           => true,
+                    '$kyc_level'             => '$basic',
+                    '$bin_nationality_match' => false,
+                    '$provider'              => 'lexisnexis'
+                )
             );
     
             return $this->client->track('$verification', $properties);
